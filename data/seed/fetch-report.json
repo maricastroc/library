@@ -1,0 +1,2284 @@
+[
+  {
+    "title": "Dom Casmurro",
+    "author": "Machado de Assis",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Memórias Póstumas de Brás Cubas",
+    "author": "Machado de Assis",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Quincas Borba",
+    "author": "Machado de Assis",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Alienista",
+    "author": "Machado de Assis",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Esaú e Jacó",
+    "author": "Machado de Assis",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Memorial de Aires",
+    "author": "Machado de Assis",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Hora da Estrela",
+    "author": "Clarice Lispector",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Paixão segundo G.H.",
+    "author": "Clarice Lispector",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Perto do Coração Selvagem",
+    "author": "Clarice Lispector",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Laços de Família",
+    "author": "Clarice Lispector",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Água Viva",
+    "author": "Clarice Lispector",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Felicidade Clandestina",
+    "author": "Clarice Lispector",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Uma Aprendizagem ou O Livro dos Prazeres",
+    "author": "Clarice Lispector",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Grande Sertão: Veredas",
+    "author": "João Guimarães Rosa",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Sagarana",
+    "author": "João Guimarães Rosa",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Primeiras Estórias",
+    "author": "João Guimarães Rosa",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Vidas Secas",
+    "author": "Graciliano Ramos",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "São Bernardo",
+    "author": "Graciliano Ramos",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Angústia",
+    "author": "Graciliano Ramos",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Capitães da Areia",
+    "author": "Jorge Amado",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Gabriela, Cravo e Canela",
+    "author": "Jorge Amado",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Dona Flor e Seus Dois Maridos",
+    "author": "Jorge Amado",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Mar Morto",
+    "author": "Jorge Amado",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Tenda dos Milagres",
+    "author": "Jorge Amado",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Quinze",
+    "author": "Rachel de Queiroz",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Memorial de Maria Moura",
+    "author": "Rachel de Queiroz",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Macunaíma",
+    "author": "Mário de Andrade",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Cortiço",
+    "author": "Aluísio Azevedo",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Triste Fim de Policarpo Quaresma",
+    "author": "Lima Barreto",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Recordações do Escrivão Isaías Caminha",
+    "author": "Lima Barreto",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Iracema",
+    "author": "José de Alencar",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Senhora",
+    "author": "José de Alencar",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "O Guarani",
+    "author": "José de Alencar",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Os Sertões",
+    "author": "Euclides da Cunha",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Ateneu",
+    "author": "Raul Pompeia",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Memórias de um Sargento de Milícias",
+    "author": "Manuel Antônio de Almeida",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Moreninha",
+    "author": "Joaquim Manuel de Macedo",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Fogo Morto",
+    "author": "José Lins do Rego",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Menino de Engenho",
+    "author": "José Lins do Rego",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "O Tempo e o Vento",
+    "author": "Erico Verissimo",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Incidente em Antares",
+    "author": "Erico Verissimo",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Olhai os Lírios do Campo",
+    "author": "Erico Verissimo",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "As Meninas",
+    "author": "Lygia Fagundes Telles",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Ciranda de Pedra",
+    "author": "Lygia Fagundes Telles",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Antes do Baile Verde",
+    "author": "Lygia Fagundes Telles",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Lavoura Arcaica",
+    "author": "Raduan Nassar",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Um Copo de Cólera",
+    "author": "Raduan Nassar",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Quarto de Despejo",
+    "author": "Carolina Maria de Jesus",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Morte e Vida Severina",
+    "author": "João Cabral de Melo Neto",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Rosa do Povo",
+    "author": "Carlos Drummond de Andrade",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Sentimento do Mundo",
+    "author": "Carlos Drummond de Andrade",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Claro Enigma",
+    "author": "Carlos Drummond de Andrade",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Libertinagem",
+    "author": "Manuel Bandeira",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Romanceiro da Inconfidência",
+    "author": "Cecília Meireles",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Poema Sujo",
+    "author": "Ferreira Gullar",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "Auto da Compadecida",
+    "author": "Ariano Suassuna",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Romance d'A Pedra do Reino",
+    "author": "Ariano Suassuna",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Vestido de Noiva",
+    "author": "Nelson Rodrigues",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "O Encontro Marcado",
+    "author": "Fernando Sabino",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Feliz Ano Velho",
+    "author": "Marcelo Rubens Paiva",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Zero",
+    "author": "Ignácio de Loyola Brandão",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Não Verás País Nenhum",
+    "author": "Ignácio de Loyola Brandão",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Hora dos Ruminantes",
+    "author": "José J. Veiga",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "Sargento Getúlio",
+    "author": "João Ubaldo Ribeiro",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Viva o Povo Brasileiro",
+    "author": "João Ubaldo Ribeiro",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Ópera dos Mortos",
+    "author": "Autran Dourado",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Crônica da Casa Assassinada",
+    "author": "Lúcio Cardoso",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Vampiro de Curitiba",
+    "author": "Dalton Trevisan",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Feliz Ano Novo",
+    "author": "Rubem Fonseca",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Agosto",
+    "author": "Rubem Fonseca",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Grande Arte",
+    "author": "Rubem Fonseca",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "Estorvo",
+    "author": "Chico Buarque",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Budapeste",
+    "author": "Chico Buarque",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Leite Derramado",
+    "author": "Chico Buarque",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Dois Irmãos",
+    "author": "Milton Hatoum",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Relato de um Certo Oriente",
+    "author": "Milton Hatoum",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "Cinzas do Norte",
+    "author": "Milton Hatoum",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "Cidade de Deus",
+    "author": "Paulo Lins",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Filho Eterno",
+    "author": "Cristovão Tezza",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "Eles Eram Muitos Cavalos",
+    "author": "Luiz Ruffato",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Torto Arado",
+    "author": "Itamar Vieira Junior",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Ponciá Vicêncio",
+    "author": "Conceição Evaristo",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Olhos d'Água",
+    "author": "Conceição Evaristo",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "Becos da Memória",
+    "author": "Conceição Evaristo",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Um Defeito de Cor",
+    "author": "Ana Maria Gonçalves",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Avesso da Pele",
+    "author": "Jeferson Tenório",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Tudo É Rio",
+    "author": "Carla Madeira",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "A Vida Invisível de Eurídice Gusmão",
+    "author": "Martha Batalha",
+    "openLibrary": false,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "Marrom e Amarelo",
+    "author": "Paulo Scott",
+    "openLibrary": false,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "K. Relato de uma Busca",
+    "author": "Bernardo Kucinski",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "A Resistência",
+    "author": "Julián Fuks",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Sol na Cabeça",
+    "author": "Geovani Martins",
+    "openLibrary": false,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "Barba Ensopada de Sangue",
+    "author": "Daniel Galera",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Nove Noites",
+    "author": "Bernardo Carvalho",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Cheiro do Ralo",
+    "author": "Lourenço Mutarelli",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Morangos Mofados",
+    "author": "Caio Fernando Abreu",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "Onde Andará Dulce Veiga?",
+    "author": "Caio Fernando Abreu",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Obscena Senhora D",
+    "author": "Hilda Hilst",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "Hotel Atlântico",
+    "author": "João Gilberto Noll",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "O Que É Isso, Companheiro?",
+    "author": "Fernando Gabeira",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Bagagem",
+    "author": "Adélia Prado",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Toda Poesia",
+    "author": "Paulo Leminski",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "A Teus Pés",
+    "author": "Ana Cristina Cesar",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Meu Pé de Laranja Lima",
+    "author": "José Mauro de Vasconcelos",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Menino Maluquinho",
+    "author": "Ziraldo",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Bolsa Amarela",
+    "author": "Lygia Bojunga",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Reinações de Narizinho",
+    "author": "Monteiro Lobato",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Urupês",
+    "author": "Monteiro Lobato",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Casa-Grande & Senzala",
+    "author": "Gilberto Freyre",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "Raízes do Brasil",
+    "author": "Sérgio Buarque de Holanda",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Povo Brasileiro",
+    "author": "Darcy Ribeiro",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Pedagogia do Oprimido",
+    "author": "Paulo Freire",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Ideias para Adiar o Fim do Mundo",
+    "author": "Ailton Krenak",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Queda do Céu",
+    "author": "Davi Kopenawa",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Holocausto Brasileiro",
+    "author": "Daniela Arbex",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Rota 66",
+    "author": "Caco Barcellos",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "Estação Carandiru",
+    "author": "Drauzio Varella",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Alquimista",
+    "author": "Paulo Coelho",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Veronika Decide Morrer",
+    "author": "Paulo Coelho",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Os Lusíadas",
+    "author": "Luís de Camões",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Mensagem",
+    "author": "Fernando Pessoa",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Livro do Desassossego",
+    "author": "Fernando Pessoa",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Ensaio sobre a Cegueira",
+    "author": "José Saramago",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Memorial do Convento",
+    "author": "José Saramago",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Evangelho segundo Jesus Cristo",
+    "author": "José Saramago",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "As Intermitências da Morte",
+    "author": "José Saramago",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Ano da Morte de Ricardo Reis",
+    "author": "José Saramago",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Ensaio sobre a Lucidez",
+    "author": "José Saramago",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Jangada de Pedra",
+    "author": "José Saramago",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Os Maias",
+    "author": "Eça de Queirós",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Primo Basílio",
+    "author": "Eça de Queirós",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "O Crime do Padre Amaro",
+    "author": "Eça de Queirós",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "A Cidade e as Serras",
+    "author": "Eça de Queirós",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Amor de Perdição",
+    "author": "Camilo Castelo Branco",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Terra Sonâmbula",
+    "author": "Mia Couto",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Último Voo do Flamingo",
+    "author": "Mia Couto",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "A Confissão da Leoa",
+    "author": "Mia Couto",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "O Vendedor de Passados",
+    "author": "José Eduardo Agualusa",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Teoria Geral do Esquecimento",
+    "author": "José Eduardo Agualusa",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Mayombe",
+    "author": "Pepetela",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Os Cus de Judas",
+    "author": "António Lobo Antunes",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Filho de Mil Homens",
+    "author": "Valter Hugo Mãe",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "A Máquina de Fazer Espanhóis",
+    "author": "Valter Hugo Mãe",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "A Desumanização",
+    "author": "Valter Hugo Mãe",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "Niketche: Uma História de Poligamia",
+    "author": "Paulina Chiziane",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Balada de Amor ao Vento",
+    "author": "Paulina Chiziane",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "O Retorno",
+    "author": "Dulce Maria Cardoso",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "Jerusalém",
+    "author": "Gonçalo M. Tavares",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Novas Cartas Portuguesas",
+    "author": "Maria Isabel Barreno",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Aparição",
+    "author": "Vergílio Ferreira",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Cem Anos de Solidão",
+    "author": "Gabriel García Márquez",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Amor nos Tempos do Cólera",
+    "author": "Gabriel García Márquez",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Crônica de uma Morte Anunciada",
+    "author": "Gabriel García Márquez",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Ninguém Escreve ao Coronel",
+    "author": "Gabriel García Márquez",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Ficções",
+    "author": "Jorge Luis Borges",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Aleph",
+    "author": "Jorge Luis Borges",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Jogo da Amarelinha",
+    "author": "Julio Cortázar",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Bestiário",
+    "author": "Julio Cortázar",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Pedro Páramo",
+    "author": "Juan Rulfo",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Casa dos Espíritos",
+    "author": "Isabel Allende",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Os Detetives Selvagens",
+    "author": "Roberto Bolaño",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "2666",
+    "author": "Roberto Bolaño",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Cidade e os Cachorros",
+    "author": "Mario Vargas Llosa",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Conversa no Catedral",
+    "author": "Mario Vargas Llosa",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "A Festa do Bode",
+    "author": "Mario Vargas Llosa",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Como Água para Chocolate",
+    "author": "Laura Esquivel",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Túnel",
+    "author": "Ernesto Sabato",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "Sobre Heróis e Tumbas",
+    "author": "Ernesto Sabato",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "A Invenção de Morel",
+    "author": "Adolfo Bioy Casares",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "As Veias Abertas da América Latina",
+    "author": "Eduardo Galeano",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Livro dos Abraços",
+    "author": "Eduardo Galeano",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "Distância de Resgate",
+    "author": "Samanta Schweblin",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "As Coisas que Perdemos no Fogo",
+    "author": "Mariana Enriquez",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "Temporada de Furacões",
+    "author": "Fernanda Melchor",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "O Beijo da Mulher Aranha",
+    "author": "Manuel Puig",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "Vinte Poemas de Amor e uma Canção Desesperada",
+    "author": "Pablo Neruda",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "O Labirinto da Solidão",
+    "author": "Octavio Paz",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "A Trégua",
+    "author": "Mario Benedetti",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "O Carteiro e o Poeta",
+    "author": "Antonio Skármeta",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "Aura",
+    "author": "Carlos Fuentes",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "Crime e Castigo",
+    "author": "Fiódor Dostoiévski",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Os Irmãos Karamázov",
+    "author": "Fiódor Dostoiévski",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "Memórias do Subsolo",
+    "author": "Fiódor Dostoiévski",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Idiota",
+    "author": "Fiódor Dostoiévski",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Anna Kariênina",
+    "author": "Liev Tolstói",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Guerra e Paz",
+    "author": "Liev Tolstói",
+    "openLibrary": false,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "A Morte de Ivan Ilitch",
+    "author": "Liev Tolstói",
+    "openLibrary": false,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "O Mestre e Margarida",
+    "author": "Mikhail Bulgákov",
+    "openLibrary": false,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Almas Mortas",
+    "author": "Nikolai Gógol",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Madame Bovary",
+    "author": "Gustave Flaubert",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Vermelho e o Negro",
+    "author": "Stendhal",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Os Miseráveis",
+    "author": "Victor Hugo",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Conde de Monte Cristo",
+    "author": "Alexandre Dumas",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Em Busca do Tempo Perdido",
+    "author": "Marcel Proust",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "O Estrangeiro",
+    "author": "Albert Camus",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Peste",
+    "author": "Albert Camus",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "A Náusea",
+    "author": "Jean-Paul Sartre",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "O Pequeno Príncipe",
+    "author": "Antoine de Saint-Exupéry",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Metamorfose",
+    "author": "Franz Kafka",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Processo",
+    "author": "Franz Kafka",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Castelo",
+    "author": "Franz Kafka",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "A Montanha Mágica",
+    "author": "Thomas Mann",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Morte em Veneza",
+    "author": "Thomas Mann",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "O Lobo da Estepe",
+    "author": "Hermann Hesse",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Sidarta",
+    "author": "Hermann Hesse",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Demian",
+    "author": "Hermann Hesse",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Os Sofrimentos do Jovem Werther",
+    "author": "Johann Wolfgang von Goethe",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Fausto",
+    "author": "Johann Wolfgang von Goethe",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Orgulho e Preconceito",
+    "author": "Jane Austen",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Razão e Sensibilidade",
+    "author": "Jane Austen",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Jane Eyre",
+    "author": "Charlotte Brontë",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "O Morro dos Ventos Uivantes",
+    "author": "Emily Brontë",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Grandes Esperanças",
+    "author": "Charles Dickens",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Frankenstein",
+    "author": "Mary Shelley",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Drácula",
+    "author": "Bram Stoker",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Retrato de Dorian Gray",
+    "author": "Oscar Wilde",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Mrs. Dalloway",
+    "author": "Virginia Woolf",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Orlando",
+    "author": "Virginia Woolf",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "As Ondas",
+    "author": "Virginia Woolf",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Um Teto Todo Seu",
+    "author": "Virginia Woolf",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Ulisses",
+    "author": "James Joyce",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Dublinenses",
+    "author": "James Joyce",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Grande Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Velho e o Mar",
+    "author": "Ernest Hemingway",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Por Quem os Sinos Dobram",
+    "author": "Ernest Hemingway",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Som e a Fúria",
+    "author": "William Faulkner",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "As Vinhas da Ira",
+    "author": "John Steinbeck",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Ratos e Homens",
+    "author": "John Steinbeck",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "O Apanhador no Campo de Centeio",
+    "author": "J. D. Salinger",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Sol é para Todos",
+    "author": "Harper Lee",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Moby Dick",
+    "author": "Herman Melville",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "A Letra Escarlate",
+    "author": "Nathaniel Hawthorne",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Dom Quixote",
+    "author": "Miguel de Cervantes",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Divina Comédia",
+    "author": "Dante Alighieri",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Odisseia",
+    "author": "Homero",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Hamlet",
+    "author": "William Shakespeare",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Coração das Trevas",
+    "author": "Joseph Conrad",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "1984",
+    "author": "George Orwell",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Revolução dos Bichos",
+    "author": "George Orwell",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Admirável Mundo Novo",
+    "author": "Aldous Huxley",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Fahrenheit 451",
+    "author": "Ray Bradbury",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Senhor das Moscas",
+    "author": "William Golding",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Lolita",
+    "author": "Vladimir Nabokov",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Insustentável Leveza do Ser",
+    "author": "Milan Kundera",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "O Nome da Rosa",
+    "author": "Umberto Eco",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "As Cidades Invisíveis",
+    "author": "Italo Calvino",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Se um Viajante numa Noite de Inverno",
+    "author": "Italo Calvino",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "O Barão nas Árvores",
+    "author": "Italo Calvino",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Leopardo",
+    "author": "Giuseppe Tomasi di Lampedusa",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "É Isto um Homem?",
+    "author": "Primo Levi",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Amiga Genial",
+    "author": "Elena Ferrante",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Dias de Abandono",
+    "author": "Elena Ferrante",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Tambor",
+    "author": "Günter Grass",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "O Perfume",
+    "author": "Patrick Süskind",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Austerlitz",
+    "author": "W. G. Sebald",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "A Consciência de Zeno",
+    "author": "Italo Svevo",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "Norwegian Wood",
+    "author": "Haruki Murakami",
+    "openLibrary": false,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Kafka à Beira-Mar",
+    "author": "Haruki Murakami",
+    "openLibrary": false,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "1Q84",
+    "author": "Haruki Murakami",
+    "openLibrary": false,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Não Me Abandone Jamais",
+    "author": "Kazuo Ishiguro",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "Os Vestígios do Dia",
+    "author": "Kazuo Ishiguro",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "A Vegetariana",
+    "author": "Han Kang",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Amada",
+    "author": "Toni Morrison",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "O Olho Mais Azul",
+    "author": "Toni Morrison",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Cor Púrpura",
+    "author": "Alice Walker",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Conto da Aia",
+    "author": "Margaret Atwood",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Americanah",
+    "author": "Chimamanda Ngozi Adichie",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Meio Sol Amarelo",
+    "author": "Chimamanda Ngozi Adichie",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "Hibisco Roxo",
+    "author": "Chimamanda Ngozi Adichie",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "O Mundo se Despedaça",
+    "author": "Chinua Achebe",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Desonra",
+    "author": "J. M. Coetzee",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "A Estrada",
+    "author": "Cormac McCarthy",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Meridiano de Sangue",
+    "author": "Cormac McCarthy",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Reparação",
+    "author": "Ian McEwan",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "As Horas",
+    "author": "Michael Cunningham",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Middlesex",
+    "author": "Jeffrey Eugenides",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "O Caçador de Pipas",
+    "author": "Khaled Hosseini",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Menina que Roubava Livros",
+    "author": "Markus Zusak",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Elegância do Ouriço",
+    "author": "Muriel Barbery",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "O Deus das Pequenas Coisas",
+    "author": "Arundhati Roy",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Os Filhos da Meia-Noite",
+    "author": "Salman Rushdie",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "Persépolis",
+    "author": "Marjane Satrapi",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Maus",
+    "author": "Art Spiegelman",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Kitchen",
+    "author": "Banana Yoshimoto",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Meu Nome É Vermelho",
+    "author": "Orhan Pamuk",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "Neve",
+    "author": "Orhan Pamuk",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "O Ano do Pensamento Mágico",
+    "author": "Joan Didion",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "A Redoma de Vidro",
+    "author": "Sylvia Plath",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "Pessoas Normais",
+    "author": "Sally Rooney",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Stoner",
+    "author": "John Williams",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Pachinko",
+    "author": "Min Jin Lee",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "Uma Vida Pequena",
+    "author": "Hanya Yanagihara",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "O Diário de Anne Frank",
+    "author": "Anne Frank",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "Duna",
+    "author": "Frank Herbert",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Fundação",
+    "author": "Isaac Asimov",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Eu, Robô",
+    "author": "Isaac Asimov",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "Neuromancer",
+    "author": "William Gibson",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Mão Esquerda da Escuridão",
+    "author": "Ursula K. Le Guin",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Os Despossuídos",
+    "author": "Ursula K. Le Guin",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Solaris",
+    "author": "Stanisław Lem",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Guia do Mochileiro das Galáxias",
+    "author": "Douglas Adams",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Kindred",
+    "author": "Octavia E. Butler",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Parábola do Semeador",
+    "author": "Octavia E. Butler",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "O Hobbit",
+    "author": "J. R. R. Tolkien",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Senhor dos Anéis",
+    "author": "J. R. R. Tolkien",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Laranja Mecânica",
+    "author": "Anthony Burgess",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Androides Sonham com Ovelhas Elétricas?",
+    "author": "Philip K. Dick",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Assassinato no Expresso do Oriente",
+    "author": "Agatha Christie",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "E Não Sobrou Nenhum",
+    "author": "Agatha Christie",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Cão dos Baskervilles",
+    "author": "Arthur Conan Doyle",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Falcão Maltês",
+    "author": "Dashiell Hammett",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Sono Eterno",
+    "author": "Raymond Chandler",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "A Sangue Frio",
+    "author": "Truman Capote",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "O Iluminado",
+    "author": "Stephen King",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Segundo Sexo",
+    "author": "Simone de Beauvoir",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Sapiens: Uma Breve História da Humanidade",
+    "author": "Yuval Noah Harari",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "O Mito de Sísifo",
+    "author": "Albert Camus",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Vigiar e Punir",
+    "author": "Michel Foucault",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Sociedade do Cansaço",
+    "author": "Byung-Chul Han",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": false
+  },
+  {
+    "title": "Mulheres, Raça e Classe",
+    "author": "Angela Davis",
+    "openLibrary": false,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Carta ao Pai",
+    "author": "Franz Kafka",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Cartas a um Jovem Poeta",
+    "author": "Rainer Maria Rilke",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "Walden",
+    "author": "Henry David Thoreau",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Os Condenados da Terra",
+    "author": "Frantz Fanon",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "Pele Negra, Máscaras Brancas",
+    "author": "Frantz Fanon",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Em Busca de Sentido",
+    "author": "Viktor Frankl",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  }
+]

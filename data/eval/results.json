@@ -1,0 +1,3247 @@
+{
+  "summary": {
+    "generatedAt": "2026-10-13T16:27:08.750Z",
+    "models": {
+      "embeddings": "embeddinggemma",
+      "classifier": "gemma4:e4b",
+      "judge": null
+    },
+    "overall": {
+      "lexical": {
+        "p5": null,
+        "ndcg5": null,
+        "emptyQueries": 1
+      },
+      "embedding": {
+        "p5": null,
+        "ndcg5": null,
+        "emptyQueries": 1
+      },
+      "full": {
+        "p5": null,
+        "ndcg5": null,
+        "emptyQueries": 1
+      }
+    },
+    "byType": {
+      "emotional": {
+        "lexical": null,
+        "embedding": null,
+        "full": null
+      },
+      "abstract": {
+        "lexical": null,
+        "embedding": null,
+        "full": null
+      },
+      "author": {
+        "lexical": null,
+        "embedding": null,
+        "full": null
+      },
+      "negative": {
+        "lexical": null,
+        "embedding": null,
+        "full": null
+      },
+      "ambiguous": {
+        "lexical": null,
+        "embedding": null,
+        "full": null
+      }
+    },
+    "abstention": {
+      "outOfScopeDeclined": 4,
+      "outOfScopeTotal": 4,
+      "inScopeAnswered": 23,
+      "inScopeTotal": 23
+    }
+  },
+  "queries": [
+    {
+      "id": "emo-1",
+      "type": "emotional",
+      "query": "quero algo melancólico, mas reconfortante",
+      "expects": null,
+      "confidence": "high",
+      "message": null,
+      "interpretation": {
+        "atmospheres": [
+          "melancholic",
+          "comforting"
+        ],
+        "inferredAtmospheres": [],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": null
+      },
+      "topSyn": 0.3108,
+      "topFeel": 0.525,
+      "systems": {
+        "lexical": [
+          {
+            "id": 70,
+            "title": "Memorial de Aires",
+            "author": "Machado de Assis"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 70,
+            "title": "Memorial de Aires",
+            "author": "Machado de Assis"
+          },
+          {
+            "id": 81,
+            "title": "Perto do Coração Selvagem",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 142,
+            "title": "O Vermelho e o Negro",
+            "author": "Stendhal"
+          },
+          {
+            "id": 86,
+            "title": "Sentimento do Mundo",
+            "author": "Carlos Drummond de Andrade"
+          },
+          {
+            "id": 76,
+            "title": "O Encontro Marcado",
+            "author": "Fernando Sabino"
+          }
+        ],
+        "full": [
+          {
+            "id": 196,
+            "title": "Kitchen",
+            "author": "Banana Yoshimoto"
+          },
+          {
+            "id": 70,
+            "title": "Memorial de Aires",
+            "author": "Machado de Assis"
+          },
+          {
+            "id": 102,
+            "title": "O Pequeno Príncipe",
+            "author": "Antoine de Saint-Exupéry"
+          },
+          {
+            "id": 37,
+            "title": "Dona Flor e Seus Dois Maridos",
+            "author": "Jorge Amado"
+          },
+          {
+            "id": 123,
+            "title": "Reparação",
+            "author": "Ian McEwan"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 1
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "emo-2",
+      "type": "emotional",
+      "query": "preciso de um livro que me faça rir",
+      "expects": null,
+      "confidence": "high",
+      "message": null,
+      "interpretation": {
+        "atmospheres": [
+          "ironic"
+        ],
+        "inferredAtmospheres": [],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": null
+      },
+      "topSyn": 0.3732,
+      "topFeel": 0.4525,
+      "systems": {
+        "lexical": [
+          {
+            "id": 58,
+            "title": "Auto da Compadecida",
+            "author": "Ariano Suassuna"
+          },
+          {
+            "id": 25,
+            "title": "Torto Arado",
+            "author": "Itamar Vieira Junior"
+          },
+          {
+            "id": 202,
+            "title": "Urupês",
+            "author": "Monteiro Lobato"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 50,
+            "title": "O Cheiro do Ralo",
+            "author": "Lourenço Mutarelli"
+          },
+          {
+            "id": 77,
+            "title": "Uma Aprendizagem ou O Livro dos Prazeres",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 63,
+            "title": "O Alienista",
+            "author": "Machado de Assis"
+          },
+          {
+            "id": 195,
+            "title": "O Nome da Rosa",
+            "author": "Umberto Eco"
+          },
+          {
+            "id": 132,
+            "title": "O Guia do Mochileiro das Galáxias",
+            "author": "Douglas Adams"
+          }
+        ],
+        "full": [
+          {
+            "id": 50,
+            "title": "O Cheiro do Ralo",
+            "author": "Lourenço Mutarelli"
+          },
+          {
+            "id": 132,
+            "title": "O Guia do Mochileiro das Galáxias",
+            "author": "Douglas Adams"
+          },
+          {
+            "id": 58,
+            "title": "Auto da Compadecida",
+            "author": "Ariano Suassuna"
+          },
+          {
+            "id": 9,
+            "title": "Memórias de um Sargento de Milícias",
+            "author": "Manuel Antônio de Almeida"
+          },
+          {
+            "id": 169,
+            "title": "O Barão nas Árvores",
+            "author": "Italo Calvino"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 3
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "emo-3",
+      "type": "emotional",
+      "query": "algo para ler quando o coração está partido",
+      "expects": null,
+      "confidence": "high",
+      "message": null,
+      "interpretation": {
+        "atmospheres": [],
+        "inferredAtmospheres": [
+          "melancholic",
+          "comforting"
+        ],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": null
+      },
+      "topSyn": 0.4395,
+      "topFeel": 0.4878,
+      "systems": {
+        "lexical": [
+          {
+            "id": 81,
+            "title": "Perto do Coração Selvagem",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 113,
+            "title": "Coração das Trevas",
+            "author": "Joseph Conrad"
+          },
+          {
+            "id": 44,
+            "title": "Feliz Ano Novo",
+            "author": "Rubem Fonseca"
+          },
+          {
+            "id": 152,
+            "title": "O Cão dos Baskervilles",
+            "author": "Arthur Conan Doyle"
+          },
+          {
+            "id": 175,
+            "title": "Amor de Perdição",
+            "author": "Camilo Castelo Branco"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 81,
+            "title": "Perto do Coração Selvagem",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 26,
+            "title": "A Hora da Estrela",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 62,
+            "title": "A Paixão segundo G.H.",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 77,
+            "title": "Uma Aprendizagem ou O Livro dos Prazeres",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 24,
+            "title": "Crônica da Casa Assassinada",
+            "author": "Lúcio Cardoso"
+          }
+        ],
+        "full": [
+          {
+            "id": 120,
+            "title": "Dias de Abandono",
+            "author": "Elena Ferrante"
+          },
+          {
+            "id": 81,
+            "title": "Perto do Coração Selvagem",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 196,
+            "title": "Kitchen",
+            "author": "Banana Yoshimoto"
+          },
+          {
+            "id": 26,
+            "title": "A Hora da Estrela",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 77,
+            "title": "Uma Aprendizagem ou O Livro dos Prazeres",
+            "author": "Clarice Lispector"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "emo-4",
+      "type": "emotional",
+      "query": "uma história que dê esperança",
+      "expects": null,
+      "confidence": "high",
+      "message": null,
+      "interpretation": {
+        "atmospheres": [
+          "luminous"
+        ],
+        "inferredAtmospheres": [],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": null
+      },
+      "topSyn": 0.3698,
+      "topFeel": 0.3191,
+      "systems": {
+        "lexical": [
+          {
+            "id": 205,
+            "title": "Grandes Esperanças",
+            "author": "Charles Dickens"
+          },
+          {
+            "id": 141,
+            "title": "Ninguém Escreve ao Coronel",
+            "author": "Gabriel García Márquez"
+          },
+          {
+            "id": 192,
+            "title": "O Grande Gatsby",
+            "author": "F. Scott Fitzgerald"
+          },
+          {
+            "id": 2,
+            "title": "Quincas Borba",
+            "author": "Machado de Assis"
+          },
+          {
+            "id": 162,
+            "title": "Bestiário",
+            "author": "Julio Cortázar"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 205,
+            "title": "Grandes Esperanças",
+            "author": "Charles Dickens"
+          },
+          {
+            "id": 154,
+            "title": "Ensaio sobre a Lucidez",
+            "author": "José Saramago"
+          },
+          {
+            "id": 23,
+            "title": "Felicidade Clandestina",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 26,
+            "title": "A Hora da Estrela",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 44,
+            "title": "Feliz Ano Novo",
+            "author": "Rubem Fonseca"
+          }
+        ],
+        "full": [
+          {
+            "id": 158,
+            "title": "O Alquimista",
+            "author": "Paulo Coelho"
+          },
+          {
+            "id": 38,
+            "title": "Tenda dos Milagres",
+            "author": "Jorge Amado"
+          },
+          {
+            "id": 145,
+            "title": "O Hobbit",
+            "author": "J. R. R. Tolkien"
+          },
+          {
+            "id": 137,
+            "title": "Sapiens: Uma Breve História da Humanidade",
+            "author": "Yuval Noah Harari"
+          },
+          {
+            "id": 208,
+            "title": "A Cidade e as Serras",
+            "author": "Eça de Queirós"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "emo-5",
+      "type": "emotional",
+      "query": "quero um livro que me tire o sono de tanto suspense",
+      "expects": null,
+      "confidence": "high",
+      "message": null,
+      "interpretation": {
+        "atmospheres": [
+          "tense"
+        ],
+        "inferredAtmospheres": [],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": null
+      },
+      "topSyn": 0.3902,
+      "topFeel": 0.5088,
+      "systems": {
+        "lexical": [
+          {
+            "id": 206,
+            "title": "O Lobo da Estepe",
+            "author": "Hermann Hesse"
+          },
+          {
+            "id": 36,
+            "title": "Leite Derramado",
+            "author": "Chico Buarque"
+          },
+          {
+            "id": 22,
+            "title": "O Vampiro de Curitiba",
+            "author": "Dalton Trevisan"
+          },
+          {
+            "id": 99,
+            "title": "Pedro Páramo",
+            "author": "Juan Rulfo"
+          },
+          {
+            "id": 122,
+            "title": "O Conto da Aia",
+            "author": "Margaret Atwood"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 95,
+            "title": "As Intermitências da Morte",
+            "author": "José Saramago"
+          },
+          {
+            "id": 136,
+            "title": "O Falcão Maltês",
+            "author": "Dashiell Hammett"
+          },
+          {
+            "id": 206,
+            "title": "O Lobo da Estepe",
+            "author": "Hermann Hesse"
+          },
+          {
+            "id": 84,
+            "title": "Ópera dos Mortos",
+            "author": "Autran Dourado"
+          },
+          {
+            "id": 73,
+            "title": "Agosto",
+            "author": "Rubem Fonseca"
+          }
+        ],
+        "full": [
+          {
+            "id": 171,
+            "title": "Assassinato no Expresso do Oriente",
+            "author": "Agatha Christie"
+          },
+          {
+            "id": 136,
+            "title": "O Falcão Maltês",
+            "author": "Dashiell Hammett"
+          },
+          {
+            "id": 73,
+            "title": "Agosto",
+            "author": "Rubem Fonseca"
+          },
+          {
+            "id": 152,
+            "title": "O Cão dos Baskervilles",
+            "author": "Arthur Conan Doyle"
+          },
+          {
+            "id": 209,
+            "title": "A Sangue Frio",
+            "author": "Truman Capote"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "abs-1",
+      "type": "abstract",
+      "query": "algo que pareça uma tarde chuvosa",
+      "expects": null,
+      "confidence": "high",
+      "message": null,
+      "interpretation": {
+        "atmospheres": [
+          "melancholic",
+          "contemplative"
+        ],
+        "inferredAtmospheres": [],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": "slow",
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": null
+      },
+      "topSyn": 0.3293,
+      "topFeel": 0.3955,
+      "systems": {
+        "lexical": [
+          {
+            "id": 154,
+            "title": "Ensaio sobre a Lucidez",
+            "author": "José Saramago"
+          },
+          {
+            "id": 167,
+            "title": "A Divina Comédia",
+            "author": "Dante Alighieri"
+          },
+          {
+            "id": 63,
+            "title": "O Alienista",
+            "author": "Machado de Assis"
+          },
+          {
+            "id": 44,
+            "title": "Feliz Ano Novo",
+            "author": "Rubem Fonseca"
+          },
+          {
+            "id": 19,
+            "title": "Mar Morto",
+            "author": "Jorge Amado"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 154,
+            "title": "Ensaio sobre a Lucidez",
+            "author": "José Saramago"
+          },
+          {
+            "id": 16,
+            "title": "O Tempo e o Vento",
+            "author": "Erico Verissimo"
+          },
+          {
+            "id": 13,
+            "title": "Eles Eram Muitos Cavalos",
+            "author": "Luiz Ruffato"
+          },
+          {
+            "id": 109,
+            "title": "Mrs. Dalloway",
+            "author": "Virginia Woolf"
+          },
+          {
+            "id": 49,
+            "title": "O Quinze",
+            "author": "Rachel de Queiroz"
+          }
+        ],
+        "full": [
+          {
+            "id": 174,
+            "title": "Em Busca do Tempo Perdido",
+            "author": "Marcel Proust"
+          },
+          {
+            "id": 109,
+            "title": "Mrs. Dalloway",
+            "author": "Virginia Woolf"
+          },
+          {
+            "id": 190,
+            "title": "As Ondas",
+            "author": "Virginia Woolf"
+          },
+          {
+            "id": 26,
+            "title": "A Hora da Estrela",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 7,
+            "title": "Senhora",
+            "author": "José de Alencar"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "abs-2",
+      "type": "abstract",
+      "query": "um livro com cheiro de casa de vó",
+      "expects": null,
+      "confidence": "high",
+      "message": null,
+      "interpretation": {
+        "atmospheres": [],
+        "inferredAtmospheres": [
+          "nostalgic",
+          "comforting"
+        ],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": null
+      },
+      "topSyn": 0.5045,
+      "topFeel": 0.4545,
+      "systems": {
+        "lexical": [
+          {
+            "id": 50,
+            "title": "O Cheiro do Ralo",
+            "author": "Lourenço Mutarelli"
+          },
+          {
+            "id": 24,
+            "title": "Crônica da Casa Assassinada",
+            "author": "Lúcio Cardoso"
+          },
+          {
+            "id": 181,
+            "title": "A Amiga Genial",
+            "author": "Elena Ferrante"
+          },
+          {
+            "id": 204,
+            "title": "O Perfume",
+            "author": "Patrick Süskind"
+          },
+          {
+            "id": 88,
+            "title": "Um Copo de Cólera",
+            "author": "Raduan Nassar"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 50,
+            "title": "O Cheiro do Ralo",
+            "author": "Lourenço Mutarelli"
+          },
+          {
+            "id": 204,
+            "title": "O Perfume",
+            "author": "Patrick Süskind"
+          },
+          {
+            "id": 36,
+            "title": "Leite Derramado",
+            "author": "Chico Buarque"
+          },
+          {
+            "id": 17,
+            "title": "Viva o Povo Brasileiro",
+            "author": "João Ubaldo Ribeiro"
+          },
+          {
+            "id": 24,
+            "title": "Crônica da Casa Assassinada",
+            "author": "Lúcio Cardoso"
+          }
+        ],
+        "full": [
+          {
+            "id": 14,
+            "title": "Gabriela, Cravo e Canela",
+            "author": "Jorge Amado"
+          },
+          {
+            "id": 36,
+            "title": "Leite Derramado",
+            "author": "Chico Buarque"
+          },
+          {
+            "id": 204,
+            "title": "O Perfume",
+            "author": "Patrick Süskind"
+          },
+          {
+            "id": 37,
+            "title": "Dona Flor e Seus Dois Maridos",
+            "author": "Jorge Amado"
+          },
+          {
+            "id": 50,
+            "title": "O Cheiro do Ralo",
+            "author": "Lourenço Mutarelli"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "abs-3",
+      "type": "abstract",
+      "query": "uma história curta que me deixe pensando por dias",
+      "expects": null,
+      "confidence": "high",
+      "message": null,
+      "interpretation": {
+        "atmospheres": [
+          "contemplative"
+        ],
+        "inferredAtmospheres": [],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": null,
+        "length": "short",
+        "era": null,
+        "genres": [
+          "Contos",
+          "Novela"
+        ],
+        "reference": null
+      },
+      "topSyn": 0.3892,
+      "topFeel": 0.3545,
+      "systems": {
+        "lexical": [
+          {
+            "id": 58,
+            "title": "Auto da Compadecida",
+            "author": "Ariano Suassuna"
+          },
+          {
+            "id": 111,
+            "title": "O Apanhador no Campo de Centeio",
+            "author": "J. D. Salinger"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 120,
+            "title": "Dias de Abandono",
+            "author": "Elena Ferrante"
+          },
+          {
+            "id": 98,
+            "title": "Teoria Geral do Esquecimento",
+            "author": "José Eduardo Agualusa"
+          },
+          {
+            "id": 109,
+            "title": "Mrs. Dalloway",
+            "author": "Virginia Woolf"
+          },
+          {
+            "id": 62,
+            "title": "A Paixão segundo G.H.",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 39,
+            "title": "Memorial de Maria Moura",
+            "author": "Rachel de Queiroz"
+          }
+        ],
+        "full": [
+          {
+            "id": 41,
+            "title": "Laços de Família",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 23,
+            "title": "Felicidade Clandestina",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 62,
+            "title": "A Paixão segundo G.H.",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 109,
+            "title": "Mrs. Dalloway",
+            "author": "Virginia Woolf"
+          },
+          {
+            "id": 85,
+            "title": "Estorvo",
+            "author": "Chico Buarque"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 2
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "abs-4",
+      "type": "abstract",
+      "query": "um livro para ler devagar, saboreando cada frase",
+      "expects": null,
+      "confidence": "high",
+      "message": null,
+      "interpretation": {
+        "atmospheres": [],
+        "inferredAtmospheres": [
+          "contemplative"
+        ],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": "slow",
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": null
+      },
+      "topSyn": 0.4024,
+      "topFeel": 0.5452,
+      "systems": {
+        "lexical": [
+          {
+            "id": 3,
+            "title": "Vidas Secas",
+            "author": "Graciliano Ramos"
+          },
+          {
+            "id": 62,
+            "title": "A Paixão segundo G.H.",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 190,
+            "title": "As Ondas",
+            "author": "Virginia Woolf"
+          },
+          {
+            "id": 95,
+            "title": "As Intermitências da Morte",
+            "author": "José Saramago"
+          },
+          {
+            "id": 133,
+            "title": "O Senhor dos Anéis",
+            "author": "J. R. R. Tolkien"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 139,
+            "title": "Ensaio sobre a Cegueira",
+            "author": "José Saramago"
+          },
+          {
+            "id": 77,
+            "title": "Uma Aprendizagem ou O Livro dos Prazeres",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 95,
+            "title": "As Intermitências da Morte",
+            "author": "José Saramago"
+          },
+          {
+            "id": 13,
+            "title": "Eles Eram Muitos Cavalos",
+            "author": "Luiz Ruffato"
+          },
+          {
+            "id": 62,
+            "title": "A Paixão segundo G.H.",
+            "author": "Clarice Lispector"
+          }
+        ],
+        "full": [
+          {
+            "id": 174,
+            "title": "Em Busca do Tempo Perdido",
+            "author": "Marcel Proust"
+          },
+          {
+            "id": 55,
+            "title": "Água Viva",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 190,
+            "title": "As Ondas",
+            "author": "Virginia Woolf"
+          },
+          {
+            "id": 179,
+            "title": "Os Vestígios do Dia",
+            "author": "Kazuo Ishiguro"
+          },
+          {
+            "id": 81,
+            "title": "Perto do Coração Selvagem",
+            "author": "Clarice Lispector"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "abs-5",
+      "type": "abstract",
+      "query": "um livro que pareça um sonho estranho",
+      "expects": null,
+      "confidence": "high",
+      "message": null,
+      "interpretation": {
+        "atmospheres": [
+          "unsettling",
+          "dreamlike"
+        ],
+        "inferredAtmospheres": [],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": null
+      },
+      "topSyn": 0.4282,
+      "topFeel": 0.4688,
+      "systems": {
+        "lexical": [
+          {
+            "id": 158,
+            "title": "O Alquimista",
+            "author": "Paulo Coelho"
+          },
+          {
+            "id": 187,
+            "title": "O Estrangeiro",
+            "author": "Albert Camus"
+          },
+          {
+            "id": 5,
+            "title": "O Cortiço",
+            "author": "Aluísio Azevedo"
+          },
+          {
+            "id": 160,
+            "title": "O Vendedor de Passados",
+            "author": "José Eduardo Agualusa"
+          },
+          {
+            "id": 115,
+            "title": "A Revolução dos Bichos",
+            "author": "George Orwell"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 67,
+            "title": "Não Verás País Nenhum",
+            "author": "Ignácio de Loyola Brandão"
+          },
+          {
+            "id": 131,
+            "title": "Os Despossuídos",
+            "author": "Ursula K. Le Guin"
+          },
+          {
+            "id": 63,
+            "title": "O Alienista",
+            "author": "Machado de Assis"
+          },
+          {
+            "id": 59,
+            "title": "Incidente em Antares",
+            "author": "Erico Verissimo"
+          },
+          {
+            "id": 95,
+            "title": "As Intermitências da Morte",
+            "author": "José Saramago"
+          }
+        ],
+        "full": [
+          {
+            "id": 47,
+            "title": "Macunaíma",
+            "author": "Mário de Andrade"
+          },
+          {
+            "id": 172,
+            "title": "O Jogo da Amarelinha",
+            "author": "Julio Cortázar"
+          },
+          {
+            "id": 67,
+            "title": "Não Verás País Nenhum",
+            "author": "Ignácio de Loyola Brandão"
+          },
+          {
+            "id": 121,
+            "title": "A Vegetariana",
+            "author": "Han Kang"
+          },
+          {
+            "id": 95,
+            "title": "As Intermitências da Morte",
+            "author": "José Saramago"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "aut-1",
+      "type": "author",
+      "query": "livros para quem gostou de Clarice Lispector",
+      "expects": null,
+      "confidence": "high",
+      "message": null,
+      "interpretation": {
+        "atmospheres": [],
+        "inferredAtmospheres": [
+          "comforting",
+          "intense"
+        ],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": "Clarice Lispector"
+      },
+      "topSyn": 0.6232,
+      "topFeel": 0.3923,
+      "systems": {
+        "lexical": [
+          {
+            "id": 81,
+            "title": "Perto do Coração Selvagem",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 77,
+            "title": "Uma Aprendizagem ou O Livro dos Prazeres",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 55,
+            "title": "Água Viva",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 62,
+            "title": "A Paixão segundo G.H.",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 41,
+            "title": "Laços de Família",
+            "author": "Clarice Lispector"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 23,
+            "title": "Felicidade Clandestina",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 77,
+            "title": "Uma Aprendizagem ou O Livro dos Prazeres",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 41,
+            "title": "Laços de Família",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 55,
+            "title": "Água Viva",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 81,
+            "title": "Perto do Coração Selvagem",
+            "author": "Clarice Lispector"
+          }
+        ],
+        "full": [
+          {
+            "id": 109,
+            "title": "Mrs. Dalloway",
+            "author": "Virginia Woolf"
+          },
+          {
+            "id": 45,
+            "title": "Grande Sertão: Veredas",
+            "author": "João Guimarães Rosa"
+          },
+          {
+            "id": 85,
+            "title": "Estorvo",
+            "author": "Chico Buarque"
+          },
+          {
+            "id": 28,
+            "title": "As Meninas",
+            "author": "Lygia Fagundes Telles"
+          },
+          {
+            "id": 174,
+            "title": "Em Busca do Tempo Perdido",
+            "author": "Marcel Proust"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "aut-2",
+      "type": "author",
+      "query": "algo no estilo de Gabriel García Márquez",
+      "expects": null,
+      "confidence": "high",
+      "message": null,
+      "interpretation": {
+        "atmospheres": [],
+        "inferredAtmospheres": [
+          "unsettling"
+        ],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": "Gabriel García Márquez"
+      },
+      "topSyn": 0.4448,
+      "topFeel": 0.3995,
+      "systems": {
+        "lexical": [
+          {
+            "id": 182,
+            "title": "Cem Anos de Solidão",
+            "author": "Gabriel García Márquez"
+          },
+          {
+            "id": 140,
+            "title": "O Amor nos Tempos do Cólera",
+            "author": "Gabriel García Márquez"
+          },
+          {
+            "id": 141,
+            "title": "Ninguém Escreve ao Coronel",
+            "author": "Gabriel García Márquez"
+          },
+          {
+            "id": 99,
+            "title": "Pedro Páramo",
+            "author": "Juan Rulfo"
+          },
+          {
+            "id": 14,
+            "title": "Gabriela, Cravo e Canela",
+            "author": "Jorge Amado"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 182,
+            "title": "Cem Anos de Solidão",
+            "author": "Gabriel García Márquez"
+          },
+          {
+            "id": 141,
+            "title": "Ninguém Escreve ao Coronel",
+            "author": "Gabriel García Márquez"
+          },
+          {
+            "id": 140,
+            "title": "O Amor nos Tempos do Cólera",
+            "author": "Gabriel García Márquez"
+          },
+          {
+            "id": 60,
+            "title": "O Que É Isso, Companheiro?",
+            "author": "Fernando Gabeira"
+          },
+          {
+            "id": 14,
+            "title": "Gabriela, Cravo e Canela",
+            "author": "Jorge Amado"
+          }
+        ],
+        "full": [
+          {
+            "id": 16,
+            "title": "O Tempo e o Vento",
+            "author": "Erico Verissimo"
+          },
+          {
+            "id": 99,
+            "title": "Pedro Páramo",
+            "author": "Juan Rulfo"
+          },
+          {
+            "id": 111,
+            "title": "O Apanhador no Campo de Centeio",
+            "author": "J. D. Salinger"
+          },
+          {
+            "id": 88,
+            "title": "Um Copo de Cólera",
+            "author": "Raduan Nassar"
+          },
+          {
+            "id": 1,
+            "title": "Dom Casmurro",
+            "author": "Machado de Assis"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "aut-3",
+      "type": "author",
+      "query": "para quem gostou de Torto Arado",
+      "expects": null,
+      "confidence": "high",
+      "message": null,
+      "interpretation": {
+        "atmospheres": [],
+        "inferredAtmospheres": [],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": "Torto Arado"
+      },
+      "topSyn": 0.4648,
+      "topFeel": 0.2868,
+      "systems": {
+        "lexical": [
+          {
+            "id": 25,
+            "title": "Torto Arado",
+            "author": "Itamar Vieira Junior"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 25,
+            "title": "Torto Arado",
+            "author": "Itamar Vieira Junior"
+          },
+          {
+            "id": 38,
+            "title": "Tenda dos Milagres",
+            "author": "Jorge Amado"
+          },
+          {
+            "id": 6,
+            "title": "Triste Fim de Policarpo Quaresma",
+            "author": "Lima Barreto"
+          },
+          {
+            "id": 19,
+            "title": "Mar Morto",
+            "author": "Jorge Amado"
+          },
+          {
+            "id": 172,
+            "title": "O Jogo da Amarelinha",
+            "author": "Julio Cortázar"
+          }
+        ],
+        "full": [
+          {
+            "id": 72,
+            "title": "O Avesso da Pele",
+            "author": "Jeferson Tenório"
+          },
+          {
+            "id": 33,
+            "title": "Um Defeito de Cor",
+            "author": "Ana Maria Gonçalves"
+          },
+          {
+            "id": 3,
+            "title": "Vidas Secas",
+            "author": "Graciliano Ramos"
+          },
+          {
+            "id": 17,
+            "title": "Viva o Povo Brasileiro",
+            "author": "João Ubaldo Ribeiro"
+          },
+          {
+            "id": 12,
+            "title": "Recordações do Escrivão Isaías Caminha",
+            "author": "Lima Barreto"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 1
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "aut-4",
+      "type": "author",
+      "query": "livros do Saramago",
+      "expects": null,
+      "confidence": "high",
+      "message": null,
+      "interpretation": {
+        "atmospheres": [],
+        "inferredAtmospheres": [
+          "ironic"
+        ],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": "José Saramago"
+      },
+      "topSyn": 0.474,
+      "topFeel": 0.324,
+      "systems": {
+        "lexical": [
+          {
+            "id": 154,
+            "title": "Ensaio sobre a Lucidez",
+            "author": "José Saramago"
+          },
+          {
+            "id": 170,
+            "title": "O Evangelho segundo Jesus Cristo",
+            "author": "José Saramago"
+          },
+          {
+            "id": 94,
+            "title": "Memorial do Convento",
+            "author": "José Saramago"
+          },
+          {
+            "id": 96,
+            "title": "A Jangada de Pedra",
+            "author": "José Saramago"
+          },
+          {
+            "id": 139,
+            "title": "Ensaio sobre a Cegueira",
+            "author": "José Saramago"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 170,
+            "title": "O Evangelho segundo Jesus Cristo",
+            "author": "José Saramago"
+          },
+          {
+            "id": 139,
+            "title": "Ensaio sobre a Cegueira",
+            "author": "José Saramago"
+          },
+          {
+            "id": 95,
+            "title": "As Intermitências da Morte",
+            "author": "José Saramago"
+          },
+          {
+            "id": 94,
+            "title": "Memorial do Convento",
+            "author": "José Saramago"
+          },
+          {
+            "id": 154,
+            "title": "Ensaio sobre a Lucidez",
+            "author": "José Saramago"
+          }
+        ],
+        "full": [
+          {
+            "id": 170,
+            "title": "O Evangelho segundo Jesus Cristo",
+            "author": "José Saramago"
+          },
+          {
+            "id": 95,
+            "title": "As Intermitências da Morte",
+            "author": "José Saramago"
+          },
+          {
+            "id": 139,
+            "title": "Ensaio sobre a Cegueira",
+            "author": "José Saramago"
+          },
+          {
+            "id": 94,
+            "title": "Memorial do Convento",
+            "author": "José Saramago"
+          },
+          {
+            "id": 154,
+            "title": "Ensaio sobre a Lucidez",
+            "author": "José Saramago"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "aut-5",
+      "type": "author",
+      "query": "para quem gosta de Rupi Kaur",
+      "expects": "limitation",
+      "confidence": "none",
+      "message": "Rupi Kaur não está neste catálogo. Sem conhecer os livros dessa referência, prefiro não inventar uma semelhança.",
+      "interpretation": {
+        "atmospheres": [],
+        "inferredAtmospheres": [
+          "comforting"
+        ],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": "Rupi Kaur"
+      },
+      "topSyn": 0.3585,
+      "topFeel": 0.389,
+      "systems": {
+        "lexical": [],
+        "embedding": [
+          {
+            "id": 124,
+            "title": "O Caçador de Pipas",
+            "author": "Khaled Hosseini"
+          },
+          {
+            "id": 146,
+            "title": "A Menina que Roubava Livros",
+            "author": "Markus Zusak"
+          },
+          {
+            "id": 166,
+            "title": "Pessoas Normais",
+            "author": "Sally Rooney"
+          },
+          {
+            "id": 111,
+            "title": "O Apanhador no Campo de Centeio",
+            "author": "J. D. Salinger"
+          },
+          {
+            "id": 125,
+            "title": "Persépolis",
+            "author": "Marjane Satrapi"
+          }
+        ],
+        "full": []
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 0
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 0
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "neg-1",
+      "type": "negative",
+      "query": "quero um livro sobre solidão, mas sem ser deprimente",
+      "expects": null,
+      "confidence": "high",
+      "message": null,
+      "interpretation": {
+        "atmospheres": [],
+        "inferredAtmospheres": [
+          "melancholic"
+        ],
+        "avoid": [
+          "deprimente"
+        ],
+        "avoidAtmospheres": [
+          "dark"
+        ],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": null
+      },
+      "topSyn": 0.4765,
+      "topFeel": 0.4813,
+      "systems": {
+        "lexical": [
+          {
+            "id": 182,
+            "title": "Cem Anos de Solidão",
+            "author": "Gabriel García Márquez"
+          },
+          {
+            "id": 39,
+            "title": "Memorial de Maria Moura",
+            "author": "Rachel de Queiroz"
+          },
+          {
+            "id": 22,
+            "title": "O Vampiro de Curitiba",
+            "author": "Dalton Trevisan"
+          },
+          {
+            "id": 190,
+            "title": "As Ondas",
+            "author": "Virginia Woolf"
+          },
+          {
+            "id": 120,
+            "title": "Dias de Abandono",
+            "author": "Elena Ferrante"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 182,
+            "title": "Cem Anos de Solidão",
+            "author": "Gabriel García Márquez"
+          },
+          {
+            "id": 62,
+            "title": "A Paixão segundo G.H.",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 120,
+            "title": "Dias de Abandono",
+            "author": "Elena Ferrante"
+          },
+          {
+            "id": 77,
+            "title": "Uma Aprendizagem ou O Livro dos Prazeres",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 26,
+            "title": "A Hora da Estrela",
+            "author": "Clarice Lispector"
+          }
+        ],
+        "full": [
+          {
+            "id": 182,
+            "title": "Cem Anos de Solidão",
+            "author": "Gabriel García Márquez"
+          },
+          {
+            "id": 206,
+            "title": "O Lobo da Estepe",
+            "author": "Hermann Hesse"
+          },
+          {
+            "id": 120,
+            "title": "Dias de Abandono",
+            "author": "Elena Ferrante"
+          },
+          {
+            "id": 96,
+            "title": "A Jangada de Pedra",
+            "author": "José Saramago"
+          },
+          {
+            "id": 210,
+            "title": "Ratos e Homens",
+            "author": "John Steinbeck"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "neg-2",
+      "type": "negative",
+      "query": "um romance delicado, mas não previsível",
+      "expects": null,
+      "confidence": "high",
+      "message": "Não tenho como avaliar \"previsível\" com os dados do catálogo; considerei o restante do pedido.",
+      "interpretation": {
+        "atmospheres": [
+          "comforting"
+        ],
+        "inferredAtmospheres": [
+          "melancholic"
+        ],
+        "avoid": [
+          "previsível"
+        ],
+        "avoidAtmospheres": [],
+        "unassessable": [
+          "previsível"
+        ],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [
+          "Romance"
+        ],
+        "reference": null
+      },
+      "topSyn": 0.4556,
+      "topFeel": 0.474,
+      "systems": {
+        "lexical": [
+          {
+            "id": 83,
+            "title": "Romance d'A Pedra do Reino",
+            "author": "Ariano Suassuna"
+          },
+          {
+            "id": 74,
+            "title": "Romanceiro da Inconfidência",
+            "author": "Cecília Meireles"
+          },
+          {
+            "id": 112,
+            "title": "Dom Quixote",
+            "author": "Miguel de Cervantes"
+          },
+          {
+            "id": 81,
+            "title": "Perto do Coração Selvagem",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 39,
+            "title": "Memorial de Maria Moura",
+            "author": "Rachel de Queiroz"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 81,
+            "title": "Perto do Coração Selvagem",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 77,
+            "title": "Uma Aprendizagem ou O Livro dos Prazeres",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 56,
+            "title": "Ponciá Vicêncio",
+            "author": "Conceição Evaristo"
+          },
+          {
+            "id": 207,
+            "title": "Os Sofrimentos do Jovem Werther",
+            "author": "Johann Wolfgang von Goethe"
+          },
+          {
+            "id": 27,
+            "title": "A Moreninha",
+            "author": "Joaquim Manuel de Macedo"
+          }
+        ],
+        "full": [
+          {
+            "id": 27,
+            "title": "A Moreninha",
+            "author": "Joaquim Manuel de Macedo"
+          },
+          {
+            "id": 149,
+            "title": "Orgulho e Preconceito",
+            "author": "Jane Austen"
+          },
+          {
+            "id": 14,
+            "title": "Gabriela, Cravo e Canela",
+            "author": "Jorge Amado"
+          },
+          {
+            "id": 37,
+            "title": "Dona Flor e Seus Dois Maridos",
+            "author": "Jorge Amado"
+          },
+          {
+            "id": 76,
+            "title": "O Encontro Marcado",
+            "author": "Fernando Sabino"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "neg-3",
+      "type": "negative",
+      "query": "ficção científica que não seja pessimista",
+      "expects": null,
+      "confidence": "high",
+      "message": null,
+      "interpretation": {
+        "atmospheres": [],
+        "inferredAtmospheres": [],
+        "avoid": [
+          "pessimista"
+        ],
+        "avoidAtmospheres": [
+          "dark"
+        ],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [
+          "Ficção científica"
+        ],
+        "reference": null
+      },
+      "topSyn": 0.4538,
+      "topFeel": 0.3944,
+      "systems": {
+        "lexical": [
+          {
+            "id": 147,
+            "title": "Solaris",
+            "author": "Stanisław Lem"
+          },
+          {
+            "id": 128,
+            "title": "Duna",
+            "author": "Frank Herbert"
+          },
+          {
+            "id": 67,
+            "title": "Não Verás País Nenhum",
+            "author": "Ignácio de Loyola Brandão"
+          },
+          {
+            "id": 129,
+            "title": "Neuromancer",
+            "author": "William Gibson"
+          },
+          {
+            "id": 130,
+            "title": "A Mão Esquerda da Escuridão",
+            "author": "Ursula K. Le Guin"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 147,
+            "title": "Solaris",
+            "author": "Stanisław Lem"
+          },
+          {
+            "id": 135,
+            "title": "Androides Sonham com Ovelhas Elétricas?",
+            "author": "Philip K. Dick"
+          },
+          {
+            "id": 131,
+            "title": "Os Despossuídos",
+            "author": "Ursula K. Le Guin"
+          },
+          {
+            "id": 129,
+            "title": "Neuromancer",
+            "author": "William Gibson"
+          },
+          {
+            "id": 132,
+            "title": "O Guia do Mochileiro das Galáxias",
+            "author": "Douglas Adams"
+          }
+        ],
+        "full": [
+          {
+            "id": 147,
+            "title": "Solaris",
+            "author": "Stanisław Lem"
+          },
+          {
+            "id": 132,
+            "title": "O Guia do Mochileiro das Galáxias",
+            "author": "Douglas Adams"
+          },
+          {
+            "id": 135,
+            "title": "Androides Sonham com Ovelhas Elétricas?",
+            "author": "Philip K. Dick"
+          },
+          {
+            "id": 129,
+            "title": "Neuromancer",
+            "author": "William Gibson"
+          },
+          {
+            "id": 67,
+            "title": "Não Verás País Nenhum",
+            "author": "Ignácio de Loyola Brandão"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "neg-4",
+      "type": "negative",
+      "query": "um clássico, mas nada muito longo",
+      "expects": null,
+      "confidence": "high",
+      "message": null,
+      "interpretation": {
+        "atmospheres": [],
+        "inferredAtmospheres": [
+          "nostalgic",
+          "melancholic"
+        ],
+        "avoid": [
+          "longo"
+        ],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": null,
+        "length": "short",
+        "era": "classic",
+        "genres": [],
+        "reference": null
+      },
+      "topSyn": 0.3518,
+      "topFeel": 0.42,
+      "systems": {
+        "lexical": [
+          {
+            "id": 168,
+            "title": "Os Maias",
+            "author": "Eça de Queirós"
+          },
+          {
+            "id": 172,
+            "title": "O Jogo da Amarelinha",
+            "author": "Julio Cortázar"
+          },
+          {
+            "id": 22,
+            "title": "O Vampiro de Curitiba",
+            "author": "Dalton Trevisan"
+          },
+          {
+            "id": 48,
+            "title": "Os Sertões",
+            "author": "Euclides da Cunha"
+          },
+          {
+            "id": 205,
+            "title": "Grandes Esperanças",
+            "author": "Charles Dickens"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 23,
+            "title": "Felicidade Clandestina",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 16,
+            "title": "O Tempo e o Vento",
+            "author": "Erico Verissimo"
+          },
+          {
+            "id": 109,
+            "title": "Mrs. Dalloway",
+            "author": "Virginia Woolf"
+          },
+          {
+            "id": 77,
+            "title": "Uma Aprendizagem ou O Livro dos Prazeres",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 179,
+            "title": "Os Vestígios do Dia",
+            "author": "Kazuo Ishiguro"
+          }
+        ],
+        "full": [
+          {
+            "id": 93,
+            "title": "Mensagem",
+            "author": "Fernando Pessoa"
+          },
+          {
+            "id": 49,
+            "title": "O Quinze",
+            "author": "Rachel de Queiroz"
+          },
+          {
+            "id": 84,
+            "title": "Ópera dos Mortos",
+            "author": "Autran Dourado"
+          },
+          {
+            "id": 88,
+            "title": "Um Copo de Cólera",
+            "author": "Raduan Nassar"
+          },
+          {
+            "id": 27,
+            "title": "A Moreninha",
+            "author": "Joaquim Manuel de Macedo"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "neg-5",
+      "type": "negative",
+      "query": "uma história de família sem ser triste",
+      "expects": null,
+      "confidence": "high",
+      "message": null,
+      "interpretation": {
+        "atmospheres": [],
+        "inferredAtmospheres": [],
+        "avoid": [
+          "triste"
+        ],
+        "avoidAtmospheres": [
+          "melancholic"
+        ],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": null
+      },
+      "topSyn": 0.4745,
+      "topFeel": 0.4043,
+      "systems": {
+        "lexical": [
+          {
+            "id": 6,
+            "title": "Triste Fim de Policarpo Quaresma",
+            "author": "Lima Barreto"
+          },
+          {
+            "id": 26,
+            "title": "A Hora da Estrela",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 120,
+            "title": "Dias de Abandono",
+            "author": "Elena Ferrante"
+          },
+          {
+            "id": 41,
+            "title": "Laços de Família",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 103,
+            "title": "A Metamorfose",
+            "author": "Franz Kafka"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 41,
+            "title": "Laços de Família",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 36,
+            "title": "Leite Derramado",
+            "author": "Chico Buarque"
+          },
+          {
+            "id": 168,
+            "title": "Os Maias",
+            "author": "Eça de Queirós"
+          },
+          {
+            "id": 69,
+            "title": "A Resistência",
+            "author": "Julián Fuks"
+          },
+          {
+            "id": 23,
+            "title": "Felicidade Clandestina",
+            "author": "Clarice Lispector"
+          }
+        ],
+        "full": [
+          {
+            "id": 36,
+            "title": "Leite Derramado",
+            "author": "Chico Buarque"
+          },
+          {
+            "id": 69,
+            "title": "A Resistência",
+            "author": "Julián Fuks"
+          },
+          {
+            "id": 41,
+            "title": "Laços de Família",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 31,
+            "title": "Dois Irmãos",
+            "author": "Milton Hatoum"
+          },
+          {
+            "id": 183,
+            "title": "A Casa dos Espíritos",
+            "author": "Isabel Allende"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "amb-1",
+      "type": "ambiguous",
+      "query": "romance",
+      "expects": null,
+      "confidence": "high",
+      "message": null,
+      "interpretation": {
+        "atmospheres": [],
+        "inferredAtmospheres": [],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [
+          "Romance"
+        ],
+        "reference": null
+      },
+      "topSyn": 0.317,
+      "topFeel": 0.3024,
+      "systems": {
+        "lexical": [
+          {
+            "id": 83,
+            "title": "Romance d'A Pedra do Reino",
+            "author": "Ariano Suassuna"
+          },
+          {
+            "id": 74,
+            "title": "Romanceiro da Inconfidência",
+            "author": "Cecília Meireles"
+          },
+          {
+            "id": 112,
+            "title": "Dom Quixote",
+            "author": "Miguel de Cervantes"
+          },
+          {
+            "id": 81,
+            "title": "Perto do Coração Selvagem",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 39,
+            "title": "Memorial de Maria Moura",
+            "author": "Rachel de Queiroz"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 57,
+            "title": "K. Relato de uma Busca",
+            "author": "Bernardo Kucinski"
+          },
+          {
+            "id": 53,
+            "title": "Cinzas do Norte",
+            "author": "Milton Hatoum"
+          },
+          {
+            "id": 175,
+            "title": "Amor de Perdição",
+            "author": "Camilo Castelo Branco"
+          },
+          {
+            "id": 207,
+            "title": "Os Sofrimentos do Jovem Werther",
+            "author": "Johann Wolfgang von Goethe"
+          },
+          {
+            "id": 39,
+            "title": "Memorial de Maria Moura",
+            "author": "Rachel de Queiroz"
+          }
+        ],
+        "full": [
+          {
+            "id": 175,
+            "title": "Amor de Perdição",
+            "author": "Camilo Castelo Branco"
+          },
+          {
+            "id": 27,
+            "title": "A Moreninha",
+            "author": "Joaquim Manuel de Macedo"
+          },
+          {
+            "id": 140,
+            "title": "O Amor nos Tempos do Cólera",
+            "author": "Gabriel García Márquez"
+          },
+          {
+            "id": 207,
+            "title": "Os Sofrimentos do Jovem Werther",
+            "author": "Johann Wolfgang von Goethe"
+          },
+          {
+            "id": 39,
+            "title": "Memorial de Maria Moura",
+            "author": "Rachel de Queiroz"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "amb-2",
+      "type": "ambiguous",
+      "query": "algo leve",
+      "expects": null,
+      "confidence": "medium",
+      "message": null,
+      "interpretation": {
+        "atmospheres": [
+          "luminous"
+        ],
+        "inferredAtmospheres": [],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": null
+      },
+      "topSyn": 0.2384,
+      "topFeel": 0.2639,
+      "systems": {
+        "lexical": [
+          {
+            "id": 169,
+            "title": "O Barão nas Árvores",
+            "author": "Italo Calvino"
+          },
+          {
+            "id": 112,
+            "title": "Dom Quixote",
+            "author": "Miguel de Cervantes"
+          },
+          {
+            "id": 116,
+            "title": "Fahrenheit 451",
+            "author": "Ray Bradbury"
+          }
+        ],
+        "embedding": [],
+        "full": [
+          {
+            "id": 158,
+            "title": "O Alquimista",
+            "author": "Paulo Coelho"
+          },
+          {
+            "id": 38,
+            "title": "Tenda dos Milagres",
+            "author": "Jorge Amado"
+          },
+          {
+            "id": 145,
+            "title": "O Hobbit",
+            "author": "J. R. R. Tolkien"
+          },
+          {
+            "id": 161,
+            "title": "Os Lusíadas",
+            "author": "Luís de Camões"
+          },
+          {
+            "id": 208,
+            "title": "A Cidade e as Serras",
+            "author": "Eça de Queirós"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 3
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 0
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "amb-3",
+      "type": "ambiguous",
+      "query": "sertão",
+      "expects": null,
+      "confidence": "high",
+      "message": null,
+      "interpretation": {
+        "atmospheres": [],
+        "inferredAtmospheres": [],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": null
+      },
+      "topSyn": 0.4399,
+      "topFeel": 0.3044,
+      "systems": {
+        "lexical": [
+          {
+            "id": 48,
+            "title": "Os Sertões",
+            "author": "Euclides da Cunha"
+          },
+          {
+            "id": 45,
+            "title": "Grande Sertão: Veredas",
+            "author": "João Guimarães Rosa"
+          },
+          {
+            "id": 25,
+            "title": "Torto Arado",
+            "author": "Itamar Vieira Junior"
+          },
+          {
+            "id": 75,
+            "title": "Morte e Vida Severina",
+            "author": "João Cabral de Melo Neto"
+          },
+          {
+            "id": 3,
+            "title": "Vidas Secas",
+            "author": "Graciliano Ramos"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 48,
+            "title": "Os Sertões",
+            "author": "Euclides da Cunha"
+          },
+          {
+            "id": 45,
+            "title": "Grande Sertão: Veredas",
+            "author": "João Guimarães Rosa"
+          },
+          {
+            "id": 75,
+            "title": "Morte e Vida Severina",
+            "author": "João Cabral de Melo Neto"
+          },
+          {
+            "id": 46,
+            "title": "São Bernardo",
+            "author": "Graciliano Ramos"
+          },
+          {
+            "id": 10,
+            "title": "Sargento Getúlio",
+            "author": "João Ubaldo Ribeiro"
+          }
+        ],
+        "full": [
+          {
+            "id": 48,
+            "title": "Os Sertões",
+            "author": "Euclides da Cunha"
+          },
+          {
+            "id": 3,
+            "title": "Vidas Secas",
+            "author": "Graciliano Ramos"
+          },
+          {
+            "id": 75,
+            "title": "Morte e Vida Severina",
+            "author": "João Cabral de Melo Neto"
+          },
+          {
+            "id": 25,
+            "title": "Torto Arado",
+            "author": "Itamar Vieira Junior"
+          },
+          {
+            "id": 10,
+            "title": "Sargento Getúlio",
+            "author": "João Ubaldo Ribeiro"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "amb-4",
+      "type": "ambiguous",
+      "query": "livros sobre mães e filhas",
+      "expects": null,
+      "confidence": "high",
+      "message": null,
+      "interpretation": {
+        "atmospheres": [],
+        "inferredAtmospheres": [
+          "comforting"
+        ],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": null
+      },
+      "topSyn": 0.4179,
+      "topFeel": 0.3725,
+      "systems": {
+        "lexical": [
+          {
+            "id": 31,
+            "title": "Dois Irmãos",
+            "author": "Milton Hatoum"
+          },
+          {
+            "id": 141,
+            "title": "Ninguém Escreve ao Coronel",
+            "author": "Gabriel García Márquez"
+          },
+          {
+            "id": 168,
+            "title": "Os Maias",
+            "author": "Eça de Queirós"
+          },
+          {
+            "id": 66,
+            "title": "Quarto de Despejo",
+            "author": "Carolina Maria de Jesus"
+          },
+          {
+            "id": 142,
+            "title": "O Vermelho e o Negro",
+            "author": "Stendhal"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 28,
+            "title": "As Meninas",
+            "author": "Lygia Fagundes Telles"
+          },
+          {
+            "id": 41,
+            "title": "Laços de Família",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 168,
+            "title": "Os Maias",
+            "author": "Eça de Queirós"
+          },
+          {
+            "id": 39,
+            "title": "Memorial de Maria Moura",
+            "author": "Rachel de Queiroz"
+          },
+          {
+            "id": 79,
+            "title": "Becos da Memória",
+            "author": "Conceição Evaristo"
+          }
+        ],
+        "full": [
+          {
+            "id": 41,
+            "title": "Laços de Família",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 197,
+            "title": "O Segundo Sexo",
+            "author": "Simone de Beauvoir"
+          },
+          {
+            "id": 14,
+            "title": "Gabriela, Cravo e Canela",
+            "author": "Jorge Amado"
+          },
+          {
+            "id": 28,
+            "title": "As Meninas",
+            "author": "Lygia Fagundes Telles"
+          },
+          {
+            "id": 156,
+            "title": "Um Teto Todo Seu",
+            "author": "Virginia Woolf"
+          }
+        ]
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "sem-1",
+      "type": "no-match",
+      "query": "manual de programação em Rust",
+      "expects": "abstain",
+      "confidence": "none",
+      "message": "Não encontrei nesta estante nada que responda bem a esse pedido. Talvez o catálogo não tenha esse tipo de livro.",
+      "interpretation": {
+        "atmospheres": [],
+        "inferredAtmospheres": [],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": null
+      },
+      "topSyn": 0.2445,
+      "topFeel": 0.2646,
+      "systems": {
+        "lexical": [
+          {
+            "id": 51,
+            "title": "Libertinagem",
+            "author": "Manuel Bandeira"
+          },
+          {
+            "id": 27,
+            "title": "A Moreninha",
+            "author": "Joaquim Manuel de Macedo"
+          },
+          {
+            "id": 9,
+            "title": "Memórias de um Sargento de Milícias",
+            "author": "Manuel Antônio de Almeida"
+          },
+          {
+            "id": 172,
+            "title": "O Jogo da Amarelinha",
+            "author": "Julio Cortázar"
+          },
+          {
+            "id": 19,
+            "title": "Mar Morto",
+            "author": "Jorge Amado"
+          }
+        ],
+        "embedding": [],
+        "full": []
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 0
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 0
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "sem-2",
+      "type": "no-match",
+      "query": "receitas veganas para o dia a dia",
+      "expects": "abstain",
+      "confidence": "none",
+      "message": "Não encontrei nesta estante nada que responda bem a esse pedido. Talvez o catálogo não tenha esse tipo de livro.",
+      "interpretation": {
+        "atmospheres": [],
+        "inferredAtmospheres": [],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": null
+      },
+      "topSyn": 0.3875,
+      "topFeel": 0.1515,
+      "systems": {
+        "lexical": [
+          {
+            "id": 13,
+            "title": "Eles Eram Muitos Cavalos",
+            "author": "Luiz Ruffato"
+          },
+          {
+            "id": 179,
+            "title": "Os Vestígios do Dia",
+            "author": "Kazuo Ishiguro"
+          },
+          {
+            "id": 109,
+            "title": "Mrs. Dalloway",
+            "author": "Virginia Woolf"
+          },
+          {
+            "id": 66,
+            "title": "Quarto de Despejo",
+            "author": "Carolina Maria de Jesus"
+          },
+          {
+            "id": 95,
+            "title": "As Intermitências da Morte",
+            "author": "José Saramago"
+          }
+        ],
+        "embedding": [],
+        "full": []
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 0
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 0
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "sem-3",
+      "type": "no-match",
+      "query": "guia de viagem para o Japão",
+      "expects": "abstain",
+      "confidence": "none",
+      "message": "Não encontrei nesta estante nada que responda bem a esse pedido. Talvez o catálogo não tenha esse tipo de livro.",
+      "interpretation": {
+        "atmospheres": [],
+        "inferredAtmospheres": [],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": null
+      },
+      "topSyn": 0.2674,
+      "topFeel": 0.2137,
+      "systems": {
+        "lexical": [
+          {
+            "id": 132,
+            "title": "O Guia do Mochileiro das Galáxias",
+            "author": "Douglas Adams"
+          },
+          {
+            "id": 167,
+            "title": "A Divina Comédia",
+            "author": "Dante Alighieri"
+          },
+          {
+            "id": 158,
+            "title": "O Alquimista",
+            "author": "Paulo Coelho"
+          },
+          {
+            "id": 164,
+            "title": "Moby Dick",
+            "author": "Herman Melville"
+          },
+          {
+            "id": 12,
+            "title": "Recordações do Escrivão Isaías Caminha",
+            "author": "Lima Barreto"
+          }
+        ],
+        "embedding": [],
+        "full": []
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 0
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 0
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "sem-4",
+      "type": "no-match",
+      "query": "como investir em ações na bolsa",
+      "expects": "abstain",
+      "confidence": "none",
+      "message": "Não encontrei nesta estante nada que responda bem a esse pedido. Talvez o catálogo não tenha esse tipo de livro.",
+      "interpretation": {
+        "atmospheres": [],
+        "inferredAtmospheres": [],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": null
+      },
+      "topSyn": 0.189,
+      "topFeel": 0.0996,
+      "systems": {
+        "lexical": [
+          {
+            "id": 73,
+            "title": "Agosto",
+            "author": "Rubem Fonseca"
+          },
+          {
+            "id": 108,
+            "title": "Drácula",
+            "author": "Bram Stoker"
+          },
+          {
+            "id": 195,
+            "title": "O Nome da Rosa",
+            "author": "Umberto Eco"
+          },
+          {
+            "id": 176,
+            "title": "Niketche: Uma História de Poligamia",
+            "author": "Paulina Chiziane"
+          },
+          {
+            "id": 209,
+            "title": "A Sangue Frio",
+            "author": "Truman Capote"
+          }
+        ],
+        "embedding": [],
+        "full": []
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 0
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 0
+        }
+      },
+      "abstentionCorrect": true
+    }
+  ]
+}
