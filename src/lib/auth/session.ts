@@ -1,6 +1,6 @@
 import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 
-export const SESSION_COOKIE = "entrelinhas_admin";
+export const SESSION_COOKIE = "subtext_admin";
 export const SESSION_MAX_AGE = 60 * 60 * 12;
 
 export function adminConfigured(): boolean {
@@ -26,7 +26,7 @@ export function verifyPassword(candidate: string): boolean {
   const expected = process.env.ADMIN_PASSWORD;
   const secret = sessionSecret();
   if (!expected || !secret) return false;
-  return safeEqual(sign(`senha:${candidate}`, secret), sign(`senha:${expected}`, secret));
+  return safeEqual(sign(`password:${candidate}`, secret), sign(`password:${expected}`, secret));
 }
 
 export function createSessionToken(now = Date.now()): string | null {

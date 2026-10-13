@@ -27,10 +27,10 @@ export function ConfirmRemoval({
       <p className="text-[0.98rem]">{question}</p>
       <div className="mt-3 flex items-center gap-4">
         <button type="submit" className="button">
-          Sim, remover
+          Yes, remove
         </button>
         <button type="button" className="eyebrow ink-link" onClick={() => setConfirming(false)}>
-          Cancelar
+          Cancel
         </button>
       </div>
     </form>

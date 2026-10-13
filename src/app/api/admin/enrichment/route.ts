@@ -7,12 +7,12 @@ import { enrichmentState, ensureBackgroundEnrichment } from "@/lib/semantic/pipe
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  if (!(await isAdmin())) return NextResponse.json({ error: "Acesso restrito ao balcão da livraria." }, { status: 401 });
+  if (!(await isAdmin())) return NextResponse.json({ error: "Access restricted to the bookshop counter." }, { status: 401 });
   return NextResponse.json({ state: enrichmentState(), stats: catalogStats(), ollama: await ollamaStatus() });
 }
 
 export async function POST() {
-  if (!(await isAdmin())) return NextResponse.json({ error: "Acesso restrito ao balcão da livraria." }, { status: 401 });
+  if (!(await isAdmin())) return NextResponse.json({ error: "Access restricted to the bookshop counter." }, { status: 401 });
   ensureBackgroundEnrichment();
   return NextResponse.json({ state: enrichmentState(), stats: catalogStats() });
 }

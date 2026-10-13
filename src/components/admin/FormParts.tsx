@@ -6,7 +6,7 @@ import type { FormState } from "@/app/admin/actions";
 
 export const INITIAL_FORM_STATE: FormState = { ok: false, message: null };
 
-export function SubmitButton({ children, pendingLabel = "Salvando…", className = "button" }: { children: ReactNode; pendingLabel?: string; className?: string }) {
+export function SubmitButton({ children, pendingLabel = "Saving…", className = "button" }: { children: ReactNode; pendingLabel?: string; className?: string }) {
   const { pending } = useFormStatus();
   return (
     <button type="submit" className={className} disabled={pending} aria-disabled={pending}>

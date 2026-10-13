@@ -28,7 +28,7 @@ export function EnrichmentPanel({ initial }: { initial: Payload }) {
       });
       setError(null);
     } catch {
-      setError("Não consegui consultar o andamento.");
+      setError("I couldn’t check the progress.");
     }
   }, [router]);
 
@@ -44,7 +44,7 @@ export function EnrichmentPanel({ initial }: { initial: Payload }) {
       if (!response.ok) throw new Error();
       await refresh();
     } catch {
-      setError("Não consegui iniciar a leitura.");
+      setError("I couldn’t start the reading.");
     }
   };
 
@@ -57,10 +57,10 @@ export function EnrichmentPanel({ initial }: { initial: Payload }) {
     <section aria-labelledby="reading-heading" className="border border-ink/30 bg-paper-light p-5">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <h2 id="reading-heading" className="display text-[1.5rem] leading-none">
-          Leitura do catálogo pela IA
+          AI reading of the catalog
         </h2>
         <p className="eyebrow text-ink-soft">
-          {ollama ? `${ollama.chatModel} · ${ollama.embedModel}` : "modelos locais"}
+          {ollama ? `${ollama.chatModel} · ${ollama.embedModel}` : "local models"}
         </p>
       </div>
       <div
@@ -69,53 +69,53 @@ export function EnrichmentPanel({ initial }: { initial: Payload }) {
         aria-valuemin={0}
         aria-valuemax={total}
         aria-valuenow={done}
-        aria-label="Livros já lidos pela IA"
+        aria-label="Books already read by the AI"
       >
         <div className="h-full bg-ink transition-[width] duration-500" style={{ width: `${total === 0 ? 0 : (done / total) * 100}%` }} />
       </div>
       <dl className="eyebrow mt-3 flex flex-wrap gap-x-6 gap-y-1 text-ink">
         <div className="flex gap-1.5">
-          <dt className="text-ink-soft">lidos</dt>
+          <dt className="text-ink-soft">read</dt>
           <dd>{semantics.ready}</dd>
         </div>
         <div className="flex gap-1.5">
-          <dt className="text-ink-soft">na fila</dt>
+          <dt className="text-ink-soft">queued</dt>
           <dd>{pending}</dd>
         </div>
         <div className="flex gap-1.5">
-          <dt className="text-ink-soft">sinopse insuficiente</dt>
+          <dt className="text-ink-soft">insufficient synopsis</dt>
           <dd>{semantics.insufficient}</dd>
         </div>
         <div className="flex gap-1.5">
-          <dt className="text-ink-soft">com erro</dt>
+          <dt className="text-ink-soft">with errors</dt>
           <dd>{semantics.error}</dd>
         </div>
       </dl>
       <div className="mt-3 min-h-6 text-[0.95rem]" aria-live="polite">
         {data.state.running ? (
           <p className="italic text-ink-soft">
-            Lendo agora: {data.state.current.slice(0, 3).join(", ") || "preparando embeddings"}…
+            Reading now: {data.state.current.slice(0, 3).join(", ") || "preparing embeddings"}…
           </p>
         ) : pending > 0 ? (
-          <p className="text-ink-soft">Há livros aguardando leitura. A estante já os mostra em papel pardo.</p>
+          <p className="text-ink-soft">Some books are waiting to be read. The shelf already shows them in kraft paper.</p>
         ) : (
-          <p className="text-ink-soft">Tudo em dia.</p>
+          <p className="text-ink-soft">All caught up.</p>
         )}
         {ollamaProblem ? (
           <p role="alert" className="mt-1 text-vermilion">
             {!ollama.available
-              ? "O Ollama não está respondendo neste computador. Sem ele, a estante só busca por palavras."
-              : `Modelo ausente no Ollama: ${[!ollama.embedReady ? ollama.embedModel : null, !ollama.chatReady ? ollama.chatModel : null].filter(Boolean).join(" e ")}.`}
+              ? "Ollama isn’t responding on this computer. Without it, the shelf can only search by keyword."
+              : `Model missing from Ollama: ${[!ollama.embedReady ? ollama.embedModel : null, !ollama.chatReady ? ollama.chatModel : null].filter(Boolean).join(" and ")}.`}
           </p>
         ) : null}
         {data.state.lastError && !data.state.running ? (
-          <p className="mt-1 text-vermilion">Último erro: {data.state.lastError}</p>
+          <p className="mt-1 text-vermilion">Last error: {data.state.lastError}</p>
         ) : null}
         {error ? <p className="mt-1 text-vermilion">{error}</p> : null}
       </div>
       {!data.state.running && pending > 0 ? (
         <button type="button" className="button mt-3" onClick={() => void start()}>
-          Ler os {pending} pendentes
+          Read the {pending} pending {pending === 1 ? "book" : "books"}
         </button>
       ) : null}
     </section>

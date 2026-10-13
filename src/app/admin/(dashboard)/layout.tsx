@@ -7,7 +7,7 @@ import { requireAdmin } from "@/lib/auth/guard";
 import { countNewInterests } from "@/lib/interest";
 import { getShopConfig } from "@/lib/shop/config";
 
-export const metadata: Metadata = { title: { default: "Balcão", template: "%s — Balcão" }, robots: { index: false } };
+export const metadata: Metadata = { title: { default: "Counter", template: "%s — Counter" }, robots: { index: false } };
 export const dynamic = "force-dynamic";
 
 export default async function DashboardLayout({ children }: LayoutProps<"/admin">) {
@@ -18,18 +18,18 @@ export default async function DashboardLayout({ children }: LayoutProps<"/admin"
     <div className="mx-auto w-full max-w-[1280px] px-4 pb-24 sm:px-8">
       <header className="flex flex-wrap items-end justify-between gap-x-8 gap-y-3 pt-6">
         <div className="flex items-end gap-4">
-          <Link href="/admin" className="text-[1.5rem]" aria-label="Balcão, início">
+          <Link href="/admin" className="text-[1.5rem]" aria-label="Counter, home">
             <Wordmark name={shop.name} />
           </Link>
-          <p className="eyebrow pb-1 text-vermilion">balcão</p>
+          <p className="eyebrow pb-1 text-vermilion">counter</p>
         </div>
         <div className="eyebrow flex items-center gap-5 pb-1">
           <Link href="/" className="ink-link">
-            Ver a estante
+            View the shelf
           </Link>
           <form action={logout}>
             <button type="submit" className="eyebrow ink-link">
-              Sair
+              Sign out
             </button>
           </form>
         </div>

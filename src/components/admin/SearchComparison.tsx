@@ -28,12 +28,12 @@ export function SearchComparison() {
       const response = await fetch(`/api/admin/compare?n=8&q=${encodeURIComponent(query.trim())}`);
       const data = (await response.json()) as Result & { error?: string };
       if (!response.ok) {
-        setState({ status: "error", result: null, message: data.error ?? "Falha ao comparar." });
+        setState({ status: "error", result: null, message: data.error ?? "Comparison failed." });
         return;
       }
       setState({ status: "done", result: data, message: null });
     } catch {
-      setState({ status: "error", result: null, message: "Falha de conexão." });
+      setState({ status: "error", result: null, message: "Connection failed." });
     }
   };
 
@@ -46,12 +46,12 @@ export function SearchComparison() {
       <form onSubmit={submit} className="flex flex-wrap items-end gap-4">
         <div className="min-w-[16rem] flex-1">
           <label htmlFor="compare-query" className="eyebrow text-ink-soft">
-            Teste uma consulta nos dois motores
+            Try a query on both engines
           </label>
-          <input id="compare-query" className="field display-italic text-[1.4rem]" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="um livro para ler numa noite de insônia" autoComplete="off" />
+          <input id="compare-query" className="field display-italic text-[1.4rem]" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="a book to read on a sleepless night" autoComplete="off" />
         </div>
         <button type="submit" className="button" disabled={state.status === "loading"}>
-          {state.status === "loading" ? "Comparando…" : "Comparar"}
+          {state.status === "loading" ? "Comparing…" : "Compare"}
         </button>
       </form>
       <div aria-live="polite">
@@ -62,10 +62,10 @@ export function SearchComparison() {
         ) : null}
         {result ? (
           <div className="mt-6 grid gap-8 md:grid-cols-2">
-            <section aria-label="Busca por palavras">
-              <h3 className="eyebrow border-b border-ink pb-2 text-ink">Busca por palavras · FTS5/BM25</h3>
+            <section aria-label="Keyword search">
+              <h3 className="eyebrow border-b border-ink pb-2 text-ink">Keyword search · FTS5/BM25</h3>
               {result.lexical.length === 0 ? (
-                <p className="py-4 text-ink-soft">Nenhum livro contém essas palavras.</p>
+                <p className="py-4 text-ink-soft">No book contains those words.</p>
               ) : (
                 <ol className="divide-y divide-ink/15">
                   {result.lexical.map((item, index) => (
@@ -74,27 +74,27 @@ export function SearchComparison() {
                       <span>
                         <span className="font-label font-semibold">{item.title}</span>
                         <span className="block text-[0.88rem] italic text-ink-soft">{item.author}</span>
-                        {semanticIds.has(item.id) ? null : <span className="eyebrow text-[8.5px] text-ink-soft">só aparece aqui</span>}
+                        {semanticIds.has(item.id) ? null : <span className="eyebrow text-[8.5px] text-ink-soft">only shows up here</span>}
                       </span>
                     </li>
                   ))}
                 </ol>
               )}
             </section>
-            <section aria-label="Busca semântica">
+            <section aria-label="Semantic search">
               <h3 className="eyebrow border-b border-ink pb-2 text-ink">
-                Busca semântica{result.semantic ? ` · confiança ${confidenceLabel(result.semantic.confidence)} · ${result.semantic.tookMs} ms` : ""}
+                Semantic search{result.semantic ? ` · ${confidenceLabel(result.semantic.confidence)} confidence · ${result.semantic.tookMs} ms` : ""}
               </h3>
               {result.semantic === null ? (
-                <p className="py-4 text-vermilion">{result.error ?? "IA indisponível."}</p>
+                <p className="py-4 text-vermilion">{result.error ?? "AI unavailable."}</p>
               ) : (
                 <>
                   {result.semantic.interpretation.atmospheres.length + result.semantic.interpretation.inferredAtmospheres.length + result.semantic.interpretation.avoidAtmospheres.length > 0 ? (
                     <p className="pt-2 text-[0.88rem] text-ink-soft">
-                      Leitura do pedido:{" "}
+                      Reading of the request:{" "}
                       {[...result.semantic.interpretation.atmospheres, ...result.semantic.interpretation.inferredAtmospheres].map(atmosphereLabel).join(", ") || "—"}
                       {result.semantic.interpretation.avoidAtmospheres.length > 0
-                        ? `; evita ${result.semantic.interpretation.avoidAtmospheres.map(atmosphereLabel).join(", ")}`
+                        ? `; avoids ${result.semantic.interpretation.avoidAtmospheres.map(atmosphereLabel).join(", ")}`
                         : ""}
                     </p>
                   ) : null}
@@ -107,7 +107,7 @@ export function SearchComparison() {
                           <span className="font-label font-semibold">{item.title}</span>
                           <span className="block text-[0.88rem] italic text-ink-soft">{item.author}</span>
                           <span className="block text-[0.82rem] text-ink-soft">{item.reasons?.slice(0, 2).join(" · ")}</span>
-                          {lexicalIds.has(item.id) ? null : <span className="eyebrow text-[8.5px] text-vermilion">a busca por palavras não encontra</span>}
+                          {lexicalIds.has(item.id) ? null : <span className="eyebrow text-[8.5px] text-vermilion">keyword search doesn’t find it</span>}
                         </span>
                       </li>
                     ))}

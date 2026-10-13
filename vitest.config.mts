@@ -9,7 +9,7 @@ export default defineConfig({
     environment: "node",
     include: ["tests/**/*.test.ts"],
     env: {
-      ENTRELINHAS_DB: ":memory:",
+      SUBTEXT_DB: ":memory:",
       SESSION_SECRET: "test-secret-with-more-than-24-characters",
       ADMIN_PASSWORD: "test-password",
     },

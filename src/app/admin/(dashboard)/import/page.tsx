@@ -2,19 +2,19 @@ import type { Metadata } from "next";
 import { CsvImporter } from "@/components/admin/CsvImporter";
 import { listImportRuns } from "@/lib/catalog/import-csv";
 
-export const metadata: Metadata = { title: "Importar catálogo" };
+export const metadata: Metadata = { title: "Import catalog" };
 
 export default function ImportPage() {
   const runs = listImportRuns();
   return (
     <div className="max-w-5xl">
-      <h1 className="display text-[2.6rem] leading-none">Importar catálogo</h1>
+      <h1 className="display text-[2.6rem] leading-none">Import catalog</h1>
       <p className="mt-3 max-w-[46rem] text-ink-soft">
-        Envie a planilha da livraria em CSV. Antes de gravar, você vê o que entra, o que atualiza e o que tem problema.
-        Colunas aceitas: ISBN, Título, Autor, Sinopse, Gênero, Preço, Estoque, Nota da livreira, Páginas, Ano e Editora.
-        Só Título e Autor são obrigatórias.{" "}
+        Upload the bookshop’s spreadsheet as a CSV. Before anything is saved, you see what comes in, what gets updated and what has a problem.
+        Accepted columns: ISBN, Title, Author, Synopsis, Genre, Price, Stock, Bookseller&apos;s note, Pages, Year and Publisher.
+        Only Title and Author are required.{" "}
         <a className="ink-link" href="/catalog-template.csv" download>
-          Baixar modelo
+          Download template
         </a>
         .
       </p>
@@ -24,14 +24,14 @@ export default function ImportPage() {
       {runs.length > 0 ? (
         <section aria-labelledby="import-history-heading" className="mt-14">
           <h2 id="import-history-heading" className="eyebrow border-b border-ink pb-2 text-ink">
-            Importações anteriores
+            Previous imports
           </h2>
           <ul className="divide-y divide-ink/15 text-[0.95rem]">
             {runs.map((run) => (
               <li key={run.id} className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-2">
-                <span className="font-label">{run.filename ?? "arquivo sem nome"}</span>
+                <span className="font-label">{run.filename ?? "unnamed file"}</span>
                 <span className="eyebrow text-ink-soft">
-                  {run.createdAt.replace("T", " ").slice(0, 16)} · {run.inserted} novos · {run.updated} atualizados · {run.skipped} fora
+                  {run.createdAt.replace("T", " ").slice(0, 16)} · {run.inserted} new · {run.updated} updated · {run.skipped} left out
                 </span>
               </li>
             ))}

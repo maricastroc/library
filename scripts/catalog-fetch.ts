@@ -9,7 +9,7 @@ const CACHE_DIR = join(ROOT, "data", "seed", ".cache");
 const OFFLINE = process.argv.includes("--offline");
 const OUT_FILE = join(ROOT, "data", "seed", OFFLINE ? "catalog.offline.json" : "catalog.json");
 const REPORT_FILE = join(ROOT, "data", "seed", OFFLINE ? "fetch-report.offline.json" : "fetch-report.json");
-const USER_AGENT = "Entrelinhas/0.1 (catalogo demonstrativo de livraria independente)";
+const USER_AGENT = "Subtext/0.1 (demo catalog for an independent bookshop)";
 
 type OpenLibraryEdition = {
   key?: string;
@@ -60,6 +60,7 @@ type CachedEntry = {
 export type SeedCatalogEntry = {
   slug: string;
   title: string;
+  editionTitle: string | null;
   author: string;
   genre: string;
   isbn: string | null;
@@ -432,23 +433,25 @@ async function main() {
       const item = queue.shift();
       if (!item) break;
       const { seed, index } = item;
-      const slug = slugify(`${seed.title} ${seed.author.split(" ").slice(-1)[0]}`);
-      const resolved = await resolveSeed(seed, slug);
+      const surname = seed.author.split(" ").slice(-1)[0];
+      const title = seed.englishTitle ?? seed.title;
+      const resolved = await resolveSeed(seed, slugify(`${seed.title} ${surname}`));
       if (!resolved) {
         unavailable.push(seed.title);
         continue;
       }
       const { ol, wiki } = resolved;
       report[index] = {
-        title: seed.title,
+        title,
         author: seed.author,
         openLibrary: Boolean(ol),
         isbn: Boolean(ol?.isbn),
         synopsis: Boolean(wiki),
       };
       results[index] = {
-        slug,
-        title: seed.title,
+        slug: slugify(`${title} ${surname}`),
+        title,
+        editionTitle: seed.englishTitle ? seed.title : null,
         author: seed.author,
         genre: seed.genre,
         isbn: ol?.isbn ?? null,
@@ -461,7 +464,7 @@ async function main() {
         sourceUrl: ol ? `https://openlibrary.org${ol.workKey}` : null,
         subjects: ol?.subjects ?? [],
         synopsis: wiki?.synopsis ?? null,
-        synopsisSource: wiki ? "Wikipédia (CC BY-SA 4.0)" : null,
+        synopsisSource: wiki ? "Wikipedia (CC BY-SA 4.0)" : null,
         synopsisUrl: wiki?.url ?? null,
       };
       done += 1;

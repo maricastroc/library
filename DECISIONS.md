@@ -1,55 +1,58 @@
-# Decisões e pendências
+# Decisions and open items
 
-## Convenções
+## Conventions
 
-- **Código em inglês, conteúdo em português.** Arquivos, rotas, componentes, funções, valores internos (status, ids da taxonomia, chaves de ordenação), classes CSS e tokens do tema estão em inglês. Ficam em português os textos da interface, os prompts enviados ao modelo, os dados do catálogo e os cabeçalhos aceitos na importação CSV. Os rótulos em português de cada id interno vivem em `src/lib/semantic/taxonomy.ts`.
-- **Valores gravados também foram traduzidos.** `src/lib/db/migrations.ts` converte um banco anterior (versão 1) para o vocabulário atual (versão 2) na abertura.
+- **Everything in English.** Files, routes, components, functions, internal values (statuses, taxonomy ids, sort keys), CSS classes and theme tokens are in English, and so are the interface texts, the prompts sent to the model, the catalog data (synopses, genres, notes) and the evaluation queries. The display label of each internal id lives in `src/lib/semantic/taxonomy.ts`.
+- **Books carry the title of their English-language edition.** When a book was never published in English, it keeps its original title. The shop sells Brazilian editions, so ISBN, publisher and cover still belong to the Portuguese-language edition, and the cover shows the Portuguese title; `data/seed/catalog.json` keeps that title in `editionTitle`, which is also what the catalog fetch searches for.
+- **Stored values were translated too.** On opening, `src/lib/db/migrations.ts` converts an earlier database to the current vocabulary: version 2 translates statuses and taxonomy ids, version 3 translates genres and synopsis sources and rebuilds the text index.
 
-## Arquitetura
+## Architecture
 
-- **Next.js 16 (App Router) + SQLite (`better-sqlite3`)**. Leitura do catálogo em Server Components; escrita por Server Actions e rotas `/api/admin/*`. Sem serviços pagos.
-- **SQLite em modo de journal `TRUNCATE`, não WAL.** Em WAL, scripts de linha de comando fechando a conexão apagaram o `-wal` enquanto o servidor de desenvolvimento o mantinha aberto; as gravações do servidor ficaram num arquivo órfão. Com journal simples, cada transação termina no arquivo principal.
-- **Vetores em BLOB e busca por força bruta em memória.** Com 200 livros (≈2.100 vetores de 768 dimensões, entre livros e frases de sinopse) a comparação leva milissegundos; um índice vetorial só acrescentaria dependência. O índice em memória é invalidado por um contador de revisão gravado no banco.
-- **Módulos de servidor nunca são importados por componentes de cliente.** Constantes compartilhadas ficam em módulos puros (`import-types.ts`, `palettes.ts`, `taxonomy.ts`).
+- **Next.js 16 (App Router) + SQLite (`better-sqlite3`)**. The catalog is read in Server Components; writes go through Server Actions and `/api/admin/*` routes. No paid services.
+- **SQLite in `TRUNCATE` journal mode, not WAL.** In WAL, command-line scripts closing their connection deleted the `-wal` file while the development server still held it open; the server's writes ended up in an orphaned file. With a plain journal, every transaction ends in the main file.
+- **Vectors in BLOBs and brute-force search in memory.** With 200 books (≈2,100 vectors of 768 dimensions, between books and synopsis sentences) the comparison takes milliseconds; a vector index would only add a dependency. The in-memory index is invalidated by a revision counter stored in the database.
+- **Server modules are never imported by client components.** Shared constants live in pure modules (`import-types.ts`, `palettes.ts`, `taxonomy.ts`).
 
-## IA
+## AI
 
-- **Embeddings: `embeddinggemma` (768d). Classificação: `gemma4:e4b`.** Ambos locais, via Ollama.
-- **O modelo de linguagem trabalha fora do caminho da consulta.** Ele lê cada sinopse uma vez e grava atmosfera, ritmo, densidade, estilo, experiência, temas e um retrato de leitura. A busca usa só embeddings e regras, e responde em dezenas de milissegundos.
-- **Saída do classificador sem `format`/schema.** Medido nesta máquina: JSON restrito por schema gera ~7 tokens/s e não escala em paralelo; texto livre com quatro requisições simultâneas chega a ~25 tokens/s. A validação é feita no código.
-- **Evidência verificada.** O classificador precisa citar trechos da sinopse; cada trecho é localizado literalmente no texto (ignorando acentos e caixa) e descartado se não existir. A confiança exibida depende do tamanho da sinopse e de quantos trechos sobreviveram.
-- **Sinopse com menos de 140 caracteres não é classificada.** O livro fica em papel pardo e só é encontrado por palavras.
-- **Busca**: a consulta é separada em pedido e restrição ("mas sem ser…", "que não seja…", "nada muito…"); o pedido vira vetor e é comparado com o vetor da sinopse e com o vetor da leitura de cada livro; a ordem final soma atributos pedidos, penaliza atributos evitados e considera extensão, ritmo, gênero e coincidência de palavras. "Para quem gostou de X" usa o centróide dos livros de X que estão no catálogo e exclui os próprios.
-- **Quando não responder.** Abaixo de um piso de similaridade a estante não mostra nada; em faixa intermediária mostra no máximo três livros e avisa que a correspondência é fraca. Referência a autor ou livro ausente do catálogo é declarada, sem inventar semelhança. Os limiares foram calibrados com `data/eval/queries.json`.
-- **Se o Ollama cair**, a rota de busca devolve resultado por palavras e diz isso na interface.
+- **Embeddings: `embeddinggemma` (768d). Classification: `gemma4:e4b`.** Both local, through Ollama.
+- **The language model works outside the query path.** It reads each synopsis once and stores atmosphere, pace, density, style, experience, themes and a reading portrait. Search uses only embeddings and rules, and answers in tens of milliseconds.
+- **Classifier output without `format`/schema.** Measured on this machine: schema-constrained JSON generates ~7 tokens/s and does not scale in parallel; free text with four simultaneous requests reaches ~25 tokens/s. Validation is done in code.
+- **Verified evidence.** The classifier must quote passages from the synopsis; each passage is located literally in the text (ignoring accents and case) and discarded if it does not exist. The confidence shown depends on the length of the synopsis and on how many passages survived.
+- **A synopsis shorter than 140 characters is not classified.** The book stays in kraft paper and can only be found by keywords.
+- **Search**: the query is split into a request and a restriction ("but without being…", "that isn't…", "nothing too…"); the request becomes a vector and is compared with each book's synopsis vector and reading vector; the final order adds requested attributes, penalizes avoided attributes and takes length, pace, genre and matching words into account. "For those who liked X" uses the centroid of the books by X that are in the catalog and excludes those books themselves.
+- **When not to answer.** Below a similarity floor the shelf shows nothing; in an intermediate band it shows at most three books and warns that the match is weak. A reference to an author or book missing from the catalog is stated as such, without inventing a resemblance. The thresholds were calibrated with `data/eval/queries.json`.
+- **If Ollama goes down**, the search route returns keyword results and says so in the interface.
 
-## Dados
+## Data
 
-- **Google Books ficou de fora**: a cota anônima diária estava esgotada (HTTP 429) e não há chave configurada.
-- **Open Library** fornece ISBN, editora, páginas, ano e capa. Só é aceita edição em português de editora regular; reimpressões sob demanda são descartadas e o campo fica vazio. O ano é o menor entre os registros da mesma obra.
-- **Wikipédia em português (CC BY-SA 4.0)** fornece a sinopse: introdução mais a seção de enredo, com atribuição e link em cada livro. O artigo só é aceito se for sobre a obra: o título da página ou a primeira frase precisam trazer o título do livro, e páginas de autor são recusadas. Uma primeira versão sem essa regra gravou biografias como sinopse em cerca de 40 livros; eles foram recoletados e reclassificados.
-- **Capas não são baixadas nem redistribuídas**; a página do livro aponta para a imagem da Open Library.
-- **Preço e estoque do catálogo inicial são demonstrativos** e aparecem marcados assim. Ao serem editados no balcão ou importados por CSV, passam a valer como reais.
-- **Notas da livreira**: as 21 notas do catálogo inicial foram escritas para a demonstração e aparecem como "nota de exemplo". Notas reais vêm do balcão ou do CSV. A IA nunca preenche esse campo.
+- **Google Books was left out**: the anonymous daily quota was exhausted (HTTP 429) and there is no key configured.
+- **Open Library** provides ISBN, publisher, pages, year and cover. Only Portuguese-language editions from regular publishers are accepted; print-on-demand reprints are discarded and the field stays empty. The year is the earliest among the records of the same work.
+- **Portuguese Wikipedia (CC BY-SA 4.0)** provides the synopsis: the introduction plus the plot section, with attribution and a link on each book. The article is only accepted if it is about the work: the page title or the first sentence must carry the book's title, and author pages are refused. A first version without this rule stored biographies as synopses for about 40 books; they were fetched again and reclassified.
+- **Synopses were translated into English** after the fetch; mentions of books that are in the catalog use their English titles, other works are named as in the source. The translation is a derivative of the Wikipedia text and stays under the same licence; the link on each book points to the original article.
+- **Covers are neither downloaded nor redistributed**; the book page points to the Open Library image.
+- **Price and stock in the initial catalog are demo values** and are marked as such. Once edited at the counter or imported by CSV, they count as real.
+- **Bookseller's notes**: the 21 notes in the initial catalog were written for the demo and appear as "sample note". Real notes come from the counter or from the CSV. The AI never fills in this field.
+- **CSV import** recognises the headers of `public/catalog-template.csv` and common English variants ("name", "description", "qty"). Headers in other languages are not mapped; a file without recognisable title and author columns is refused with a message listing the headers found.
 
 ## Interface
 
-- **Lombadas posicionadas por `transform`, com ordem estável no DOM.** Reordenar muda só coordenadas, então não há remontagem nem perda de foco. A transição é CSS no compositor; lombadas fora da área visível trocam de lugar sem animar.
-- **A estante é uma única parada de Tab** (roving tabindex); setas seguem a ordem visual. Como a ordem do DOM não acompanha a ordem visual, há o modo **Índice**, uma lista semântica na ordem escolhida.
-- **Regras das lombadas** (`src/lib/shelf/identity.ts`): cor = atmosfera predominante, levemente misturada com a segunda; espessura = páginas; altura = densidade e forma; faixas = ritmo; tipografia = gênero. A cor do texto é escolhida para manter contraste de pelo menos 4,5:1, verificado em teste para todas as combinações.
-- **Livro aberto**: `<dialog>` modal nativo. Um volume 3D (lombada e capa) sai da posição medida da lombada, gira e pousa; a capa abre sobre a dobradiça. Motion conduz a coreografia por `MotionValue`. Com `prefers-reduced-motion`, ou quando a lombada de origem não está visível, a transição é um esmaecimento.
-- **Estado na URL**: `?q=`, `?sort=` e `?book=`; o botão voltar do navegador fecha o livro.
+- **Spines positioned by `transform`, with a stable DOM order.** Reordering changes only coordinates, so nothing remounts and focus is not lost. The transition is CSS on the compositor; spines outside the visible area swap places without animating.
+- **The shelf is a single Tab stop** (roving tabindex); arrow keys follow the visual order. Since the DOM order does not follow the visual order, there is the **Index** mode, a semantic list in the chosen order.
+- **Spine rules** (`src/lib/shelf/identity.ts`): color = predominant atmosphere, slightly mixed with the second; thickness = pages; height = density and form; bands = pace; typeface = genre. The text color is chosen to keep a contrast of at least 4.5:1, checked in a test for every combination.
+- **Open book**: a native modal `<dialog>`. A 3D volume (spine and cover) leaves the measured position of the spine, turns and lands; the cover opens on its hinge. Motion drives the choreography through `MotionValue`. With `prefers-reduced-motion`, or when the source spine is not visible, the transition is a fade.
+- **State in the URL**: `?q=`, `?sort=` and `?book=`; the browser's back button closes the book.
 
-## Balcão
+## Counter
 
-- Senha única em `ADMIN_PASSWORD`; sessão em cookie `httpOnly` assinado com HMAC, 12 horas. `src/proxy.ts` barra `/admin/*` e `/api/admin/*`, e cada Server Action e rota confere a sessão de novo.
-- Importação CSV em duas etapas: análise com prévia e depois gravação em uma transação.
+- A single password in `ADMIN_PASSWORD`; session in an `httpOnly` cookie signed with HMAC, 12 hours. `src/proxy.ts` guards `/admin/*` and `/api/admin/*`, and every Server Action and route checks the session again.
+- CSV import in two steps: analysis with a preview, then writing in one transaction.
 
-## Pendências
+## Open items
 
-- A avaliação usa um modelo local como juiz de relevância. Falta julgamento humano das mesmas listas.
-- 58 dos 326 títulos pesquisados não tinham artigo utilizável na Wikipédia em português (ou só tinham a página do autor, que é recusada). No catálogo de 200 livros, 163 têm ISBN de edição em português e 178 têm capa.
-- Sem autenticação por usuário, sem pagamento, sem envio de e-mail: a reserva só registra o pedido para a livraria responder.
-- Interpretação de consultas por regras cobre as negações mais comuns do português; construções incomuns passam como texto livre.
-- Limite de requisições em memória, por processo.
-- Não há testes automatizados de navegador; os fluxos foram verificados manualmente.
+- The evaluation uses a local model as the relevance judge. Human judgment of the same lists is still missing.
+- 58 of the 326 titles researched had no usable article on Portuguese Wikipedia (or only had the author's page, which is refused). In the 200-book catalog, 163 have the ISBN of a Portuguese-language edition and 178 have a cover.
+- No per-user authentication, no payment, no e-mail sending: a reservation only records the request for the bookshop to answer.
+- Rule-based query interpretation covers the most common English negations; unusual constructions pass through as free text. Queries written in Portuguese are no longer interpreted.
+- Rate limiting is in memory, per process.
+- There are no automated browser tests; the flows were checked by hand.

@@ -1,2 +1,2 @@
-ISBN;Título;Autor;Sinopse;Gênero;Preço;Estoque;Nota da livreira;Páginas;Ano;Editora
-;Título do livro;Nome de quem escreveu;"Sinopse com pelo menos algumas frases, para a IA conseguir descrever a leitura.";Romance;49,90;3;;240;2020;Nome da editora
+ISBN;Title;Author;Synopsis;Genre;Price;Stock;Bookseller's note;Pages;Year;Publisher
+;Book title;Name of the author;"Synopsis with at least a few sentences, so the AI can describe the reading experience.";Novel;49.90;3;;240;2020;Publisher name

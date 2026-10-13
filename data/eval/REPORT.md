@@ -1,377 +1,425 @@
-# Avaliação da busca — palavras × semântica
+# Search evaluation — keywords × semantics
 
-Gerado em 2026-10-13T16:27:08.750Z. Embeddings: `embeddinggemma`. Classificador: `gemma4:e4b`. Sem notas de relevância (rode com --judge).
+Generated at 2026-10-13T18:40:35.739Z. Embeddings: `embeddinggemma`. Classifier: `gemma4:e4b`. Relevance grades assigned automatically by `gemma4:12b` (0, 1 or 2), reading only title, author, genre and synopsis. This is not a human evaluation.
 
-- **palavras** (`lexical`): FTS5/BM25 sobre título, autor, gênero, sinopse e nota, com prefixos.
-- **só embeddings** (`embedding`): proximidade entre a consulta e a sinopse.
-- **estante** (`full`): interpretação da consulta, embeddings de sinopse e de leitura, reordenação por atributos.
+- **keywords** (`lexical`): FTS5/BM25 over title, author, genre, synopsis and note, with prefixes.
+- **embeddings only** (`embedding`): closeness between the query and the synopsis.
+- **shelf** (`full`): query interpretation, synopsis and reading embeddings, reranking by attributes.
 
-## Resumo
+## Summary
 
-| motor | P@5 | nDCG@5 | consultas sem resultado |
+| engine | P@5 | nDCG@5 | queries with no results |
 | --- | --- | --- | --- |
-| palavras | — | — | 1 de 24 |
-| só embeddings | — | — | 1 de 24 |
-| estante | — | — | 1 de 24 |
+| keywords | 0.42 | 0.36 | 1 of 24 |
+| embeddings only | 0.65 | 0.64 | 0 of 24 |
+| shelf | 0.75 | 0.71 | 1 of 24 |
 
-nDCG@5 por tipo de consulta:
+nDCG@5 by query type:
 
-| tipo | palavras | só embeddings | estante |
+| type | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| emocional | — | — | — |
-| abstrata | — | — | — |
-| autor | — | — | — |
-| negativa | — | — | — |
-| ambígua | — | — | — |
+| emotional | 0.14 | 0.49 | 0.86 |
+| abstract | 0.38 | 0.58 | 0.72 |
+| author | 0.58 | 0.80 | 0.58 |
+| negative | 0.41 | 0.69 | 0.74 |
+| ambiguous | 0.25 | 0.66 | 0.67 |
 
-Consultas fora do escopo recusadas ou sinalizadas como fracas: 4 de 4. Consultas dentro do escopo respondidas com confiança: 23 de 23.
+Out-of-scope queries declined or flagged as weak: 4 of 4. In-scope queries answered with confidence: 23 of 23.
 
-## Consultas
+## Queries
 
-### emo-1 · emocional — «quero algo melancólico, mas reconfortante»
+### emo-1 · emotional — "I want something melancholic, but comforting"
 
-Confiança: **high** (maior similaridade com sinopse 0.3108, com leitura 0.525). Leitura do pedido: `{"atmospheres":["melancholic","comforting"],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+Confidence: **high** (highest similarity to a synopsis 0.3252, to a reading 0.4983). Reading of the request: `{"atmospheres":["melancholic","comforting"],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
 
-| # | palavras | só embeddings | estante |
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | Memorial de Aires — Machado de Assis | Memorial de Aires — Machado de Assis | Kitchen — Banana Yoshimoto |
-| 2 | — | Perto do Coração Selvagem — Clarice Lispector | Memorial de Aires — Machado de Assis |
-| 3 | — | O Vermelho e o Negro — Stendhal | O Pequeno Príncipe — Antoine de Saint-Exupéry |
-| 4 | — | Sentimento do Mundo — Carlos Drummond de Andrade | Dona Flor e Seus Dois Maridos — Jorge Amado |
-| 5 | — | O Encontro Marcado — Fernando Sabino | Reparação — Ian McEwan |
+| 1 | Counselor Ayres' Memorial — Machado de Assis **(1)** | Atonement — Ian McEwan **(0)** | Kitchen — Banana Yoshimoto **(2)** |
+| 2 | — | Covert Joy — Clarice Lispector **(2)** | Atonement — Ian McEwan **(0)** |
+| 3 | — | The Red and the Black — Stendhal **(0)** | Counselor Ayres' Memorial — Machado de Assis **(1)** |
+| 4 | — | Kitchen — Banana Yoshimoto **(2)** | Dona Flor and Her Two Husbands — Jorge Amado **(1)** |
+| 5 | — | Counselor Ayres' Memorial — Machado de Assis **(1)** | Covert Joy — Clarice Lispector **(2)** |
 
-### emo-2 · emocional — «preciso de um livro que me faça rir»
+nDCG@5 — keywords 0.17 · embeddings only 0.61 · shelf 0.87
 
-Confiança: **high** (maior similaridade com sinopse 0.3732, com leitura 0.4525). Leitura do pedido: `{"atmospheres":["ironic"],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+### emo-2 · emotional — "I need a book that makes me laugh"
 
-| # | palavras | só embeddings | estante |
+Confidence: **high** (highest similarity to a synopsis 0.3046, to a reading 0.4379). Reading of the request: `{"atmospheres":["ironic"],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | Auto da Compadecida — Ariano Suassuna | O Cheiro do Ralo — Lourenço Mutarelli | O Cheiro do Ralo — Lourenço Mutarelli |
-| 2 | Torto Arado — Itamar Vieira Junior | Uma Aprendizagem ou O Livro dos Prazeres — Clarice Lispector | O Guia do Mochileiro das Galáxias — Douglas Adams |
-| 3 | Urupês — Monteiro Lobato | O Alienista — Machado de Assis | Auto da Compadecida — Ariano Suassuna |
-| 4 | — | O Nome da Rosa — Umberto Eco | Memórias de um Sargento de Milícias — Manuel Antônio de Almeida |
-| 5 | — | O Guia do Mochileiro das Galáxias — Douglas Adams | O Barão nas Árvores — Italo Calvino |
+| 1 | The Rogues' Trial — Ariano Suassuna **(0)** | The Hitchhiker's Guide to the Galaxy — Douglas Adams **(2)** | The Hitchhiker's Guide to the Galaxy — Douglas Adams **(2)** |
+| 2 | — | O Cheiro do Ralo — Lourenço Mutarelli **(0)** | O Cheiro do Ralo — Lourenço Mutarelli **(0)** |
+| 3 | — | The Alienist — Machado de Assis **(2)** | Memoirs of a Militia Sergeant — Manuel Antônio de Almeida **(0)** |
+| 4 | — | An Apprenticeship or The Book of Pleasures — Clarice Lispector **(0)** | The Rogues' Trial — Ariano Suassuna **(0)** |
+| 5 | — | The Book Thief — Markus Zusak **(0)** | Don Quixote — Miguel de Cervantes **(2)** |
 
-### emo-3 · emocional — «algo para ler quando o coração está partido»
+nDCG@5 — keywords 0.00 · embeddings only 0.70 · shelf 0.65
 
-Confiança: **high** (maior similaridade com sinopse 0.4395, com leitura 0.4878). Leitura do pedido: `{"atmospheres":[],"inferredAtmospheres":["melancholic","comforting"],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+### emo-3 · emotional — "something to read when your heart is broken"
 
-| # | palavras | só embeddings | estante |
+Confidence: **high** (highest similarity to a synopsis 0.3516, to a reading 0.436). Reading of the request: `{"atmospheres":[],"inferredAtmospheres":["melancholic","comforting"],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | Perto do Coração Selvagem — Clarice Lispector | Perto do Coração Selvagem — Clarice Lispector | Dias de Abandono — Elena Ferrante |
-| 2 | Coração das Trevas — Joseph Conrad | A Hora da Estrela — Clarice Lispector | Perto do Coração Selvagem — Clarice Lispector |
-| 3 | Feliz Ano Novo — Rubem Fonseca | A Paixão segundo G.H. — Clarice Lispector | Kitchen — Banana Yoshimoto |
-| 4 | O Cão dos Baskervilles — Arthur Conan Doyle | Uma Aprendizagem ou O Livro dos Prazeres — Clarice Lispector | A Hora da Estrela — Clarice Lispector |
-| 5 | Amor de Perdição — Camilo Castelo Branco | Crônica da Casa Assassinada — Lúcio Cardoso | Uma Aprendizagem ou O Livro dos Prazeres — Clarice Lispector |
+| 1 | Near to the Wild Heart — Clarice Lispector **(1)** | The Sorrows of Young Werther — Johann Wolfgang von Goethe **(2)** | Kitchen — Banana Yoshimoto **(2)** |
+| 2 | Heart of Darkness — Joseph Conrad **(0)** | The Days of Abandonment — Elena Ferrante **(2)** | The Days of Abandonment — Elena Ferrante **(2)** |
+| 3 | The Hound of the Baskervilles — Arthur Conan Doyle **(0)** | Atonement — Ian McEwan **(1)** | The Sorrows of Young Werther — Johann Wolfgang von Goethe **(2)** |
+| 4 | Ancient Tillage — Raduan Nassar **(0)** | The Hour of the Star — Clarice Lispector **(1)** | Atonement — Ian McEwan **(1)** |
+| 5 | Iracema — José de Alencar **(0)** | Death and Life of Severino — João Cabral de Melo Neto **(0)** | The Book Thief — Markus Zusak **(1)** |
 
-### emo-4 · emocional — «uma história que dê esperança»
+nDCG@5 — keywords 0.14 · embeddings only 0.81 · shelf 1.00
 
-Confiança: **high** (maior similaridade com sinopse 0.3698, com leitura 0.3191). Leitura do pedido: `{"atmospheres":["luminous"],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+### emo-4 · emotional — "a story that gives hope"
 
-| # | palavras | só embeddings | estante |
+Confidence: **high** (highest similarity to a synopsis 0.302, to a reading 0.2596). Reading of the request: `{"atmospheres":["luminous"],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | Grandes Esperanças — Charles Dickens | Grandes Esperanças — Charles Dickens | O Alquimista — Paulo Coelho |
-| 2 | Ninguém Escreve ao Coronel — Gabriel García Márquez | Ensaio sobre a Lucidez — José Saramago | Tenda dos Milagres — Jorge Amado |
-| 3 | O Grande Gatsby — F. Scott Fitzgerald | Felicidade Clandestina — Clarice Lispector | O Hobbit — J. R. R. Tolkien |
-| 4 | Quincas Borba — Machado de Assis | A Hora da Estrela — Clarice Lispector | Sapiens: Uma Breve História da Humanidade — Yuval Noah Harari |
-| 5 | Bestiário — Julio Cortázar | Feliz Ano Novo — Rubem Fonseca | A Cidade e as Serras — Eça de Queirós |
+| 1 | Quincas Borba — Machado de Assis **(0)** | The Hour of the Star — Clarice Lispector **(0)** | The Alchemist — Paulo Coelho **(2)** |
+| 2 | The Great Gatsby — F. Scott Fitzgerald **(1)** | Hopscotch — Julio Cortázar **(0)** | Tent of Miracles — Jorge Amado **(0)** |
+| 3 | Do Androids Dream of Electric Sheep? — Philip K. Dick **(0)** | Feliz Ano Novo — Rubem Fonseca **(0)** | The City and the Mountains — Eça de Queirós **(0)** |
+| 4 | No One Writes to the Colonel — Gabriel García Márquez **(0)** | — | Gabriela, Clove and Cinnamon — Jorge Amado **(0)** |
+| 5 | Bestiary — Julio Cortázar **(0)** | — | The Hobbit — J. R. R. Tolkien **(2)** |
 
-### emo-5 · emocional — «quero um livro que me tire o sono de tanto suspense»
+nDCG@5 — keywords 0.12 · embeddings only 0.00 · shelf 0.77
 
-Confiança: **high** (maior similaridade com sinopse 0.3902, com leitura 0.5088). Leitura do pedido: `{"atmospheres":["tense"],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+### emo-5 · emotional — "I want a book that keeps me up at night with suspense"
 
-| # | palavras | só embeddings | estante |
+Confidence: **high** (highest similarity to a synopsis 0.3382, to a reading 0.4501). Reading of the request: `{"atmospheres":["tense"],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | O Lobo da Estepe — Hermann Hesse | As Intermitências da Morte — José Saramago | Assassinato no Expresso do Oriente — Agatha Christie |
-| 2 | Leite Derramado — Chico Buarque | O Falcão Maltês — Dashiell Hammett | O Falcão Maltês — Dashiell Hammett |
-| 3 | O Vampiro de Curitiba — Dalton Trevisan | O Lobo da Estepe — Hermann Hesse | Agosto — Rubem Fonseca |
-| 4 | Pedro Páramo — Juan Rulfo | Ópera dos Mortos — Autran Dourado | O Cão dos Baskervilles — Arthur Conan Doyle |
-| 5 | O Conto da Aia — Margaret Atwood | Agosto — Rubem Fonseca | A Sangue Frio — Truman Capote |
+| 1 | Spilt Milk — Chico Buarque **(0)** | The Maltese Falcon — Dashiell Hammett **(2)** | Murder on the Orient Express — Agatha Christie **(2)** |
+| 2 | The Vampire of Curitiba — Dalton Trevisan **(2)** | The Book Thief — Markus Zusak **(0)** | Crimes of August — Rubem Fonseca **(2)** |
+| 3 | The Handmaid's Tale — Margaret Atwood **(1)** | Death with Interruptions — José Saramago **(0)** | The Maltese Falcon — Dashiell Hammett **(2)** |
+| 4 | Kitchen — Banana Yoshimoto **(0)** | My Brilliant Friend — Elena Ferrante **(0)** | The Count of Monte Cristo — Alexandre Dumas **(2)** |
+| 5 | Hamlet — William Shakespeare **(0)** | The Red and the Black — Stendhal **(0)** | The Hound of the Baskervilles — Arthur Conan Doyle **(2)** |
 
-### abs-1 · abstrata — «algo que pareça uma tarde chuvosa»
+nDCG@5 — keywords 0.27 · embeddings only 0.34 · shelf 1.00
 
-Confiança: **high** (maior similaridade com sinopse 0.3293, com leitura 0.3955). Leitura do pedido: `{"atmospheres":["melancholic","contemplative"],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":"slow","length":null,"era":null,"genres":[],"reference":null}`
+### abs-1 · abstract — "something that feels like a rainy afternoon"
 
-| # | palavras | só embeddings | estante |
+Confidence: **high** (highest similarity to a synopsis 0.2967, to a reading 0.3477). Reading of the request: `{"atmospheres":["melancholic","contemplative"],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":"slow","length":null,"era":null,"genres":[],"reference":null}`
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | Ensaio sobre a Lucidez — José Saramago | Ensaio sobre a Lucidez — José Saramago | Em Busca do Tempo Perdido — Marcel Proust |
-| 2 | A Divina Comédia — Dante Alighieri | O Tempo e o Vento — Erico Verissimo | Mrs. Dalloway — Virginia Woolf |
-| 3 | O Alienista — Machado de Assis | Eles Eram Muitos Cavalos — Luiz Ruffato | As Ondas — Virginia Woolf |
-| 4 | Feliz Ano Novo — Rubem Fonseca | Mrs. Dalloway — Virginia Woolf | A Hora da Estrela — Clarice Lispector |
-| 5 | Mar Morto — Jorge Amado | O Quinze — Rachel de Queiroz | Senhora — José de Alencar |
+| 1 | Seeing — José Saramago **(1)** | Mrs. Dalloway — Virginia Woolf **(2)** | Mrs. Dalloway — Virginia Woolf **(2)** |
+| 2 | The Alienist — Machado de Assis **(0)** | Seeing — José Saramago **(1)** | In Search of Lost Time — Marcel Proust **(2)** |
+| 3 | The Sad End of Policarpo Quaresma — Lima Barreto **(0)** | A Time to Meet — Fernando Sabino **(0)** | The Remains of the Day — Kazuo Ishiguro **(1)** |
+| 4 | — | There Were Many Horses — Luiz Ruffato **(0)** | The Waves — Virginia Woolf **(2)** |
+| 5 | — | The Passion According to G.H. — Clarice Lispector **(0)** | The Passion According to G.H. — Clarice Lispector **(0)** |
 
-### abs-2 · abstrata — «um livro com cheiro de casa de vó»
+nDCG@5 — keywords 0.14 · embeddings only 0.50 · shelf 0.93
 
-Confiança: **high** (maior similaridade com sinopse 0.5045, com leitura 0.4545). Leitura do pedido: `{"atmospheres":[],"inferredAtmospheres":["nostalgic","comforting"],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+### abs-2 · abstract — "a book that smells like grandma's house"
 
-| # | palavras | só embeddings | estante |
+Confidence: **high** (highest similarity to a synopsis 0.4601, to a reading 0.4351). Reading of the request: `{"atmospheres":[],"inferredAtmospheres":["nostalgic"],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | O Cheiro do Ralo — Lourenço Mutarelli | O Cheiro do Ralo — Lourenço Mutarelli | Gabriela, Cravo e Canela — Jorge Amado |
-| 2 | Crônica da Casa Assassinada — Lúcio Cardoso | O Perfume — Patrick Süskind | Leite Derramado — Chico Buarque |
-| 3 | A Amiga Genial — Elena Ferrante | Leite Derramado — Chico Buarque | O Perfume — Patrick Süskind |
-| 4 | O Perfume — Patrick Süskind | Viva o Povo Brasileiro — João Ubaldo Ribeiro | Dona Flor e Seus Dois Maridos — Jorge Amado |
-| 5 | Um Copo de Cólera — Raduan Nassar | Crônica da Casa Assassinada — Lúcio Cardoso | O Cheiro do Ralo — Lourenço Mutarelli |
+| 1 | Perfume — Patrick Süskind **(1)** | Perfume — Patrick Süskind **(1)** | The House of the Spirits — Isabel Allende **(0)** |
+| 2 | The House of the Spirits — Isabel Allende **(0)** | O Cheiro do Ralo — Lourenço Mutarelli **(0)** | Ponciá Vicêncio — Conceição Evaristo **(0)** |
+| 3 | O Cheiro do Ralo — Lourenço Mutarelli **(0)** | The House of the Spirits — Isabel Allende **(0)** | Perfume — Patrick Süskind **(1)** |
+| 4 | A Moreninha — Joaquim Manuel de Macedo **(0)** | Kitchen — Banana Yoshimoto **(0)** | Dona Flor and Her Two Husbands — Jorge Amado **(1)** |
+| 5 | One Hundred Years of Solitude — Gabriel García Márquez **(0)** | Ponciá Vicêncio — Conceição Evaristo **(0)** | The Maias — Eça de Queirós **(1)** |
 
-### abs-3 · abstrata — «uma história curta que me deixe pensando por dias»
+nDCG@5 — keywords 0.47 · embeddings only 0.47 · shelf 0.62
 
-Confiança: **high** (maior similaridade com sinopse 0.3892, com leitura 0.3545). Leitura do pedido: `{"atmospheres":["contemplative"],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":"short","era":null,"genres":["Contos","Novela"],"reference":null}`
+### abs-3 · abstract — "a short story that keeps me thinking for days"
 
-| # | palavras | só embeddings | estante |
+Confidence: **high** (highest similarity to a synopsis 0.363, to a reading 0.338). Reading of the request: `{"atmospheres":["contemplative"],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":"short","era":null,"genres":["Short stories","Novella"],"reference":null}`
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | Auto da Compadecida — Ariano Suassuna | Dias de Abandono — Elena Ferrante | Laços de Família — Clarice Lispector |
-| 2 | O Apanhador no Campo de Centeio — J. D. Salinger | Teoria Geral do Esquecimento — José Eduardo Agualusa | Felicidade Clandestina — Clarice Lispector |
-| 3 | — | Mrs. Dalloway — Virginia Woolf | A Paixão segundo G.H. — Clarice Lispector |
-| 4 | — | A Paixão segundo G.H. — Clarice Lispector | Mrs. Dalloway — Virginia Woolf |
-| 5 | — | Memorial de Maria Moura — Rachel de Queiroz | Estorvo — Chico Buarque |
+| 1 | Fahrenheit 451 — Ray Bradbury **(0)** | Mrs. Dalloway — Virginia Woolf **(0)** | Family Ties — Clarice Lispector **(2)** |
+| 2 | The Rogues' Trial — Ariano Suassuna **(0)** | And Still the Earth — Ignácio de Loyola Brandão **(1)** | Mrs. Dalloway — Virginia Woolf **(0)** |
+| 3 | Antes do Baile Verde — Lygia Fagundes Telles **(2)** | No One Writes to the Colonel — Gabriel García Márquez **(2)** | Turbulence — Chico Buarque **(0)** |
+| 4 | O Quinze — Rachel de Queiroz **(0)** | Covert Joy — Clarice Lispector **(2)** | Covert Joy — Clarice Lispector **(2)** |
+| 5 | Sagarana — João Guimarães Rosa **(2)** | Family Ties — Clarice Lispector **(2)** | The Stranger — Albert Camus **(1)** |
 
-### abs-4 · abstrata — «um livro para ler devagar, saboreando cada frase»
+nDCG@5 — keywords 0.30 · embeddings only 0.52 · shelf 0.53
 
-Confiança: **high** (maior similaridade com sinopse 0.4024, com leitura 0.5452). Leitura do pedido: `{"atmospheres":[],"inferredAtmospheres":["contemplative"],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":"slow","length":null,"era":null,"genres":[],"reference":null}`
+### abs-4 · abstract — "a book to read slowly, savoring every sentence"
 
-| # | palavras | só embeddings | estante |
+Confidence: **high** (highest similarity to a synopsis 0.3764, to a reading 0.5309). Reading of the request: `{"atmospheres":[],"inferredAtmospheres":["contemplative"],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":"slow","length":null,"era":null,"genres":[],"reference":null}`
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | Vidas Secas — Graciliano Ramos | Ensaio sobre a Cegueira — José Saramago | Em Busca do Tempo Perdido — Marcel Proust |
-| 2 | A Paixão segundo G.H. — Clarice Lispector | Uma Aprendizagem ou O Livro dos Prazeres — Clarice Lispector | Água Viva — Clarice Lispector |
-| 3 | As Ondas — Virginia Woolf | As Intermitências da Morte — José Saramago | As Ondas — Virginia Woolf |
-| 4 | As Intermitências da Morte — José Saramago | Eles Eram Muitos Cavalos — Luiz Ruffato | Os Vestígios do Dia — Kazuo Ishiguro |
-| 5 | O Senhor dos Anéis — J. R. R. Tolkien | A Paixão segundo G.H. — Clarice Lispector | Perto do Coração Selvagem — Clarice Lispector |
+| 1 | Barren Lives — Graciliano Ramos **(2)** | The Remains of the Day — Kazuo Ishiguro **(2)** | In Search of Lost Time — Marcel Proust **(2)** |
+| 2 | The Passion According to G.H. — Clarice Lispector **(2)** | One Hundred Years of Solitude — Gabriel García Márquez **(2)** | The Remains of the Day — Kazuo Ishiguro **(2)** |
+| 3 | The Sorrows of Young Werther — Johann Wolfgang von Goethe **(2)** | Death with Interruptions — José Saramago **(2)** | Mrs. Dalloway — Virginia Woolf **(2)** |
+| 4 | A Cup of Rage — Raduan Nassar **(1)** | An Apprenticeship or The Book of Pleasures — Clarice Lispector **(2)** | The Passion According to G.H. — Clarice Lispector **(2)** |
+| 5 | Ancient Tillage — Raduan Nassar **(1)** | Atonement — Ian McEwan **(1)** | The Waves — Virginia Woolf **(2)** |
 
-### abs-5 · abstrata — «um livro que pareça um sonho estranho»
+nDCG@5 — keywords 0.82 · embeddings only 0.91 · shelf 1.00
 
-Confiança: **high** (maior similaridade com sinopse 0.4282, com leitura 0.4688). Leitura do pedido: `{"atmospheres":["unsettling","dreamlike"],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+### abs-5 · abstract — "a book that feels like a strange dream"
 
-| # | palavras | só embeddings | estante |
+Confidence: **high** (highest similarity to a synopsis 0.3697, to a reading 0.4869). Reading of the request: `{"atmospheres":["unsettling","dreamlike"],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | O Alquimista — Paulo Coelho | Não Verás País Nenhum — Ignácio de Loyola Brandão | Macunaíma — Mário de Andrade |
-| 2 | O Estrangeiro — Albert Camus | Os Despossuídos — Ursula K. Le Guin | O Jogo da Amarelinha — Julio Cortázar |
-| 3 | O Cortiço — Aluísio Azevedo | O Alienista — Machado de Assis | Não Verás País Nenhum — Ignácio de Loyola Brandão |
-| 4 | O Vendedor de Passados — José Eduardo Agualusa | Incidente em Antares — Erico Verissimo | A Vegetariana — Han Kang |
-| 5 | A Revolução dos Bichos — George Orwell | As Intermitências da Morte — José Saramago | As Intermitências da Morte — José Saramago |
+| 1 | Do Androids Dream of Electric Sheep? — Philip K. Dick **(1)** | The Book of Chameleons — José Eduardo Agualusa **(0)** | The Voices of the Dead — Autran Dourado **(0)** |
+| 2 | The Alchemist — Paulo Coelho **(1)** | Sleepwalking Land — Mia Couto **(2)** | And Still the Earth — Ignácio de Loyola Brandão **(1)** |
+| 3 | The Stranger — Albert Camus **(0)** | The Land at the End of the World — António Lobo Antunes **(0)** | Bestiary — Julio Cortázar **(2)** |
+| 4 | The Slum — Aluísio Azevedo **(0)** | Incidente em Antares — Erico Verissimo **(2)** | Incidente em Antares — Erico Verissimo **(2)** |
+| 5 | Animal Farm — George Orwell **(0)** | Turbulence — Chico Buarque **(2)** | The Wedding Dress — Nelson Rodrigues **(2)** |
 
-### aut-1 · autor — «livros para quem gostou de Clarice Lispector»
+nDCG@5 — keywords 0.18 · embeddings only 0.49 · shelf 0.52
 
-Confiança: **high** (maior similaridade com sinopse 0.6232, com leitura 0.3923). Leitura do pedido: `{"atmospheres":[],"inferredAtmospheres":["comforting","intense"],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":"Clarice Lispector"}`
+### aut-1 · author — "books for those who liked Clarice Lispector"
 
-| # | palavras | só embeddings | estante |
+Confidence: **high** (highest similarity to a synopsis 0.5862, to a reading 0.3728). Reading of the request: `{"atmospheres":[],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":"Clarice Lispector"}`
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | Perto do Coração Selvagem — Clarice Lispector | Felicidade Clandestina — Clarice Lispector | Mrs. Dalloway — Virginia Woolf |
-| 2 | Uma Aprendizagem ou O Livro dos Prazeres — Clarice Lispector | Uma Aprendizagem ou O Livro dos Prazeres — Clarice Lispector | Grande Sertão: Veredas — João Guimarães Rosa |
-| 3 | Água Viva — Clarice Lispector | Laços de Família — Clarice Lispector | Estorvo — Chico Buarque |
-| 4 | A Paixão segundo G.H. — Clarice Lispector | Água Viva — Clarice Lispector | As Meninas — Lygia Fagundes Telles |
-| 5 | Laços de Família — Clarice Lispector | Perto do Coração Selvagem — Clarice Lispector | Em Busca do Tempo Perdido — Marcel Proust |
+| 1 | Near to the Wild Heart — Clarice Lispector **(2)** | An Apprenticeship or The Book of Pleasures — Clarice Lispector **(2)** | Turbulence — Chico Buarque **(1)** |
+| 2 | An Apprenticeship or The Book of Pleasures — Clarice Lispector **(2)** | The Hour of the Star — Clarice Lispector **(2)** | Mrs. Dalloway — Virginia Woolf **(2)** |
+| 3 | Água Viva — Clarice Lispector **(2)** | Covert Joy — Clarice Lispector **(2)** | Dom Casmurro — Machado de Assis **(1)** |
+| 4 | The Passion According to G.H. — Clarice Lispector **(2)** | Family Ties — Clarice Lispector **(2)** | Ponciá Vicêncio — Conceição Evaristo **(1)** |
+| 5 | Family Ties — Clarice Lispector **(2)** | Near to the Wild Heart — Clarice Lispector **(2)** | The Marble Dance — Lygia Fagundes Telles **(2)** |
 
-### aut-2 · autor — «algo no estilo de Gabriel García Márquez»
+nDCG@5 — keywords 1.00 · embeddings only 1.00 · shelf 0.56
 
-Confiança: **high** (maior similaridade com sinopse 0.4448, com leitura 0.3995). Leitura do pedido: `{"atmospheres":[],"inferredAtmospheres":["unsettling"],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":"Gabriel García Márquez"}`
+### aut-2 · author — "something in the style of Gabriel García Márquez"
 
-| # | palavras | só embeddings | estante |
+Confidence: **high** (highest similarity to a synopsis 0.5448, to a reading 0.4626). Reading of the request: `{"atmospheres":[],"inferredAtmospheres":["dreamlike"],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":"Gabriel García Márquez"}`
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | Cem Anos de Solidão — Gabriel García Márquez | Cem Anos de Solidão — Gabriel García Márquez | O Tempo e o Vento — Erico Verissimo |
-| 2 | O Amor nos Tempos do Cólera — Gabriel García Márquez | Ninguém Escreve ao Coronel — Gabriel García Márquez | Pedro Páramo — Juan Rulfo |
-| 3 | Ninguém Escreve ao Coronel — Gabriel García Márquez | O Amor nos Tempos do Cólera — Gabriel García Márquez | O Apanhador no Campo de Centeio — J. D. Salinger |
-| 4 | Pedro Páramo — Juan Rulfo | O Que É Isso, Companheiro? — Fernando Gabeira | Um Copo de Cólera — Raduan Nassar |
-| 5 | Gabriela, Cravo e Canela — Jorge Amado | Gabriela, Cravo e Canela — Jorge Amado | Dom Casmurro — Machado de Assis |
+| 1 | One Hundred Years of Solitude — Gabriel García Márquez **(2)** | One Hundred Years of Solitude — Gabriel García Márquez **(2)** | Hopscotch — Julio Cortázar **(1)** |
+| 2 | Love in the Time of Cholera — Gabriel García Márquez **(2)** | Love in the Time of Cholera — Gabriel García Márquez **(2)** | The Old Man and the Sea — Ernest Hemingway **(0)** |
+| 3 | No One Writes to the Colonel — Gabriel García Márquez **(2)** | No One Writes to the Colonel — Gabriel García Márquez **(2)** | Turbulence — Chico Buarque **(0)** |
+| 4 | Pedro Páramo — Juan Rulfo **(2)** | The Hour of the Star — Clarice Lispector **(0)** | The House of the Spirits — Isabel Allende **(2)** |
+| 5 | Gabriela, Clove and Cinnamon — Jorge Amado **(1)** | The Passion According to G.H. — Clarice Lispector **(0)** | Pedro Páramo — Juan Rulfo **(2)** |
 
-### aut-3 · autor — «para quem gostou de Torto Arado»
+nDCG@5 — keywords 0.91 · embeddings only 0.72 · shelf 0.39
 
-Confiança: **high** (maior similaridade com sinopse 0.4648, com leitura 0.2868). Leitura do pedido: `{"atmospheres":[],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":"Torto Arado"}`
+### aut-3 · author — "for those who liked Crooked Plow"
 
-| # | palavras | só embeddings | estante |
+Confidence: **high** (highest similarity to a synopsis 0.4664, to a reading 0.2295). Reading of the request: `{"atmospheres":[],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":"Crooked Plow"}`
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | Torto Arado — Itamar Vieira Junior | Torto Arado — Itamar Vieira Junior | O Avesso da Pele — Jeferson Tenório |
-| 2 | — | Tenda dos Milagres — Jorge Amado | Um Defeito de Cor — Ana Maria Gonçalves |
-| 3 | — | Triste Fim de Policarpo Quaresma — Lima Barreto | Vidas Secas — Graciliano Ramos |
-| 4 | — | Mar Morto — Jorge Amado | Viva o Povo Brasileiro — João Ubaldo Ribeiro |
-| 5 | — | O Jogo da Amarelinha — Julio Cortázar | Recordações do Escrivão Isaías Caminha — Lima Barreto |
+| 1 | Crooked Plow — Itamar Vieira Junior **(0)** | Crooked Plow — Itamar Vieira Junior **(0)** | Um Defeito de Cor — Ana Maria Gonçalves **(2)** |
+| 2 | — | Hopscotch — Julio Cortázar **(0)** | Sleepwalking Land — Mia Couto **(1)** |
+| 3 | — | Wuthering Heights — Emily Brontë **(1)** | Fogo Morto — José Lins do Rego **(2)** |
+| 4 | — | Ancient Tillage — Raduan Nassar **(2)** | Baltasar and Blimunda — José Saramago **(1)** |
+| 5 | — | Chronicle of the Murdered House — Lúcio Cardoso **(1)** | Ancient Tillage — Raduan Nassar **(2)** |
 
-### aut-4 · autor — «livros do Saramago»
+nDCG@5 — keywords 0.00 · embeddings only 0.30 · shelf 0.93
 
-Confiança: **high** (maior similaridade com sinopse 0.474, com leitura 0.324). Leitura do pedido: `{"atmospheres":[],"inferredAtmospheres":["ironic"],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":"José Saramago"}`
+### aut-4 · author — "books by Saramago"
 
-| # | palavras | só embeddings | estante |
+Confidence: **high** (highest similarity to a synopsis 0.4561, to a reading 0.2659). Reading of the request: `{"atmospheres":[],"inferredAtmospheres":["ironic"],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":"José Saramago"}`
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | Ensaio sobre a Lucidez — José Saramago | O Evangelho segundo Jesus Cristo — José Saramago | O Evangelho segundo Jesus Cristo — José Saramago |
-| 2 | O Evangelho segundo Jesus Cristo — José Saramago | Ensaio sobre a Cegueira — José Saramago | As Intermitências da Morte — José Saramago |
-| 3 | Memorial do Convento — José Saramago | As Intermitências da Morte — José Saramago | Ensaio sobre a Cegueira — José Saramago |
-| 4 | A Jangada de Pedra — José Saramago | Memorial do Convento — José Saramago | Memorial do Convento — José Saramago |
-| 5 | Ensaio sobre a Cegueira — José Saramago | Ensaio sobre a Lucidez — José Saramago | Ensaio sobre a Lucidez — José Saramago |
+| 1 | Seeing — José Saramago **(2)** | Death with Interruptions — José Saramago **(2)** | Death with Interruptions — José Saramago **(2)** |
+| 2 | The Gospel According to Jesus Christ — José Saramago **(2)** | The Gospel According to Jesus Christ — José Saramago **(2)** | Baltasar and Blimunda — José Saramago **(2)** |
+| 3 | Baltasar and Blimunda — José Saramago **(2)** | Baltasar and Blimunda — José Saramago **(2)** | The Gospel According to Jesus Christ — José Saramago **(2)** |
+| 4 | The Stone Raft — José Saramago **(2)** | Blindness — José Saramago **(2)** | Seeing — José Saramago **(2)** |
+| 5 | Death with Interruptions — José Saramago **(2)** | Seeing — José Saramago **(2)** | Blindness — José Saramago **(2)** |
 
-### aut-5 · autor — «para quem gosta de Rupi Kaur»
+nDCG@5 — keywords 1.00 · embeddings only 1.00 · shelf 1.00
 
-Confiança: **none** (maior similaridade com sinopse 0.3585, com leitura 0.389). Leitura do pedido: `{"atmospheres":[],"inferredAtmospheres":["comforting"],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":"Rupi Kaur"}`
+### aut-5 · author — "for those who like Rupi Kaur"
 
-> Rupi Kaur não está neste catálogo. Sem conhecer os livros dessa referência, prefiro não inventar uma semelhança.
+Confidence: **none** (highest similarity to a synopsis 0.2893, to a reading 0.3574). Reading of the request: `{"atmospheres":[],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":"Rupi Kaur"}`
 
-| # | palavras | só embeddings | estante |
+> Rupi Kaur is not in this catalog. Without knowing that reference's books, I would rather not invent a resemblance.
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | — | O Caçador de Pipas — Khaled Hosseini | — |
-| 2 | — | A Menina que Roubava Livros — Markus Zusak | — |
-| 3 | — | Pessoas Normais — Sally Rooney | — |
-| 4 | — | O Apanhador no Campo de Centeio — J. D. Salinger | — |
-| 5 | — | Persépolis — Marjane Satrapi | — |
+| 1 | — | The Kite Runner — Khaled Hosseini **(1)** | — |
+| 2 | — | An Apprenticeship or The Book of Pleasures — Clarice Lispector **(1)** | — |
+| 3 | — | Normal People — Sally Rooney **(1)** | — |
+| 4 | — | Persepolis — Marjane Satrapi **(1)** | — |
+| 5 | — | The Hour of the Star — Clarice Lispector **(1)** | — |
 
-### neg-1 · negativa — «quero um livro sobre solidão, mas sem ser deprimente»
+nDCG@5 — keywords — · embeddings only 1.00 · shelf —
 
-Confiança: **high** (maior similaridade com sinopse 0.4765, com leitura 0.4813). Leitura do pedido: `{"atmospheres":[],"inferredAtmospheres":["melancholic"],"avoid":["deprimente"],"avoidAtmospheres":["dark"],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+### neg-1 · negative — "I want a book about loneliness, but without being depressing"
 
-| # | palavras | só embeddings | estante |
+Confidence: **high** (highest similarity to a synopsis 0.4356, to a reading 0.445). Reading of the request: `{"atmospheres":[],"inferredAtmospheres":["melancholic"],"avoid":["depressing"],"avoidAtmospheres":["dark"],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | Cem Anos de Solidão — Gabriel García Márquez | Cem Anos de Solidão — Gabriel García Márquez | Cem Anos de Solidão — Gabriel García Márquez |
-| 2 | Memorial de Maria Moura — Rachel de Queiroz | A Paixão segundo G.H. — Clarice Lispector | O Lobo da Estepe — Hermann Hesse |
-| 3 | O Vampiro de Curitiba — Dalton Trevisan | Dias de Abandono — Elena Ferrante | Dias de Abandono — Elena Ferrante |
-| 4 | As Ondas — Virginia Woolf | Uma Aprendizagem ou O Livro dos Prazeres — Clarice Lispector | A Jangada de Pedra — José Saramago |
-| 5 | Dias de Abandono — Elena Ferrante | A Hora da Estrela — Clarice Lispector | Ratos e Homens — John Steinbeck |
+| 1 | Of Mice and Men — John Steinbeck **(0)** | One Hundred Years of Solitude — Gabriel García Márquez **(1)** | One Hundred Years of Solitude — Gabriel García Márquez **(1)** |
+| 2 | Memorial de Maria Moura — Rachel de Queiroz **(0)** | The Days of Abandonment — Elena Ferrante **(0)** | The Catcher in the Rye — J. D. Salinger **(1)** |
+| 3 | The Vampire of Curitiba — Dalton Trevisan **(1)** | Kitchen — Banana Yoshimoto **(2)** | Atonement — Ian McEwan **(0)** |
+| 4 | The Little Prince — Antoine de Saint-Exupéry **(2)** | Atonement — Ian McEwan **(0)** | A General Theory of Oblivion — José Eduardo Agualusa **(2)** |
+| 5 | — | Normal People — Sally Rooney **(1)** | Kitchen — Banana Yoshimoto **(2)** |
 
-### neg-2 · negativa — «um romance delicado, mas não previsível»
+nDCG@5 — keywords 0.25 · embeddings only 0.40 · shelf 0.57
 
-Confiança: **high** (maior similaridade com sinopse 0.4556, com leitura 0.474). Leitura do pedido: `{"atmospheres":["comforting"],"inferredAtmospheres":["melancholic"],"avoid":["previsível"],"avoidAtmospheres":[],"unassessable":["previsível"],"pace":null,"length":null,"era":null,"genres":["Romance"],"reference":null}`
+### neg-2 · negative — "a delicate novel, but not predictable"
 
-> Não tenho como avaliar "previsível" com os dados do catálogo; considerei o restante do pedido.
+Confidence: **high** (highest similarity to a synopsis 0.4394, to a reading 0.4689). Reading of the request: `{"atmospheres":["comforting"],"inferredAtmospheres":["melancholic"],"avoid":["predictable"],"avoidAtmospheres":[],"unassessable":["predictable"],"pace":null,"length":null,"era":null,"genres":["Novel"],"reference":null}`
 
-| # | palavras | só embeddings | estante |
+> I have no way to assess "predictable" with the catalog data; I considered the rest of your request.
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | Romance d'A Pedra do Reino — Ariano Suassuna | Perto do Coração Selvagem — Clarice Lispector | A Moreninha — Joaquim Manuel de Macedo |
-| 2 | Romanceiro da Inconfidência — Cecília Meireles | Uma Aprendizagem ou O Livro dos Prazeres — Clarice Lispector | Orgulho e Preconceito — Jane Austen |
-| 3 | Dom Quixote — Miguel de Cervantes | Ponciá Vicêncio — Conceição Evaristo | Gabriela, Cravo e Canela — Jorge Amado |
-| 4 | Perto do Coração Selvagem — Clarice Lispector | Os Sofrimentos do Jovem Werther — Johann Wolfgang von Goethe | Dona Flor e Seus Dois Maridos — Jorge Amado |
-| 5 | Memorial de Maria Moura — Rachel de Queiroz | A Moreninha — Joaquim Manuel de Macedo | O Encontro Marcado — Fernando Sabino |
+| 1 | Near to the Wild Heart — Clarice Lispector **(2)** | The Hour of the Star — Clarice Lispector **(2)** | A Moreninha — Joaquim Manuel de Macedo **(0)** |
+| 2 | K — Bernardo Kucinski **(0)** | The Remains of the Day — Kazuo Ishiguro **(2)** | Pride and Prejudice — Jane Austen **(1)** |
+| 3 | Memorial de Maria Moura — Rachel de Queiroz **(1)** | My Brilliant Friend — Elena Ferrante **(1)** | My Brilliant Friend — Elena Ferrante **(1)** |
+| 4 | Ashes of the Amazon — Milton Hatoum **(0)** | Kitchen — Banana Yoshimoto **(2)** | Atonement — Ian McEwan **(2)** |
+| 5 | Crime and Punishment — Fiódor Dostoiévski **(1)** | Atonement — Ian McEwan **(2)** | Kitchen — Banana Yoshimoto **(2)** |
 
-### neg-3 · negativa — «ficção científica que não seja pessimista»
+nDCG@5 — keywords 0.44 · embeddings only 0.89 · shelf 0.41
 
-Confiança: **high** (maior similaridade com sinopse 0.4538, com leitura 0.3944). Leitura do pedido: `{"atmospheres":[],"inferredAtmospheres":[],"avoid":["pessimista"],"avoidAtmospheres":["dark"],"unassessable":[],"pace":null,"length":null,"era":null,"genres":["Ficção científica"],"reference":null}`
+### neg-3 · negative — "science fiction that isn't pessimistic"
 
-| # | palavras | só embeddings | estante |
+Confidence: **high** (highest similarity to a synopsis 0.3688, to a reading 0.3527). Reading of the request: `{"atmospheres":[],"inferredAtmospheres":[],"avoid":["pessimistic"],"avoidAtmospheres":["dark"],"unassessable":[],"pace":null,"length":null,"era":null,"genres":["Science fiction"],"reference":null}`
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | Solaris — Stanisław Lem | Solaris — Stanisław Lem | Solaris — Stanisław Lem |
-| 2 | Duna — Frank Herbert | Androides Sonham com Ovelhas Elétricas? — Philip K. Dick | O Guia do Mochileiro das Galáxias — Douglas Adams |
-| 3 | Não Verás País Nenhum — Ignácio de Loyola Brandão | Os Despossuídos — Ursula K. Le Guin | Androides Sonham com Ovelhas Elétricas? — Philip K. Dick |
-| 4 | Neuromancer — William Gibson | Neuromancer — William Gibson | Neuromancer — William Gibson |
-| 5 | A Mão Esquerda da Escuridão — Ursula K. Le Guin | O Guia do Mochileiro das Galáxias — Douglas Adams | Não Verás País Nenhum — Ignácio de Loyola Brandão |
+| 1 | Solaris — Stanisław Lem **(1)** | The Dispossessed — Ursula K. Le Guin **(1)** | The Hitchhiker's Guide to the Galaxy — Douglas Adams **(2)** |
+| 2 | Dune — Frank Herbert **(1)** | The Left Hand of Darkness — Ursula K. Le Guin **(1)** | Neuromancer — William Gibson **(1)** |
+| 3 | Fahrenheit 451 — Ray Bradbury **(0)** | Do Androids Dream of Electric Sheep? — Philip K. Dick **(0)** | Do Androids Dream of Electric Sheep? — Philip K. Dick **(0)** |
+| 4 | Captains of the Sands — Jorge Amado **(0)** | Solaris — Stanisław Lem **(1)** | Solaris — Stanisław Lem **(1)** |
+| 5 | And Still the Earth — Ignácio de Loyola Brandão **(1)** | Neuromancer — William Gibson **(1)** | The Dispossessed — Ursula K. Le Guin **(1)** |
 
-### neg-4 · negativa — «um clássico, mas nada muito longo»
+nDCG@5 — keywords 0.41 · embeddings only 0.49 · shelf 0.90
 
-Confiança: **high** (maior similaridade com sinopse 0.3518, com leitura 0.42). Leitura do pedido: `{"atmospheres":[],"inferredAtmospheres":["nostalgic","melancholic"],"avoid":["longo"],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":"short","era":"classic","genres":[],"reference":null}`
+### neg-4 · negative — "a classic, but nothing too long"
 
-| # | palavras | só embeddings | estante |
+Confidence: **high** (highest similarity to a synopsis 0.3337, to a reading 0.3678). Reading of the request: `{"atmospheres":[],"inferredAtmospheres":[],"avoid":["long"],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":"short","era":"classic","genres":[],"reference":null}`
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | Os Maias — Eça de Queirós | Felicidade Clandestina — Clarice Lispector | Mensagem — Fernando Pessoa |
-| 2 | O Jogo da Amarelinha — Julio Cortázar | O Tempo e o Vento — Erico Verissimo | O Quinze — Rachel de Queiroz |
-| 3 | O Vampiro de Curitiba — Dalton Trevisan | Mrs. Dalloway — Virginia Woolf | Ópera dos Mortos — Autran Dourado |
-| 4 | Os Sertões — Euclides da Cunha | Uma Aprendizagem ou O Livro dos Prazeres — Clarice Lispector | Um Copo de Cólera — Raduan Nassar |
-| 5 | Grandes Esperanças — Charles Dickens | Os Vestígios do Dia — Kazuo Ishiguro | A Moreninha — Joaquim Manuel de Macedo |
+| 1 | A Cup of Rage — Raduan Nassar **(2)** | The Old Man and the Sea — Ernest Hemingway **(2)** | O Quinze — Rachel de Queiroz **(2)** |
+| 2 | Rebellion in the Backlands — Euclides da Cunha **(0)** | The Hour of the Star — Clarice Lispector **(2)** | The Great Gatsby — F. Scott Fitzgerald **(2)** |
+| 3 | Great Expectations — Charles Dickens **(1)** | Time and the Wind — Erico Verissimo **(0)** | Of Mice and Men — John Steinbeck **(2)** |
+| 4 | The Maias — Eça de Queirós **(0)** | Mrs. Dalloway — Virginia Woolf **(2)** | Mrs. Dalloway — Virginia Woolf **(2)** |
+| 5 | The Odyssey — Homero **(1)** | The Remains of the Day — Kazuo Ishiguro **(2)** | A Moreninha — Joaquim Manuel de Macedo **(2)** |
 
-### neg-5 · negativa — «uma história de família sem ser triste»
+nDCG@5 — keywords 0.44 · embeddings only 0.83 · shelf 1.00
 
-Confiança: **high** (maior similaridade com sinopse 0.4745, com leitura 0.4043). Leitura do pedido: `{"atmospheres":[],"inferredAtmospheres":[],"avoid":["triste"],"avoidAtmospheres":["melancholic"],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+### neg-5 · negative — "a family story without being sad"
 
-| # | palavras | só embeddings | estante |
+Confidence: **high** (highest similarity to a synopsis 0.4148, to a reading 0.3678). Reading of the request: `{"atmospheres":[],"inferredAtmospheres":[],"avoid":["sad"],"avoidAtmospheres":["melancholic"],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | Triste Fim de Policarpo Quaresma — Lima Barreto | Laços de Família — Clarice Lispector | Leite Derramado — Chico Buarque |
-| 2 | A Hora da Estrela — Clarice Lispector | Leite Derramado — Chico Buarque | A Resistência — Julián Fuks |
-| 3 | Dias de Abandono — Elena Ferrante | Os Maias — Eça de Queirós | Laços de Família — Clarice Lispector |
-| 4 | Laços de Família — Clarice Lispector | A Resistência — Julián Fuks | Dois Irmãos — Milton Hatoum |
-| 5 | A Metamorfose — Franz Kafka | Felicidade Clandestina — Clarice Lispector | A Casa dos Espíritos — Isabel Allende |
+| 1 | The Sad End of Policarpo Quaresma — Lima Barreto **(0)** | Family Ties — Clarice Lispector **(1)** | Family Ties — Clarice Lispector **(1)** |
+| 2 | Family Ties — Clarice Lispector **(1)** | Spilt Milk — Chico Buarque **(1)** | Resistance — Julián Fuks **(1)** |
+| 3 | The Metamorphosis — Franz Kafka **(0)** | Resistance — Julián Fuks **(1)** | The Brothers — Milton Hatoum **(0)** |
+| 4 | The House of the Spirits — Isabel Allende **(1)** | The Brothers — Milton Hatoum **(0)** | The First Wife: A Tale of Polygamy — Paulina Chiziane **(1)** |
+| 5 | Resistance — Julián Fuks **(1)** | One Hundred Years of Solitude — Gabriel García Márquez **(1)** | The House of the Spirits — Isabel Allende **(1)** |
 
-### amb-1 · ambígua — «romance»
+nDCG@5 — keywords 0.49 · embeddings only 0.85 · shelf 0.83
 
-Confiança: **high** (maior similaridade com sinopse 0.317, com leitura 0.3024). Leitura do pedido: `{"atmospheres":[],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":["Romance"],"reference":null}`
+### amb-1 · ambiguous — "romance"
 
-| # | palavras | só embeddings | estante |
+Confidence: **high** (highest similarity to a synopsis 0.3615, to a reading 0.4156). Reading of the request: `{"atmospheres":[],"inferredAtmospheres":["comforting","nostalgic"],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | Romance d'A Pedra do Reino — Ariano Suassuna | K. Relato de uma Busca — Bernardo Kucinski | Amor de Perdição — Camilo Castelo Branco |
-| 2 | Romanceiro da Inconfidência — Cecília Meireles | Cinzas do Norte — Milton Hatoum | A Moreninha — Joaquim Manuel de Macedo |
-| 3 | Dom Quixote — Miguel de Cervantes | Amor de Perdição — Camilo Castelo Branco | O Amor nos Tempos do Cólera — Gabriel García Márquez |
-| 4 | Perto do Coração Selvagem — Clarice Lispector | Os Sofrimentos do Jovem Werther — Johann Wolfgang von Goethe | Os Sofrimentos do Jovem Werther — Johann Wolfgang von Goethe |
-| 5 | Memorial de Maria Moura — Rachel de Queiroz | Memorial de Maria Moura — Rachel de Queiroz | Memorial de Maria Moura — Rachel de Queiroz |
+| 1 | Romance d'A Pedra do Reino — Ariano Suassuna **(0)** | Doomed Love — Camilo Castelo Branco **(2)** | A Moreninha — Joaquim Manuel de Macedo **(2)** |
+| 2 | Romanceiro da Inconfidência — Cecília Meireles **(2)** | The Sorrows of Young Werther — Johann Wolfgang von Goethe **(2)** | The Sorrows of Young Werther — Johann Wolfgang von Goethe **(2)** |
+| 3 | Memoirs of a Militia Sergeant — Manuel Antônio de Almeida **(0)** | Love in the Time of Cholera — Gabriel García Márquez **(2)** | Love in the Time of Cholera — Gabriel García Márquez **(2)** |
+| 4 | Doomed Love — Camilo Castelo Branco **(2)** | Senhora — José de Alencar **(2)** | Doomed Love — Camilo Castelo Branco **(2)** |
+| 5 | Don Quixote — Miguel de Cervantes **(0)** | A Moreninha — Joaquim Manuel de Macedo **(2)** | Senhora — José de Alencar **(2)** |
 
-### amb-2 · ambígua — «algo leve»
+nDCG@5 — keywords 0.36 · embeddings only 1.00 · shelf 1.00
 
-Confiança: **medium** (maior similaridade com sinopse 0.2384, com leitura 0.2639). Leitura do pedido: `{"atmospheres":["luminous"],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+### amb-2 · ambiguous — "something light"
 
-| # | palavras | só embeddings | estante |
+Confidence: **medium** (highest similarity to a synopsis 0.246, to a reading 0.2906). Reading of the request: `{"atmospheres":["luminous"],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | O Barão nas Árvores — Italo Calvino | — | O Alquimista — Paulo Coelho |
-| 2 | Dom Quixote — Miguel de Cervantes | — | Tenda dos Milagres — Jorge Amado |
-| 3 | Fahrenheit 451 — Ray Bradbury | — | O Hobbit — J. R. R. Tolkien |
-| 4 | — | — | Os Lusíadas — Luís de Camões |
-| 5 | — | — | A Cidade e as Serras — Eça de Queirós |
+| 1 | Seeing — José Saramago **(0)** | Seeing — José Saramago **(0)** | Libertinagem — Manuel Bandeira **(1)** |
+| 2 | Chronicle of the Murdered House — Lúcio Cardoso **(1)** | The Hour of the Star — Clarice Lispector **(1)** | The Alchemist — Paulo Coelho **(2)** |
+| 3 | The Baron in the Trees — Italo Calvino **(1)** | Whatever Happened to Dulce Veiga? — Caio Fernando Abreu **(1)** | The Divine Comedy — Dante Alighieri **(0)** |
+| 4 | Blindness — José Saramago **(0)** | — | Gabriela, Clove and Cinnamon — Jorge Amado **(1)** |
+| 5 | The Second Sex — Simone de Beauvoir **(0)** | — | The City and the Mountains — Eça de Queirós **(1)** |
 
-### amb-3 · ambígua — «sertão»
+nDCG@5 — keywords 0.23 · embeddings only 0.23 · shelf 0.75
 
-Confiança: **high** (maior similaridade com sinopse 0.4399, com leitura 0.3044). Leitura do pedido: `{"atmospheres":[],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+### amb-3 · ambiguous — "sertão"
 
-| # | palavras | só embeddings | estante |
+Confidence: **medium** (highest similarity to a synopsis 0.3331, to a reading 0.2354). Reading of the request: `{"atmospheres":[],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | Os Sertões — Euclides da Cunha | Os Sertões — Euclides da Cunha | Os Sertões — Euclides da Cunha |
-| 2 | Grande Sertão: Veredas — João Guimarães Rosa | Grande Sertão: Veredas — João Guimarães Rosa | Vidas Secas — Graciliano Ramos |
-| 3 | Torto Arado — Itamar Vieira Junior | Morte e Vida Severina — João Cabral de Melo Neto | Morte e Vida Severina — João Cabral de Melo Neto |
-| 4 | Morte e Vida Severina — João Cabral de Melo Neto | São Bernardo — Graciliano Ramos | Torto Arado — Itamar Vieira Junior |
-| 5 | Vidas Secas — Graciliano Ramos | Sargento Getúlio — João Ubaldo Ribeiro | Sargento Getúlio — João Ubaldo Ribeiro |
+| 1 | Barren Lives — Graciliano Ramos **(2)** | Death and Life of Severino — João Cabral de Melo Neto **(2)** | Gabriela, Clove and Cinnamon — Jorge Amado **(0)** |
+| 2 | — | São Bernardo — Graciliano Ramos **(1)** | An Invincible Memory — João Ubaldo Ribeiro **(1)** |
+| 3 | — | Sergeant Getúlio — João Ubaldo Ribeiro **(2)** | Death and Life of Severino — João Cabral de Melo Neto **(2)** |
+| 4 | — | Senhora — José de Alencar **(0)** | Sergeant Getúlio — João Ubaldo Ribeiro **(2)** |
+| 5 | — | Sagarana — João Guimarães Rosa **(1)** | Sagarana — João Guimarães Rosa **(1)** |
 
-### amb-4 · ambígua — «livros sobre mães e filhas»
+nDCG@5 — keywords 0.42 · embeddings only 0.77 · shelf 0.53
 
-Confiança: **high** (maior similaridade com sinopse 0.4179, com leitura 0.3725). Leitura do pedido: `{"atmospheres":[],"inferredAtmospheres":["comforting"],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+### amb-4 · ambiguous — "books about mothers and daughters"
 
-| # | palavras | só embeddings | estante |
+Confidence: **medium** (highest similarity to a synopsis 0.3653, to a reading 0.3877). Reading of the request: `{"atmospheres":[],"inferredAtmospheres":["comforting"],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | Dois Irmãos — Milton Hatoum | As Meninas — Lygia Fagundes Telles | Laços de Família — Clarice Lispector |
-| 2 | Ninguém Escreve ao Coronel — Gabriel García Márquez | Laços de Família — Clarice Lispector | O Segundo Sexo — Simone de Beauvoir |
-| 3 | Os Maias — Eça de Queirós | Os Maias — Eça de Queirós | Gabriela, Cravo e Canela — Jorge Amado |
-| 4 | Quarto de Despejo — Carolina Maria de Jesus | Memorial de Maria Moura — Rachel de Queiroz | As Meninas — Lygia Fagundes Telles |
-| 5 | O Vermelho e o Negro — Stendhal | Becos da Memória — Conceição Evaristo | Um Teto Todo Seu — Virginia Woolf |
+| 1 | The House of the Spirits — Isabel Allende **(0)** | The House of the Spirits — Isabel Allende **(0)** | The House of the Spirits — Isabel Allende **(0)** |
+| 2 | The Brothers — Milton Hatoum **(0)** | Family Ties — Clarice Lispector **(1)** | The Girl in the Photograph — Lygia Fagundes Telles **(0)** |
+| 3 | The Maias — Eça de Queirós **(0)** | The Girl in the Photograph — Lygia Fagundes Telles **(0)** | My Brilliant Friend — Elena Ferrante **(0)** |
+| 4 | Madame Bovary — Gustave Flaubert **(0)** | The Maias — Eça de Queirós **(0)** | The Brothers — Milton Hatoum **(0)** |
+| 5 | Senhora — José de Alencar **(0)** | The Brothers — Milton Hatoum **(0)** | Family Ties — Clarice Lispector **(1)** |
 
-### sem-1 · sem correspondência — «manual de programação em Rust»
+nDCG@5 — keywords 0.00 · embeddings only 0.63 · shelf 0.39
 
-Confiança: **none** (maior similaridade com sinopse 0.2445, com leitura 0.2646). Leitura do pedido: `{"atmospheres":[],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+### sem-1 · no match — "Rust programming manual"
 
-> Não encontrei nesta estante nada que responda bem a esse pedido. Talvez o catálogo não tenha esse tipo de livro.
+Confidence: **none** (highest similarity to a synopsis 0.2013, to a reading 0.2583). Reading of the request: `{"atmospheres":[],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
 
-| # | palavras | só embeddings | estante |
+> I found nothing on this shelf that answers this request well. The catalog may not have this kind of book.
+
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
 | 1 | Libertinagem — Manuel Bandeira | — | — |
 | 2 | A Moreninha — Joaquim Manuel de Macedo | — | — |
-| 3 | Memórias de um Sargento de Milícias — Manuel Antônio de Almeida | — | — |
-| 4 | O Jogo da Amarelinha — Julio Cortázar | — | — |
-| 5 | Mar Morto — Jorge Amado | — | — |
+| 3 | Memoirs of a Militia Sergeant — Manuel Antônio de Almeida | — | — |
+| 4 | Hopscotch — Julio Cortázar | — | — |
+| 5 | Um Defeito de Cor — Ana Maria Gonçalves | — | — |
 
-### sem-2 · sem correspondência — «receitas veganas para o dia a dia»
+### sem-2 · no match — "everyday vegan recipes"
 
-Confiança: **none** (maior similaridade com sinopse 0.3875, com leitura 0.1515). Leitura do pedido: `{"atmospheres":[],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+Confidence: **none** (highest similarity to a synopsis 0.2946, to a reading 0.113). Reading of the request: `{"atmospheres":[],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
 
-> Não encontrei nesta estante nada que responda bem a esse pedido. Talvez o catálogo não tenha esse tipo de livro.
+> I found nothing on this shelf that answers this request well. The catalog may not have this kind of book.
 
-| # | palavras | só embeddings | estante |
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | Eles Eram Muitos Cavalos — Luiz Ruffato | — | — |
-| 2 | Os Vestígios do Dia — Kazuo Ishiguro | — | — |
-| 3 | Mrs. Dalloway — Virginia Woolf | — | — |
-| 4 | Quarto de Despejo — Carolina Maria de Jesus | — | — |
-| 5 | As Intermitências da Morte — José Saramago | — | — |
+| 1 | There Were Many Horses — Luiz Ruffato | — | — |
+| 2 | Libertinagem — Manuel Bandeira | — | — |
+| 3 | Family Ties — Clarice Lispector | — | — |
+| 4 | The Vampire of Curitiba — Dalton Trevisan | — | — |
+| 5 | Dona Flor and Her Two Husbands — Jorge Amado | — | — |
 
-### sem-3 · sem correspondência — «guia de viagem para o Japão»
+### sem-3 · no match — "travel guide to Japan"
 
-Confiança: **none** (maior similaridade com sinopse 0.2674, com leitura 0.2137). Leitura do pedido: `{"atmospheres":[],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+Confidence: **none** (highest similarity to a synopsis 0.2231, to a reading 0.1858). Reading of the request: `{"atmospheres":[],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
 
-> Não encontrei nesta estante nada que responda bem a esse pedido. Talvez o catálogo não tenha esse tipo de livro.
+> I found nothing on this shelf that answers this request well. The catalog may not have this kind of book.
 
-| # | palavras | só embeddings | estante |
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | O Guia do Mochileiro das Galáxias — Douglas Adams | — | — |
-| 2 | A Divina Comédia — Dante Alighieri | — | — |
-| 3 | O Alquimista — Paulo Coelho | — | — |
-| 4 | Moby Dick — Herman Melville | — | — |
-| 5 | Recordações do Escrivão Isaías Caminha — Lima Barreto | — | — |
+| 1 | The Hitchhiker's Guide to the Galaxy — Douglas Adams | — | — |
+| 2 | The Divine Comedy — Dante Alighieri | — | — |
+| 3 | The Alchemist — Paulo Coelho | — | — |
+| 4 | And Still the Earth — Ignácio de Loyola Brandão | — | — |
+| 5 | The Metamorphosis — Franz Kafka | — | — |
 
-### sem-4 · sem correspondência — «como investir em ações na bolsa»
+### sem-4 · no match — "how to invest in the stock market"
 
-Confiança: **none** (maior similaridade com sinopse 0.189, com leitura 0.0996). Leitura do pedido: `{"atmospheres":[],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
+Confidence: **none** (highest similarity to a synopsis 0.1125, to a reading 0.0418). Reading of the request: `{"atmospheres":[],"inferredAtmospheres":[],"avoid":[],"avoidAtmospheres":[],"unassessable":[],"pace":null,"length":null,"era":null,"genres":[],"reference":null}`
 
-> Não encontrei nesta estante nada que responda bem a esse pedido. Talvez o catálogo não tenha esse tipo de livro.
+> I found nothing on this shelf that answers this request well. The catalog may not have this kind of book.
 
-| # | palavras | só embeddings | estante |
+| # | keywords | embeddings only | shelf |
 | --- | --- | --- | --- |
-| 1 | Agosto — Rubem Fonseca | — | — |
-| 2 | Drácula — Bram Stoker | — | — |
-| 3 | O Nome da Rosa — Umberto Eco | — | — |
-| 4 | Niketche: Uma História de Poligamia — Paulina Chiziane | — | — |
-| 5 | A Sangue Frio — Truman Capote | — | — |
+| 1 | The Maltese Falcon — Dashiell Hammett | — | — |
+| 2 | The Brazilian People — Darcy Ribeiro | — | — |
+| 3 | Crimes of August — Rubem Fonseca | — | — |
+| 4 | The Posthumous Memoirs of Brás Cubas — Machado de Assis | — | — |
+| 5 | The Book Thief — Markus Zusak | — | — |

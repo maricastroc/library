@@ -12,10 +12,10 @@ type Stage =
   | { step: "done"; plan: ImportPlan; outcome: ImportOutcome };
 
 const STATUS: Record<ImportRowStatus, { label: string; className: string }> = {
-  new: { label: "novo", className: "bg-ink text-paper" },
-  update: { label: "atualiza", className: "border border-ink text-ink" },
-  duplicate: { label: "ignorado", className: "border border-ink/40 text-ink-soft" },
-  error: { label: "erro", className: "bg-vermilion text-paper" },
+  new: { label: "new", className: "bg-ink text-paper" },
+  update: { label: "updates", className: "border border-ink text-ink" },
+  duplicate: { label: "skipped", className: "border border-ink/40 text-ink-soft" },
+  error: { label: "error", className: "bg-vermilion text-paper" },
 };
 
 export function CsvImporter() {
@@ -40,12 +40,12 @@ export function CsvImporter() {
     try {
       const result = await send(selected, "analyze");
       if (!result.plan) {
-        setStage({ step: "choose", error: result.error ?? "Não foi possível ler o arquivo." });
+        setStage({ step: "choose", error: result.error ?? "Couldn’t read the file." });
         return;
       }
       setStage({ step: "review", plan: result.plan, error: null, applying: false });
     } catch {
-      setStage({ step: "choose", error: "Falha ao enviar o arquivo. Tente de novo." });
+      setStage({ step: "choose", error: "Couldn’t upload the file. Try again." });
     }
   };
 
@@ -55,13 +55,13 @@ export function CsvImporter() {
     try {
       const result = await send(file, "apply");
       if (!result.ok || !result.outcome || !result.plan) {
-        setStage({ ...stage, applying: false, error: result.error ?? "A importação falhou. Nada foi gravado." });
+        setStage({ ...stage, applying: false, error: result.error ?? "The import failed. Nothing was saved." });
         return;
       }
       setStage({ step: "done", plan: result.plan, outcome: result.outcome });
       router.refresh();
     } catch {
-      setStage({ ...stage, applying: false, error: "Falha de conexão. Nada foi gravado." });
+      setStage({ ...stage, applying: false, error: "Connection failed. Nothing was saved." });
     }
   };
 
@@ -85,9 +85,9 @@ export function CsvImporter() {
           }}
         >
           <span className="display text-[1.5rem]">
-            {stage.step === "analyzing" ? "Lendo o arquivo…" : "Escolha um arquivo CSV ou solte aqui"}
+            {stage.step === "analyzing" ? "Reading the file…" : "Choose a CSV file or drop it here"}
           </span>
-          <span className="text-[0.95rem] text-ink-soft">Até 2 MB e 2.000 linhas. Vírgula ou ponto e vírgula, tanto faz.</span>
+          <span className="text-[0.95rem] text-ink-soft">Up to 2 MB and 2,000 rows. Comma or semicolon, either works.</span>
           <input
             ref={inputRef}
             id="csv-file"
@@ -118,10 +118,10 @@ export function CsvImporter() {
     <div>
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <p className="eyebrow text-ink-soft">
-          {file?.name} · separador “{plan.delimiter === "\t" ? "tabulação" : plan.delimiter}”
+          {file?.name} · separator “{plan.delimiter === "\t" ? "tab" : plan.delimiter}”
         </p>
         <button type="button" className="eyebrow ink-link" onClick={reset}>
-          Escolher outro arquivo
+          Choose another file
         </button>
       </div>
 
@@ -133,11 +133,11 @@ export function CsvImporter() {
         <>
           <dl className="mt-4 grid grid-cols-2 gap-px bg-ink/25 sm:grid-cols-5">
             {[
-              ["linhas", plan.totals.total],
-              ["livros novos", plan.totals.created],
-              ["atualizações", plan.totals.updated],
-              ["ignoradas", plan.totals.duplicates],
-              ["com erro", plan.totals.errors],
+              ["rows", plan.totals.total],
+              ["new books", plan.totals.created],
+              ["updates", plan.totals.updated],
+              ["skipped", plan.totals.duplicates],
+              ["with errors", plan.totals.errors],
             ].map(([label, value]) => (
               <div key={label} className="bg-paper p-3">
                 <dd className="display text-[1.9rem] leading-none">{value}</dd>
@@ -146,14 +146,14 @@ export function CsvImporter() {
             ))}
           </dl>
           <p className="mt-4 text-[0.95rem] text-ink-soft">
-            Colunas reconhecidas:{" "}
+            Columns recognized:{" "}
             {plan.columns
               .filter((column) => column.field)
               .map((column) => `${column.header} → ${FIELD_LABELS[column.field as keyof typeof FIELD_LABELS]}`)
               .join("; ")}
             .
             {plan.columns.some((column) => !column.field)
-              ? ` Ignoradas: ${plan.columns.filter((column) => !column.field).map((column) => column.header || "(sem nome)").join(", ")}.`
+              ? ` Ignored: ${plan.columns.filter((column) => !column.field).map((column) => column.header || "(unnamed)").join(", ")}.`
               : ""}
           </p>
         </>
@@ -162,22 +162,22 @@ export function CsvImporter() {
       {stage.step === "done" ? (
         <div role="status" className="mt-6 border-l-2 border-ink pl-3">
           <p className="display text-[1.4rem]">
-            {stage.outcome.inserted} {stage.outcome.inserted === 1 ? "livro entrou" : "livros entraram"} na estante
-            {stage.outcome.updated > 0 ? ` e ${stage.outcome.updated} ${stage.outcome.updated === 1 ? "foi atualizado" : "foram atualizados"}` : ""}.
+            {stage.outcome.inserted} {stage.outcome.inserted === 1 ? "book joined" : "books joined"} the shelf
+            {stage.outcome.updated > 0 ? ` and ${stage.outcome.updated} ${stage.outcome.updated === 1 ? "was updated" : "were updated"}` : ""}.
           </p>
           <p className="mt-1 text-ink-soft">
-            Eles já estão visíveis. A IA lê as sinopses em segundo plano; acompanhe no{" "}
+            They’re already visible. The AI reads the synopses in the background; follow along on the{" "}
             <Link className="ink-link" href="/admin">
-              painel
+              dashboard
             </Link>
             .
           </p>
           <div className="mt-3 flex gap-4">
             <Link href="/admin/books" className="button">
-              Ver livros
+              View books
             </Link>
             <button type="button" className="button button-outline" onClick={reset}>
-              Importar outro arquivo
+              Import another file
             </button>
           </div>
         </div>
@@ -185,14 +185,14 @@ export function CsvImporter() {
         <div className="mt-6 flex flex-wrap items-center gap-4">
           <button type="button" className="button" disabled={importable === 0 || stage.applying} onClick={() => void apply()}>
             {stage.applying
-              ? "Importando…"
+              ? "Importing…"
               : importable === 0
-                ? "Nada a importar"
-                : `Importar ${importable} ${importable === 1 ? "livro" : "livros"}`}
+                ? "Nothing to import"
+                : `Import ${importable} ${importable === 1 ? "book" : "books"}`}
           </button>
           {plan.totals.errors > 0 ? (
             <p className="text-[0.95rem] text-ink-soft">
-              {plan.totals.errors === 1 ? "A linha com erro fica de fora" : `As ${plan.totals.errors} linhas com erro ficam de fora`}; corrija o arquivo e envie de novo depois.
+              {plan.totals.errors === 1 ? "The row with an error is left out" : `The ${plan.totals.errors} rows with errors are left out`}; fix the file and upload it again later.
             </p>
           ) : null}
           {stage.error ? (
@@ -207,16 +207,16 @@ export function CsvImporter() {
         <div className="mt-8">
           <label className="eyebrow inline-flex cursor-pointer items-center gap-2 text-ink">
             <input type="checkbox" checked={onlyIssues} onChange={(event) => setOnlyIssues(event.target.checked)} className="h-4 w-4 accent-[var(--color-ink)]" />
-            mostrar só linhas com erros ou avisos
+            show only rows with errors or warnings
           </label>
           <div className="mt-2 max-h-[32rem] overflow-auto border-t-2 border-ink">
             <table className="w-full min-w-[40rem] border-collapse text-left text-[0.92rem]">
               <thead className="sticky top-0 bg-paper">
                 <tr className="eyebrow border-b border-ink text-ink-soft">
-                  <th scope="col" className="py-2 pr-3 font-normal">Linha</th>
-                  <th scope="col" className="py-2 pr-3 font-normal">Situação</th>
-                  <th scope="col" className="py-2 pr-3 font-normal">Livro</th>
-                  <th scope="col" className="py-2 font-normal">Observações</th>
+                  <th scope="col" className="py-2 pr-3 font-normal">Row</th>
+                  <th scope="col" className="py-2 pr-3 font-normal">Status</th>
+                  <th scope="col" className="py-2 pr-3 font-normal">Book</th>
+                  <th scope="col" className="py-2 font-normal">Remarks</th>
                 </tr>
               </thead>
               <tbody>
@@ -227,11 +227,11 @@ export function CsvImporter() {
                       <span className={`eyebrow px-1.5 py-0.5 text-[9px] ${STATUS[row.status].className}`}>{STATUS[row.status].label}</span>
                     </td>
                     <td className="py-2 pr-3">
-                      <span className="font-label font-semibold">{row.title || "(sem título)"}</span>
-                      <span className="block text-[0.85rem] italic text-ink-soft">{row.author || "(sem autor)"}</span>
+                      <span className="font-label font-semibold">{row.title || "(untitled)"}</span>
+                      <span className="block text-[0.85rem] italic text-ink-soft">{row.author || "(no author)"}</span>
                     </td>
                     <td className="py-2 text-[0.88rem]">
-                      {row.changes.length > 0 ? <p>Atualiza: {row.changes.join(", ")}.</p> : null}
+                      {row.changes.length > 0 ? <p>Updates: {row.changes.join(", ")}.</p> : null}
                       {row.issues.map((issue, index) => (
                         <p key={index} className={issue.level === "error" ? "text-vermilion" : "text-ink-soft"}>
                           {issue.message}

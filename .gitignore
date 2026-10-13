@@ -41,7 +41,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# banco local e cache de coleta
+# local database and fetch cache
 /data/*.db
 /data/*.db-*
 /data/seed/.cache/

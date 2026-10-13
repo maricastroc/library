@@ -39,20 +39,22 @@ type ShelfProps = {
   onOpen: (id: number) => void;
 };
 
+const countBooks = (count: number) => `${count} ${count === 1 ? "book" : "books"}`;
+
 const position = (x: number, y: number, extra?: CSSProperties) =>
   ({ "--x": `${x}px`, "--y": `${y}px`, ...extra }) as CSSProperties;
 
 function describe(book: ShelfBook, result: SearchResult | undefined, rank: number | null): string {
   const parts: string[] = [];
-  if (rank) parts.push(`Resultado ${rank}:`);
-  parts.push(`${book.title}, de ${book.author}.`);
+  if (rank) parts.push(`Result ${rank}:`);
+  parts.push(`${book.title}, by ${book.author}.`);
   if (book.genre) parts.push(`${book.genre}.`);
-  if (book.atmospheres.length > 0) parts.push(`Atmosfera ${book.atmospheres.map(atmosphereLabel).join(", ")}.`);
+  if (book.atmospheres.length > 0) parts.push(`Atmosphere: ${book.atmospheres.map(atmosphereLabel).join(", ")}.`);
   const price = formatPrice(book.priceCents);
   if (price) parts.push(`${price}.`);
-  if (book.stock === 0) parts.push("Esgotado.");
-  if (book.note) parts.push(book.noteOrigin === "example" ? "Com nota de exemplo." : "Com nota da livreira.");
-  if (result) parts.push(`Por quê: ${result.reasons.map((reason) => reason.label).join("; ")}.`);
+  if (book.stock === 0) parts.push("Out of stock.");
+  if (book.note) parts.push(book.noteOrigin === "example" ? "With a sample note." : "With a bookseller’s note.");
+  if (result) parts.push(`Why: ${result.reasons.map((reason) => reason.label).join("; ")}.`);
   return parts.join(" ");
 }
 
@@ -185,13 +187,13 @@ export function Shelf({ ref, books, groups, arrangement, matches, results, readi
   if (books.length === 0) {
     return (
       <div className="border-t-[3px] border-ink py-16 text-center">
-        <p className="display text-3xl">A estante ainda está vazia.</p>
+        <p className="display text-3xl">The shelf is still empty.</p>
         <p className="mt-3 text-ink-soft">
-          Importe um catálogo no{" "}
+          Import a catalog at the{" "}
           <a className="ink-link" href="/admin/import">
-            balcão da livraria
+            bookshop counter
           </a>{" "}
-          para começar.
+          to get started.
         </p>
       </div>
     );
@@ -202,6 +204,7 @@ export function Shelf({ ref, books, groups, arrangement, matches, results, readi
   const activeBook = active !== null ? byId.get(active) : undefined;
   const scale = layout?.metrics.scale ?? 1;
   const searching = Boolean(matches && matches.length > 0);
+  const matchCount = matches?.length ?? 0;
 
   return (
     <div
@@ -209,8 +212,8 @@ export function Shelf({ ref, books, groups, arrangement, matches, results, readi
       role="group"
       aria-label={
         searching
-          ? `Estante com ${books.length} livros. ${matches?.length ?? 0} respondem à sua busca e vêm primeiro. Use as setas para percorrer.`
-          : `Estante com ${books.length} livros, arrumada por ${arrangement}. Use as setas para percorrer e Enter para abrir.`
+          ? `Shelf with ${countBooks(books.length)}. ${matchCount} ${matchCount === 1 ? "answers your search and comes first" : "answer your search and come first"}. Use the arrow keys to browse.`
+          : `Shelf with ${countBooks(books.length)}, arranged by ${arrangement}. Use the arrow keys to browse and Enter to open.`
       }
       aria-busy={reading}
       className={`shelf ${reading ? "is-reading" : ""}`}
@@ -237,8 +240,8 @@ export function Shelf({ ref, books, groups, arrangement, matches, results, readi
           {layout.labels.map((label) => (
             <p key={label.key} className="placed eyebrow text-ink-soft" style={position(0, label.y)}>
               {label.key === "answer"
-                ? `A estante respondeu · ${matches?.length ?? 0} ${matches?.length === 1 ? "livro" : "livros"}`
-                : `O restante da estante · ${books.length - (matches?.length ?? 0)} livros em segundo plano`}
+                ? `The shelf answered · ${countBooks(matchCount)}`
+                : `The rest of the shelf · ${countBooks(books.length - matchCount)} in the background`}
             </p>
           ))}
 
@@ -292,7 +295,7 @@ export function Shelf({ ref, books, groups, arrangement, matches, results, readi
                 <div className="shelf-talker relative px-3 pb-2 pt-2.5" style={{ rotate: `${talker.tilt}deg` }}>
                   <p className="handwriting line-clamp-3 text-[19px] text-ink">{book.note}</p>
                   <p className="eyebrow mt-1.5 text-[8.5px] text-ink-soft">
-                    {book.noteOrigin === "example" ? "nota de exemplo" : `— ${bookseller || "a livreira"}`}
+                    {book.noteOrigin === "example" ? "sample note" : `— ${bookseller || "the bookseller"}`}
                   </p>
                 </div>
               </div>
@@ -353,7 +356,7 @@ export function Shelf({ ref, books, groups, arrangement, matches, results, readi
                 <p className="eyebrow mt-1 text-[9.5px] text-paper/80">
                   {activeBook.author}
                   {formatPrice(activeBook.priceCents) ? ` · ${formatPrice(activeBook.priceCents)}` : ""}
-                  {activeBook.stock === 0 ? " · esgotado" : ""}
+                  {activeBook.stock === 0 ? " · out of stock" : ""}
                 </p>
               </div>
             </div>

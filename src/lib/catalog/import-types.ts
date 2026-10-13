@@ -15,16 +15,16 @@ export type ImportField =
 
 export const FIELD_LABELS: Record<ImportField, string> = {
   isbn: "ISBN",
-  title: "Título",
-  author: "Autor",
-  synopsis: "Sinopse",
-  genre: "Gênero",
-  price: "Preço",
-  stock: "Estoque",
-  note: "Nota da livreira",
-  pages: "Páginas",
-  year: "Ano",
-  publisher: "Editora",
+  title: "Title",
+  author: "Author",
+  synopsis: "Synopsis",
+  genre: "Genre",
+  price: "Price",
+  stock: "Stock",
+  note: "Bookseller's note",
+  pages: "Pages",
+  year: "Year",
+  publisher: "Publisher",
 };
 
 export type ImportIssue = { level: "error" | "warning"; message: string };

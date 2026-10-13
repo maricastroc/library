@@ -32,76 +32,83 @@ export type ParsedQuery = {
 };
 
 const ATMOSPHERE_CUES: [RegExp, AtmosphereId][] = [
-  [/\b(melancol|trist|saudos|chuv|cinzent|nublad|outon)/, "melancholic"],
-  [/\b(reconfort|acolhed|aconcheg|consol|tern[oau]|afetuos|carinh|quentinh|abraco|delicad|doce|gentil|amoros|confort)/, "comforting"],
-  [/\b(sombri|deprim|depress|pesad|desesper|pessimis|tragic|baixo astral|sofrid|angusti|pra baixo|para baixo)/, "dark"],
-  [/\b(leve[s]?\b|alegr|esperan|otimis|alto astral|feliz|solar|lumin|recomec|pra cima|para cima)/, "luminous"],
-  [/\b(estranh|perturb|inquiet|esquisit|bizarr|absurd|desconfort|sinistr)/, "unsettling"],
-  [/\b(engrac|humor|rir\b|risad|ironi|satir|sarcas|comic|deboch|divertid)/, "ironic"],
-  [/\b(contempla|calm[oa]|seren|silenci|tranquil|filosof|reflexiv|medita|sosseg|pensando|pensar\b|chuv|garoa|nublad|nevoeiro)/, "contemplative"],
-  [/\b(intens|visceral|arrebat|paixao|apaixon|avassalad|furi[oa]|obsess)/, "intense"],
-  [/\b(sonh|oniric|magic|fantastic|surreal|fabul|encantad|mitic)/, "dreamlike"],
-  [/\b(nostalg|infancia|lembranc|antigament|tempo perdido|saudade)/, "nostalgic"],
-  [/\b(suspense|tens[ao]\b|misteri|medo\b|assust|terror|arrepi|thriller|perigo)/, "tense"],
-  [/\b(crua?\b|sec[oa]\b|brutal|realista|dur[oa]\b|sem enfeite|miseria|denuncia)/, "raw"],
+  [/\b(melanchol|sad\b|sadness|wistful|bittersweet|rain|gray\b|grey\b|overcast|autumn)/, "melancholic"],
+  [/\b(comfort|cozy|cosy|warm|sooth|consol|tender|affection|heartwarming|hug\b|delicate|sweet|gentle|loving)/, "comforting"],
+  [/\b(dark|bleak|gloom|depress|heavy|despair|pessimis|tragic|grim\b|harrowing|anguish|downbeat|downer|somber|sombre)/, "dark"],
+  [/\b(light\b|lighthearted|light hearted|cheerful|joy|hope|optimis|upbeat|happy|sunny|lumin|bright|fresh start|feel good|uplift)/, "luminous"],
+  [/\b(strange|weird|disturb|unsettl|eerie|bizarre|absurd|uncomfortable|creepy|sinister|uncanny)/, "unsettling"],
+  [/\b(funny|humor|humour|laugh|ironic|irony|satir|sarcas|comical|comedy|comedic|witty|hilarious|amusing)/, "ironic"],
+  [/\b(contemplat|calm|serene|quiet|silen|tranquil|peaceful|philosoph|reflective|meditat|thinking|think\b|ponder|rain|drizzle|overcast|fog|mist)/, "contemplative"],
+  [/\b(intense|intensity|visceral|passion|overwhelming|fierce|fury|furious|obsess|all consuming)/, "intense"],
+  [/\b(dream|oneiric|magic|fantastical|surreal|fable|enchant|mythic|fairy tale|fairytale)/, "dreamlike"],
+  [/\b(nostalg|childhood|memories|old days|bygone|lost time|longing for)/, "nostalgic"],
+  [/\b(suspense|tense\b|tension|myster|fear\b|scary|scare|frighten|terror|horror|chilling|thriller|danger)/, "tense"],
+  [/\b(raw\b|dry\b|stark|brutal|realist|harsh|gritty|unadorned|unflinching|poverty|misery|expose)/, "raw"],
 ];
 
 const EXPERIENCE_CUES: [RegExp, ExperienceId][] = [
-  [/\b(pensando|pensar\b|refletir|reflex|fique na cabeca|continu\w+ depois)/, "lingering"],
-  [/\b(chorar|emocion|comov)/, "moving"],
-  [/\b(rir\b|risad|engrac|divertid)/, "funny"],
-  [/\b(perder o sono|nao consig\w* largar|nao consig\w* parar|que prenda|viciante)/, "gripping"],
-  [/\b(viajar|outro mundo|outra epoca|outro lugar|longe daqui)/, "transporting"],
-  [/\b(consol|confort|reconfort|dias dificeis|momento dificil|fase dificil)/, "consoling"],
-  [/\b(de uma sentada|rapid\w+ de ler|numa tarde|em um dia|num dia|numa noite)/, "one_sitting"],
-  [/\b(devagar|sem pressa|saborear|aos poucos)/, "slow_read"],
-  [/\b(me reconhec|me identific|me ver n)/, "relatable"],
-  [/\b(provoc|desafi|incomod|mud\w+ minha|mud\w+ meu|tire do lugar)/, "challenging"],
+  [/\b(thinking|think\b|reflect|stays? with me|sticks? with me|on my mind|in my head|long after)/, "lingering"],
+  [/\b(cry|cries|tears?|weep|touching|emotional|tearjerker|tear jerker|moves? me|moved)\b|(?<!(?:fast|slow) )\bmoving\b/, "moving"],
+  [/\b(laugh|funny|hilarious|amusing)/, "funny"],
+  [/\b(lose sleep|losing sleep|keeps? me up|up all night|can t put (?:it )?down|couldn t put (?:it )?down|cannot put (?:it )?down|can t stop|won t let me sleep|keeps? me awake|gripping|addictive|unputdownable|hooked)/, "gripping"],
+  [/\b(travel far|travel in time|take me (?:away|far|somewhere)|another world|another time|another era|another place|far away|faraway|far from here)/, "transporting"],
+  [/\b(consol|comfort|solace|hard times|difficult times|tough times|hard days|difficult days|rough patch)/, "consoling"],
+  [/\b(one sitting|single sitting|quick read|quick to read|in an afternoon|in one afternoon|in a day|in one day|in one night|in an evening)/, "one_sitting"],
+  [/\b(slowly|unhurried|no rush|without rushing|savor|savour|little by little)/, "slow_read"],
+  [/\b(relate to|relatable|recogni[sz]e myself|see myself|identify with)/, "relatable"],
+  [/\b(provok|provocative|challeng|unsettles? me|chang\w* my|shake me)/, "challenging"],
 ];
 
 const GENRE_CUES: [RegExp, string[]][] = [
-  [/\b(poesia|poema|poemas|poetic[oa]s?|versos)\b/, ["Poesia"]],
-  [/\b(conto|contos)\b/, ["Contos"]],
-  [/\b(historia[s]? curta[s]?|narrativa[s]? curta[s]?)\b/, ["Contos", "Novela"]],
-  [/\b(ensaio|ensaios)\b/, ["Ensaio"]],
-  [/\b(ficcao cientifica|sci fi|scifi|distopia|distopic[oa]s?)\b/, ["Ficção científica"]],
-  [/\b(policial|policiais|detetive|noir)\b/, ["Policial"]],
-  [/\b(quadrinho|quadrinhos|hq|hqs|graphic novel)\b/, ["Quadrinhos"]],
-  [/\b(teatro|peca de teatro|dramaturgia)\b/, ["Teatro"]],
-  [/\b(infantil|infantis|criancas?|infantojuvenil|juvenil)\b/, ["Infantojuvenil"]],
-  [/\b(fantasia)\b/, ["Fantasia"]],
-  [/\b(memorias|autobiografi\w+|diario)\b/, ["Memórias"]],
-  [/\b(reportagem|jornalis\w+|livro reportagem)\b/, ["Reportagem"]],
-  [/\b(nao ficcao)\b/, ["Ensaio", "Reportagem", "Memórias"]],
-  [/\b(novela)\b/, ["Novela"]],
-  [/\b(romance|romances)\b/, ["Romance"]],
+  [/\b(poetry|poems?|poetic|verses?)\b/, ["Poetry"]],
+  [/\b(short stories|story collections?|tales)\b/, ["Short stories"]],
+  [/\b(short story|short tale|short narrative)\b/, ["Short stories", "Novella"]],
+  [/\b(essays?)\b/, ["Essay"]],
+  [/\b(science fiction|sci fi|scifi|dystopia\w*|dystopic)\b/, ["Science fiction"]],
+  [/\b(crime|detective|noir|whodunit|murder mystery)\b/, ["Crime"]],
+  [/\b(comics|comic books?|graphic novels?)\b/, ["Comics"]],
+  [/\b(theater|theatre|stage plays?|a play|playwright\w*)\b/, ["Theater"]],
+  [/\b(children s|children|kids?|young readers?|young adult|ya|middle grade)\b/, ["Young readers"]],
+  [/\b(fantasy)\b/, ["Fantasy"]],
+  [/\b(memoirs?|autobiograph\w+|diary|diaries)\b/, ["Memoir"]],
+  [/\b(reportage|journalis\w+|long form reporting)\b/, ["Reportage"]],
+  [/\b(non fiction|nonfiction)\b/, ["Essay", "Reportage", "Memoir"]],
+  [/\b(novellas?)\b/, ["Novella"]],
+  [/(?<!graphic )\b(novels?)\b/, ["Novel"]],
 ];
 
-const SHORT_CUE = /\b(curt[oa]s?|breve[s]?|pequen[oa]s?|fininh[oa]s?|poucas paginas|de uma sentada|rapid[oa]s? de ler|numa tarde)\b/;
-const LONG_CUE = /\b(long[oa]s?|calhamaco|extens[oa]s?|tijol\w+|muitas paginas|catatau)\b/;
-const SLOW_CUE = /\b(lent[oa]s?|devagar|sem pressa|arrastad[oa]s?|parad[oa]s?|chuvos[oa]s?|preguicos[oa]s?)\b/;
-const FAST_CUE = /\b(agil|ageis|frenetic[oa]s?|eletrizante|que prenda|nao consig\w* largar|page turner|dinamic[oa]s?|vertiginos[oa]s?|rapid[oa]s?)\b/;
+const SHORT_CUE = /\b(short(?! stories)|brief|small|slim|thin|few pages|one sitting|quick read|quick to read|in an afternoon)\b/;
+const LONG_CUE = /\b(long(?! after)|lengthy|doorstop\w*|tome|thick|hefty|many pages)\b/;
+const SLOW_CUE = /\b(slow|slowly|unhurried|no rush|without rushing|leisurely|lazy|rainy|sluggish|dragging)\b/;
+const FAST_CUE = /\b(fast|brisk|frantic|electrifying|gripping|can t put (?:it )?down|page turner|dynamic|breakneck|quick|action packed|propulsive)\b/;
 
-const CLASSIC_CUE = /\b(classic[oa]s?|seculo xix|seculo 19|de antigamente)\b/;
-const CONTEMPORARY_CUE = /\b(contemporane[oa]s?|recentes?|atual|atuais|lancamentos?|deste seculo|dos ultimos anos)\b/;
+const CLASSIC_CUE = /\b(classics?|classical|19th century|nineteenth century|from the old days)\b/;
+const CONTEMPORARY_CUE = /\b(contemporary|recent|current|new releases?|just released|this century|(?:of|from) the last few years)\b/;
 
+const NAME = String.raw`(?:[A-ZÀ-Ý][\p{L}.'-]+)(?:\s+(?:(?:de|da|do|dos|das|von|van)\s+)?[A-ZÀ-Ý][\p{L}.'-]+)*`;
 const REFERENCE_CUE =
-  /\b(quem gost\w+|quem curt\w+|quem am\w+|quem leu|fas? d[eoa]s?|parecid[oa]s? com|parec\w+ com|no estilo|estilo d[eoa]s?|na linha|como [oa]s? d[eoa]s?|lembr\w+|igual a|similar\w* a|semelhante\w* a|depois de ler|terminei|acabei de ler|adorei|amei|gostei)\b/;
-const AUTHOR_MENTION = /(?:livros?|obras?|romances?|contos|poemas|algo|tudo|autor[a]?|escritor[a]?)\s+(?:d[eoa]s?\s+)?((?:[A-ZÀ-Ý][\p{L}.'-]+)(?:\s+(?:(?:de|da|do|dos|das|von|van)\s+)?[A-ZÀ-Ý][\p{L}.'-]+)*)/u;
+  /\b(who (?:liked?|loved?|enjoy(?:ed|s)?|likes|loves|read)|fans? of|similar to|in the style of|style of|in the vein of|along the lines of|reminiscent of|reminds? me of|just like|(?:books?|novels?|authors?|writers?|something|anything) like|after reading|just finished|i finished|just read|i (?:really )?(?:loved|liked|adored|enjoyed)|if (?:i|you) (?:liked|loved|enjoyed))\b/;
+const REFERENCE_START = /liked?|loved?|enjoy|read|fans?|similar|style|vein|lines|reminiscent|remind|finished|adored/i;
+const AUTHOR_MENTION = new RegExp(
+  String.raw`(?:(?:books?|works?|novels?|stories|poems|something|anything|everything)\s+(?:by|of|from)|author|writer)\s+(${NAME})|(${NAME})['’]s\s+(?:books?|novels?|works?|stories|poems|writing)`,
+  "u",
+);
+const NOT_A_NAME = /^(Want|Looking|Book|Books|Something|Anything|Give|Find|Show|Please|Recommend|What|Which|Novel|Novels)$/i;
 
 const NEGATION_PATTERNS: RegExp[] = [
-  /(?:^|[\s,;])(?:mas|porém|porem|só que|so que)\s+(?:que\s+)?(?:não|nao)\s+(?:(?:seja[m]?|fique[m]?|é|são|tenha[m]?|pareça[m]?|muito|tão|tao)\s+)*([^,.;!?]+)/gi,
-  /(?:^|[\s,;])(?:(?:mas|porém|porem)\s+)?sem\s+(?:(?:ser(?:em)?|que\s+seja[m]?|ficar|parecer|cair\s+n[oa]s?|ter|muit[oa]s?|tant[oa]s?|nenhum[a]?)\s+)*([^,.;!?]+)/gi,
-  /(?:^|[\s,;])que\s+(?:não|nao)\s+(?:seja[m]?|fique[m]?|é|são|tenha[m]?|pareça[m]?)\s+(?:(?:muito|tão|tao)\s+)?([^,.;!?]+)/gi,
-  /(?:^|[\s,;])nada\s+(?:de\s+)?([^,.;!?]+)/gi,
-  /(?:^|[\s,;])(?:não|nao)\s+(?:quero|queria|gosto\s+de|curto|suporto|aguento)\s+([^,.;!?]+)/gi,
-  /(?:^|[\s,;])(?:não|nao)\s+(?:(?:seja[m]?|muito|tão|tao)\s+)+([^,.;!?]+)/gi,
+  /(?:^|[\s,;])(?:but|yet|though)\s+(?:(?:that|which|it|it[’']?s)\s+)?(?:(?:(?:is|are)\s+)?not|isn[’']?t|aren[’']?t|(?:doesn[’']?t|does\s+not|don[’']?t|do\s+not)\s+(?:get|feel|seem|become|have|turn))\s+(?:(?:be|being|too|so|very|overly|a|an)\s+)*([^,.;!?]+)/gi,
+  /(?:^|[\s,;])(?:(?:but|yet)\s+)?without\s+(?:(?:being|getting|becoming|feeling|seeming|falling\s+into|having|too\s+much|so\s+much|too\s+many|so\s+many|too|any|a|an)\s+)*([^,.;!?]+)/gi,
+  /(?:^|[\s,;])(?:that|which)\s+(?:(?:is|are)\s+not|isn[’']?t|aren[’']?t|(?:doesn[’']?t|does\s+not|don[’']?t|do\s+not)\s+(?:get|feel|seem|become|have|turn))\s+(?:(?:too|so|very|overly|a|an)\s+)*([^,.;!?]+)/gi,
+  /(?:^|[\s,;])(?:(?:but|and)\s+)?nothing\s+(?:(?:too|so|very|overly)\s+)*([^,.;!?]+)/gi,
+  /(?:^|[\s,;])(?:(?:but|and)\s+)?no\s+(?!rush\b|hurry\b|matter\b|longer\b|more\b)([^,.;!?]+)/gi,
+  /(?:^|[\s,;])(?:(?:i\s+)?(?:don[’']?t|do\s+not)\s+(?:want|like|enjoy|need)|(?:i\s+)?(?:can[’']?t|cannot)\s+stand|i\s+hate)\s+(?:(?:anything|something|books?|a|an|too|so|very)\s+)*([^,.;!?]+)/gi,
+  /(?:^|[\s,;])(?:(?:but|and)\s+)?not\s+(?:(?:be|being|too|so|very|overly)\s+)+([^,.;!?]+)/gi,
 ];
 
 function cleanAvoidPhrase(value: string): string {
   let phrase = value.trim().toLowerCase();
-  phrase = phrase.split(/\s+(?:e\s+que|mas|porém|porem|para|pra|e\s+nem|nem)\s+/)[0];
-  phrase = phrase.replace(/^(?:ser|muito|tão|tao|um|uma|uns|umas|de|ter)\s+/g, "").trim();
+  phrase = phrase.split(/\s+(?:and\s+that|but|yet|for|to|and\s+not|nor|or)\s+/)[0];
+  phrase = phrase.replace(/^(?:being|be|too|so|very|a|an|any|of|having)\s+/g, "").trim();
   return phrase.split(/\s+/).slice(0, 5).join(" ");
 }
 
@@ -140,15 +147,16 @@ function findReference(query: string, folded: string, catalog: CatalogNames): Pa
   }
 
   const mention = AUTHOR_MENTION.exec(query);
-  if (!cueMatch && mention && mention[1].length >= 4) {
-    return { kind: "author", label: mention[1].trim(), bookIds: [], inCatalog: false, similar: false };
+  const mentioned = mention?.[1] ?? mention?.[2];
+  if (!cueMatch && mentioned && mentioned.length >= 4) {
+    return { kind: "author", label: mentioned.trim(), bookIds: [], inCatalog: false, similar: false };
   }
 
   if (cueMatch) {
-    const after = query.slice(Math.max(0, query.toLowerCase().search(/gost|curt|am[oae]|leu|fã|fa[ns]|parec|estilo|linha|como|lembr|igual|similar|semelhante|ler|terminei|adorei|gostei/i)));
+    const after = query.slice(Math.max(0, query.search(REFERENCE_START)));
     const proper = after.match(/(?:[A-ZÀ-Ý][\p{L}.'-]+(?:\s+(?:de|da|do|dos|das|e|von|van)\s+)?\s*){1,5}/u);
     const candidates = after.match(/\b[A-ZÀ-Ý][\p{L}.'-]+(?:\s+(?:(?:de|da|do|dos|das|von|van)\s+)?[A-ZÀ-Ý][\p{L}.'-]+)*/gu) ?? [];
-    const named = candidates.find((candidate) => candidate.length >= 4 && !/^(Quero|Queria|Procuro|Livro|Livros|Algo|Um|Uma|Para)$/i.test(candidate));
+    const named = candidates.find((candidate) => candidate.length >= 4 && !NOT_A_NAME.test(candidate));
     if (named ?? proper?.[0]) {
       return { kind: "author", label: (named ?? proper?.[0] ?? "").trim(), bookIds: [], inCatalog: false, similar: true };
     }
@@ -182,7 +190,7 @@ export function parseQuery(query: string, catalog: CatalogNames): ParsedQuery {
 
   const avoidAtmospheres = cuesIn(avoidFolded, ATMOSPHERE_CUES);
   const atmospheres = cuesIn(positiveFolded, ATMOSPHERE_CUES).filter((id) => !avoidAtmospheres.includes(id));
-  const contrast = positiveFolded.split(/ (?:mas|porem|so que|e ao mesmo tempo) /);
+  const contrast = positiveFolded.split(/ (?:but|yet|though|and at the same time) /);
   const emphasis =
     contrast.length > 1 ? cuesIn(contrast[contrast.length - 1], ATMOSPHERE_CUES).filter((id) => atmospheres.includes(id)) : [];
 

@@ -8,9 +8,9 @@ import { OllamaError } from "@/lib/semantic/ollama";
 export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
-  if (!(await isAdmin())) return NextResponse.json({ error: "Acesso restrito ao balcão da livraria." }, { status: 401 });
+  if (!(await isAdmin())) return NextResponse.json({ error: "Access restricted to the bookshop counter." }, { status: 401 });
   const query = (request.nextUrl.searchParams.get("q") ?? "").replace(/\s+/g, " ").trim().slice(0, 240);
-  if (query.length < 2) return NextResponse.json({ error: "Escreva pelo menos duas letras." }, { status: 400 });
+  if (query.length < 2) return NextResponse.json({ error: "Type at least two letters." }, { status: 400 });
   const limit = Math.min(20, Math.max(3, Number(request.nextUrl.searchParams.get("n")) || 8));
   const describe = (id: number) => {
     const book = getBookById(id);
@@ -39,6 +39,6 @@ export async function GET(request: NextRequest) {
     if (error instanceof OllamaError) {
       return NextResponse.json({ query, lexical, semantic: null, error: error.message }, { status: 200 });
     }
-    return NextResponse.json({ error: "Falha ao comparar." }, { status: 500 });
+    return NextResponse.json({ error: "Comparison failed." }, { status: 500 });
   }
 }

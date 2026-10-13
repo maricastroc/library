@@ -30,7 +30,7 @@ export function splitSentences(text: string): string[] {
   let buffer = "";
   for (const piece of pieces) {
     const candidate = `${buffer}${piece}`.trim();
-    const endsWithAbbreviation = /(?:\b[A-ZÀ-Ý]|\bSr|\bSra|\bDr|\bDra|\bn|\bp|\bvol|\bcap|\bed|\bc|\bca|\betc)\.$/i.test(candidate);
+    const endsWithAbbreviation = /(?:\b[A-ZÀ-Ý]|\bMr|\bMrs|\bMs|\bDr|\bSt|\bSr|\bSra|\bDra|\bno|\bp|\bvol|\bch|\bed|\bc|\bca|\betc)\.$/i.test(candidate);
     if (candidate.length < 40 || endsWithAbbreviation) {
       buffer = `${candidate} `;
       continue;
@@ -47,7 +47,7 @@ export function splitSentences(text: string): string[] {
 
 export function formatPrice(cents: number | null | undefined): string | null {
   if (cents === null || cents === undefined) return null;
-  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(cents / 100);
+  return new Intl.NumberFormat("en-US", { style: "currency", currency: "BRL" }).format(cents / 100);
 }
 
 export function authorSortKey(author: string): string {
@@ -57,5 +57,5 @@ export function authorSortKey(author: string): string {
 }
 
 export function titleSortKey(title: string): string {
-  return normalizeText(title).replace(/^(o|a|os|as|um|uma|uns|umas) /, "");
+  return normalizeText(title).replace(/^(the|an|o|a|os|as|um|uma|uns|umas) /, "");
 }

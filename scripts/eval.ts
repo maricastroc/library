@@ -29,21 +29,21 @@ type QueryReport = {
 };
 
 const EVAL_DIR = join(process.cwd(), "data", "eval");
-const JUDGE_MODEL = process.env.ENTRELINHAS_JUDGE_MODEL ?? "gemma4:12b";
+const JUDGE_MODEL = process.env.SUBTEXT_JUDGE_MODEL ?? "gemma4:12b";
 const JUDGE_CACHE_FILE = join(EVAL_DIR, "judge-cache.json");
 const SYSTEMS: SystemName[] = ["lexical", "embedding", "full"];
 const TOP = 5;
 
 const TYPE_LABELS: Record<string, string> = {
-  emotional: "emocional",
-  abstract: "abstrata",
-  author: "autor",
-  negative: "negativa",
-  ambiguous: "ambígua",
-  "no-match": "sem correspondência",
+  emotional: "emotional",
+  abstract: "abstract",
+  author: "author",
+  negative: "negative",
+  ambiguous: "ambiguous",
+  "no-match": "no match",
 };
 
-const SYSTEM_LABELS: Record<SystemName, string> = { lexical: "palavras", embedding: "só embeddings", full: "estante" };
+const SYSTEM_LABELS: Record<SystemName, string> = { lexical: "keywords", embedding: "embeddings only", full: "shelf" };
 
 const judgeCache: Record<string, number> = existsSync(JUDGE_CACHE_FILE)
   ? (JSON.parse(readFileSync(JUDGE_CACHE_FILE, "utf8")) as Record<string, number>)
@@ -55,7 +55,7 @@ function describe(id: number): Ranked {
 }
 
 function excerpt(id: number): string {
-  return (getBookById(id)?.synopsis ?? "sem sinopse").replace(/\s+/g, " ").slice(0, 440);
+  return (getBookById(id)?.synopsis ?? "no synopsis").replace(/\s+/g, " ").slice(0, 440);
 }
 
 function cacheKey(query: string, id: number): string {
@@ -73,13 +73,13 @@ async function judge(query: string, ids: number[]): Promise<Record<string, numbe
   if (missing.length === 0) return grades;
   const lines = missing.map((id, index) => {
     const book = getBookById(id);
-    return `[${index + 1}] ${book?.title} — ${book?.author} (${book?.genre ?? "sem gênero"}, ${book?.pages ?? "?"} páginas, ${book?.year ?? "ano desconhecido"})\n${excerpt(id)}`;
+    return `[${index + 1}] ${book?.title} — ${book?.author} (${book?.genre ?? "no genre"}, ${book?.pages ?? "?"} pages, ${book?.year ?? "unknown year"})\n${excerpt(id)}`;
   });
   const raw = await chatJson<{ grades?: Record<string, unknown> }>({
     model: JUDGE_MODEL,
     system:
-      'Você é uma livreira experiente avaliando indicações de leitura. Para o pedido de um leitor, dê a cada livro uma nota: 0 = não atende ao pedido, 1 = atende em parte, 2 = atende bem. Baseie-se apenas nas informações fornecidas sobre cada livro. Se o pedido não tem relação com livros de literatura, ensaio ou afins, todas as notas devem ser 0. Responda somente com JSON no formato {"grades":{"1":0,"2":2}} contendo todos os números.',
-    user: `Pedido do leitor: «${query}»\n\nLivros:\n\n${lines.join("\n\n")}`,
+      'You are an experienced bookseller assessing reading recommendations. For a reader\'s request, give each book a grade: 0 = does not meet the request, 1 = meets it in part, 2 = meets it well. Rely only on the information provided about each book. If the request has nothing to do with literature, essays or similar books, every grade must be 0. Reply only with JSON in the format {"grades":{"1":0,"2":2}} containing every number.',
+    user: `Reader's request: "${query}"\n\nBooks:\n\n${lines.join("\n\n")}`,
     temperature: 0,
     maxTokens: 260,
     timeoutMs: 400000,
@@ -209,43 +209,43 @@ async function main() {
   writeFileSync(join(EVAL_DIR, "results.json"), JSON.stringify({ summary, queries: reports }, null, 2));
 
   const lines: string[] = [
-    "# Avaliação da busca — palavras × semântica",
+    "# Search evaluation — keywords × semantics",
     "",
-    `Gerado em ${summary.generatedAt}. Embeddings: \`${EMBED_MODEL}\`. Classificador: \`${CHAT_MODEL}\`. ${useJudge ? `Notas de relevância atribuídas automaticamente por \`${JUDGE_MODEL}\` (0, 1 ou 2), lendo apenas título, autor, gênero e sinopse. Não é avaliação humana.` : "Sem notas de relevância (rode com --judge)."}`,
+    `Generated at ${summary.generatedAt}. Embeddings: \`${EMBED_MODEL}\`. Classifier: \`${CHAT_MODEL}\`. ${useJudge ? `Relevance grades assigned automatically by \`${JUDGE_MODEL}\` (0, 1 or 2), reading only title, author, genre and synopsis. This is not a human evaluation.` : "No relevance grades (run with --judge)."}`,
     "",
-    "- **palavras** (`lexical`): FTS5/BM25 sobre título, autor, gênero, sinopse e nota, com prefixos.",
-    "- **só embeddings** (`embedding`): proximidade entre a consulta e a sinopse.",
-    "- **estante** (`full`): interpretação da consulta, embeddings de sinopse e de leitura, reordenação por atributos.",
+    "- **keywords** (`lexical`): FTS5/BM25 over title, author, genre, synopsis and note, with prefixes.",
+    "- **embeddings only** (`embedding`): closeness between the query and the synopsis.",
+    "- **shelf** (`full`): query interpretation, synopsis and reading embeddings, reranking by attributes.",
     "",
-    "## Resumo",
+    "## Summary",
     "",
-    "| motor | P@5 | nDCG@5 | consultas sem resultado |",
+    "| engine | P@5 | nDCG@5 | queries with no results |",
     "| --- | --- | --- | --- |",
     ...SYSTEMS.map((system) => {
       const row = summary.overall[system];
-      return `| ${SYSTEM_LABELS[system]} | ${format(row.p5)} | ${format(row.ndcg5)} | ${row.emptyQueries} de ${inScope.length} |`;
+      return `| ${SYSTEM_LABELS[system]} | ${format(row.p5)} | ${format(row.ndcg5)} | ${row.emptyQueries} of ${inScope.length} |`;
     }),
     "",
-    "nDCG@5 por tipo de consulta:",
+    "nDCG@5 by query type:",
     "",
-    "| tipo | palavras | só embeddings | estante |",
+    "| type | keywords | embeddings only | shelf |",
     "| --- | --- | --- | --- |",
     ...types.map((type) => {
       const row = summary.byType[type];
       return `| ${TYPE_LABELS[type] ?? type} | ${format(row.lexical)} | ${format(row.embedding)} | ${format(row.full)} |`;
     }),
     "",
-    `Consultas fora do escopo recusadas ou sinalizadas como fracas: ${summary.abstention.outOfScopeDeclined} de ${summary.abstention.outOfScopeTotal}. Consultas dentro do escopo respondidas com confiança: ${summary.abstention.inScopeAnswered} de ${summary.abstention.inScopeTotal}.`,
+    `Out-of-scope queries declined or flagged as weak: ${summary.abstention.outOfScopeDeclined} of ${summary.abstention.outOfScopeTotal}. In-scope queries answered with confidence: ${summary.abstention.inScopeAnswered} of ${summary.abstention.inScopeTotal}.`,
     "",
-    "## Consultas",
+    "## Queries",
   ];
   for (const report of reports) {
-    lines.push("", `### ${report.id} · ${TYPE_LABELS[report.type] ?? report.type} — «${report.query}»`, "");
+    lines.push("", `### ${report.id} · ${TYPE_LABELS[report.type] ?? report.type} — "${report.query}"`, "");
     lines.push(
-      `Confiança: **${report.confidence}** (maior similaridade com sinopse ${report.topSyn}, com leitura ${report.topFeel}). Leitura do pedido: \`${JSON.stringify(report.interpretation)}\``,
+      `Confidence: **${report.confidence}** (highest similarity to a synopsis ${report.topSyn}, to a reading ${report.topFeel}). Reading of the request: \`${JSON.stringify(report.interpretation)}\``,
     );
     if (report.message) lines.push("", `> ${report.message}`);
-    lines.push("", "| # | palavras | só embeddings | estante |", "| --- | --- | --- | --- |");
+    lines.push("", "| # | keywords | embeddings only | shelf |", "| --- | --- | --- | --- |");
     const showGrades = Object.keys(report.grades).length > 0;
     for (let position = 0; position < TOP; position += 1) {
       const cell = (system: SystemName) => {
@@ -259,7 +259,7 @@ async function main() {
     if (showGrades) {
       lines.push(
         "",
-        `nDCG@5 — palavras ${format(report.metrics.lexical.ndcg5)} · só embeddings ${format(report.metrics.embedding.ndcg5)} · estante ${format(report.metrics.full.ndcg5)}`,
+        `nDCG@5 — keywords ${format(report.metrics.lexical.ndcg5)} · embeddings only ${format(report.metrics.embedding.ndcg5)} · shelf ${format(report.metrics.full.ndcg5)}`,
       );
     }
   }

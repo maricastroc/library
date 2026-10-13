@@ -37,28 +37,28 @@ export function Reservation({ book, query }: { book: ShelfBook; query: string | 
       });
       const data = (await response.json()) as { ok?: boolean; kind?: "reservation" | "notice"; error?: string; field?: string };
       if (!response.ok || !data.ok) {
-        setStatus({ step: "form", error: data.error ?? "Não foi possível registrar agora.", field: data.field ?? null, sending: false });
+        setStatus({ step: "form", error: data.error ?? "We couldn’t record that just now.", field: data.field ?? null, sending: false });
         return;
       }
       setStatus({ step: "sent", kind: data.kind ?? "reservation" });
     } catch {
-      setStatus({ step: "form", error: "Sem conexão com a livraria. Tente de novo em instantes.", field: null, sending: false });
+      setStatus({ step: "form", error: "No connection to the bookshop. Try again in a moment.", field: null, sending: false });
     }
   };
 
   return (
-    <section aria-label="Preço e reserva" className="border-t-2 border-ink pt-4">
+    <section aria-label="Price and reservation" className="border-t-2 border-ink pt-4">
       <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
         <div>
-          <p className="display text-[2.1rem] leading-none">{price ?? "Preço sob consulta"}</p>
+          <p className="display text-[2.1rem] leading-none">{price ?? "Price on request"}</p>
           <p className="eyebrow mt-1.5 text-ink-soft">
-            {book.priceIsDemo && price ? "preço demonstrativo · " : ""}
+            {book.priceIsDemo && price ? "demo price · " : ""}
             {available === null
-              ? "disponibilidade sob consulta"
+              ? "availability on request"
               : available
-                ? `${book.stock} ${book.stock === 1 ? "exemplar" : "exemplares"} na loja`
-                : "esgotado no momento"}
-            {book.stockIsDemo && available !== null ? " · estoque demonstrativo" : ""}
+                ? `${book.stock} ${book.stock === 1 ? "copy" : "copies"} in the shop`
+                : "out of stock for now"}
+            {book.stockIsDemo && available !== null ? " · demo stock" : ""}
           </p>
         </div>
         {status.step === "closed" ? (
@@ -67,7 +67,7 @@ export function Reservation({ book, query }: { book: ShelfBook; query: string | 
             className="button"
             onClick={() => setStatus({ step: "form", error: null, field: null, sending: false })}
           >
-            {available === false ? "Avise-me quando chegar" : "Reservar um exemplar"}
+            {available === false ? "Notify me when it arrives" : "Reserve a copy"}
           </button>
         ) : null}
       </div>
@@ -76,13 +76,13 @@ export function Reservation({ book, query }: { book: ShelfBook; query: string | 
         <form onSubmit={submit} className="mt-5 space-y-4" noValidate>
           <p className="text-[0.98rem] text-ink-soft">
             {available === false
-              ? "Deixe seu contato e a livraria avisa quando o livro voltar."
-              : "A livraria separa o exemplar e confirma com você. Nada é cobrado agora."}
+              ? "Leave your contact and the bookshop will let you know when the book is back."
+              : "The bookshop sets the copy aside and confirms with you. Nothing is charged now."}
           </p>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label htmlFor={nameId} className="eyebrow text-ink-soft">
-                Seu nome
+                Your name
               </label>
               <input
                 id={nameId}
@@ -97,7 +97,7 @@ export function Reservation({ book, query }: { book: ShelfBook; query: string | 
             </div>
             <div>
               <label htmlFor={contactId} className="eyebrow text-ink-soft">
-                E-mail ou telefone
+                Email or phone
               </label>
               <input
                 id={contactId}
@@ -113,13 +113,13 @@ export function Reservation({ book, query }: { book: ShelfBook; query: string | 
           </div>
           <div>
             <label htmlFor={messageId} className="eyebrow text-ink-soft">
-              Recado para a livraria (opcional)
+              Message for the bookshop (optional)
             </label>
             <textarea id={messageId} name="message" className="field resize-none" rows={2} maxLength={500} />
           </div>
           <div aria-hidden className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
             <label>
-              Não preencha
+              Leave this empty
               <input name="website" tabIndex={-1} autoComplete="off" />
             </label>
           </div>
@@ -130,10 +130,10 @@ export function Reservation({ book, query }: { book: ShelfBook; query: string | 
           ) : null}
           <div className="flex flex-wrap items-center gap-3">
             <button type="submit" className="button" disabled={status.sending}>
-              {status.sending ? "Enviando…" : available === false ? "Quero ser avisada(o)" : "Confirmar reserva"}
+              {status.sending ? "Sending…" : available === false ? "Notify me" : "Confirm reservation"}
             </button>
             <button type="button" className="eyebrow text-ink-soft hover:text-ink" onClick={() => setStatus({ step: "closed" })}>
-              Cancelar
+              Cancel
             </button>
           </div>
         </form>
@@ -142,8 +142,8 @@ export function Reservation({ book, query }: { book: ShelfBook; query: string | 
       {status.step === "sent" ? (
         <p role="status" className="mt-4 border-l-2 border-vermilion pl-3 text-[1.02rem]">
           {status.kind === "reservation"
-            ? "Reserva anotada. A livraria vai separar o exemplar e entrar em contato para confirmar."
-            : "Anotado. A livraria avisa você assim que este livro voltar à estante."}
+            ? "Reservation noted. The bookshop will set the copy aside and get in touch to confirm."
+            : "Noted. The bookshop will let you know as soon as this book is back on the shelf."}
         </p>
       ) : null}
     </section>

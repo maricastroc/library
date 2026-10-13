@@ -20,7 +20,7 @@ export function SortControls({
   return (
     <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-3 border-b border-ink/25 pb-2">
       <fieldset className="min-w-0">
-        <legend className="eyebrow mb-1.5 text-ink-soft">Arrumar a estante por</legend>
+        <legend className="eyebrow mb-1.5 text-ink-soft">Arrange the shelf by</legend>
         <div className="-mx-1 flex flex-wrap gap-x-1 gap-y-1">
           {SORT_OPTIONS.map((option) => {
             const selected = option.key === value;
@@ -57,7 +57,7 @@ export function SortControls({
         <p className="eyebrow hidden text-ink-soft lg:block" aria-live="polite">
           {current?.hint}
         </p>
-        <div role="group" aria-label="Modo de exibição" className="eyebrow flex border border-ink">
+        <div role="group" aria-label="View mode" className="eyebrow flex border border-ink">
           {(["shelf", "index"] as const).map((mode) => (
             <button
               key={mode}
@@ -66,7 +66,7 @@ export function SortControls({
               onClick={() => onViewChange(mode)}
               className={`px-2.5 py-1.5 transition-colors ${view === mode ? "bg-ink text-paper" : "text-ink hover:bg-ink/10"}`}
             >
-              {mode === "shelf" ? "Estante" : "Índice"}
+              {mode === "shelf" ? "Shelf" : "Index"}
             </button>
           ))}
         </div>

@@ -7,7 +7,7 @@ import { ShowcaseEditor } from "@/components/admin/ShowcaseEditor";
 import { getShowcaseById } from "@/lib/showcase";
 import { listPickerBooks } from "@/lib/showcase/picker";
 
-export const metadata: Metadata = { title: "Editar vitrine" };
+export const metadata: Metadata = { title: "Edit showcase" };
 
 export default async function EditShowcasePage({ params, searchParams }: PageProps<"/admin/showcases/[id]">) {
   const { id } = await params;
@@ -17,12 +17,12 @@ export default async function EditShowcasePage({ params, searchParams }: PagePro
   return (
     <div className="max-w-5xl">
       <Link href="/admin/showcases" className="eyebrow ink-link">
-        ← Vitrines
+        ← Showcases
       </Link>
       <h1 className="display mt-3 text-balance text-[2.6rem] leading-[1.02]">{showcase.title}</h1>
       {query.created ? (
         <p role="status" className="mt-4 border-l-2 border-ink pl-3">
-          Vitrine criada. {showcase.published ? "Ela já está no ar." : "Ela está como rascunho: publique quando quiser compartilhar."}
+          Showcase created. {showcase.published ? "It’s already live." : "It’s a draft: publish it when you want to share."}
         </p>
       ) : null}
       <div className="mt-8">
@@ -30,9 +30,9 @@ export default async function EditShowcasePage({ params, searchParams }: PagePro
       </div>
       <section aria-labelledby="delete-showcase-heading" className="mt-14 border-t border-ink/30 pt-6">
         <h2 id="delete-showcase-heading" className="eyebrow text-ink">
-          Apagar vitrine
+          Delete showcase
         </h2>
-        <ConfirmRemoval action={removeShowcase} id={showcase.id} label="Apagar esta vitrine" question={`Apagar a vitrine "${showcase.title}"? O link compartilhado deixa de funcionar. Os livros continuam no catálogo.`} />
+        <ConfirmRemoval action={removeShowcase} id={showcase.id} label="Delete this showcase" question={`Delete the showcase "${showcase.title}"? The shared link will stop working. The books stay in the catalog.`} />
       </section>
     </div>
   );

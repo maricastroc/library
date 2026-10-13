@@ -87,6 +87,17 @@ function main() {
     }
   })();
 
+  let retitled = 0;
+  if (process.argv.includes("--refresh-titles")) {
+    for (const entry of entries) {
+      if (!entry.editionTitle) continue;
+      const existing = findExistingBook({ isbn: null, title: entry.editionTitle, author: entry.author });
+      if (!existing) continue;
+      updateBook(existing, { title: entry.title });
+      retitled += 1;
+    }
+  }
+
   let synopsesFixed = 0;
   if (process.argv.includes("--refresh-synopsis")) {
     for (const entry of entries) {
@@ -96,7 +107,7 @@ function main() {
         synopsis: string | null;
         synopsis_source: string | null;
       };
-      if (row.synopsis_source && !row.synopsis_source.startsWith("Wikipédia")) continue;
+      if (row.synopsis_source && !row.synopsis_source.startsWith("Wikipedia")) continue;
       if ((row.synopsis ?? null) === (entry.synopsis ?? null)) continue;
       updateBook(existing, { synopsis: entry.synopsis, synopsisSource: entry.synopsisSource, synopsisUrl: entry.synopsisUrl });
       db()
@@ -183,7 +194,7 @@ function main() {
     }
   }
 
-  console.log(JSON.stringify({ inserted, skipped, refreshed, synopsesFixed, pruned, exampleNotes: noted, stats: catalogStats() }, null, 1));
+  console.log(JSON.stringify({ inserted, skipped, refreshed, retitled, synopsesFixed, pruned, exampleNotes: noted, stats: catalogStats() }, null, 1));
   closeDb();
 }
 

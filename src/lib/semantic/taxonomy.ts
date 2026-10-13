@@ -23,86 +23,86 @@ export type Atmosphere = {
 export const ATMOSPHERES: Atmosphere[] = [
   {
     id: "melancholic",
-    label: "melancólica",
-    noun: "melancolia",
-    description: "tristeza suave, saudade, perda, despedida, solidão, vazio, chuva, fim de tarde",
+    label: "melancholic",
+    noun: "melancholy",
+    description: "gentle sadness, longing, loss, farewell, loneliness, emptiness, rain, late afternoon",
     color: "#34506b",
   },
   {
     id: "comforting",
-    label: "acolhedora",
-    noun: "acolhimento",
-    description: "ternura, afeto, aconchego, consolo, reconforto, delicadeza, amizade, cuidado, calor humano",
+    label: "comforting",
+    noun: "warmth",
+    description: "tenderness, affection, coziness, solace, reassurance, gentleness, friendship, care, human warmth",
     color: "#c56a45",
   },
   {
     id: "dark",
-    label: "sombria",
-    noun: "sombra",
-    description: "escuridão, desespero, morte, violência, pessimismo, opressão, peso, tragédia",
+    label: "dark",
+    noun: "shadow",
+    description: "darkness, despair, death, violence, pessimism, oppression, heaviness, tragedy",
     color: "#211f1d",
   },
   {
     id: "luminous",
-    label: "luminosa",
-    noun: "luz",
-    description: "esperança, alegria, leveza, otimismo, encantamento, recomeço, vitalidade",
+    label: "luminous",
+    noun: "light",
+    description: "hope, joy, lightness, optimism, enchantment, new beginnings, vitality",
     color: "#dba53a",
   },
   {
     id: "unsettling",
-    label: "inquietante",
-    noun: "inquietação",
-    description: "estranheza, desconforto, perturbação, absurdo, ameaça difusa, mal-estar, paranoia",
+    label: "unsettling",
+    noun: "unease",
+    description: "strangeness, discomfort, disturbance, absurdity, diffuse threat, unease, paranoia",
     color: "#24483e",
   },
   {
     id: "ironic",
-    label: "irônica",
-    noun: "ironia",
-    description: "humor, sátira, sarcasmo, comicidade, riso, deboche, crítica mordaz",
+    label: "ironic",
+    noun: "irony",
+    description: "humor, satire, sarcasm, comedy, laughter, mockery, biting criticism",
     color: "#d2452f",
   },
   {
     id: "contemplative",
-    label: "contemplativa",
-    noun: "contemplação",
-    description: "silêncio, reflexão, serenidade, lentidão, observação, filosofia, introspecção calma",
+    label: "contemplative",
+    noun: "contemplation",
+    description: "silence, reflection, serenity, slowness, observation, philosophy, calm introspection",
     color: "#87957a",
   },
   {
     id: "intense",
-    label: "intensa",
-    noun: "intensidade",
-    description: "paixão, fúria, desejo, visceral, arrebatamento, conflito emocional extremo, obsessão",
+    label: "intense",
+    noun: "intensity",
+    description: "passion, fury, desire, visceral feeling, rapture, extreme emotional conflict, obsession",
     color: "#7b1f2e",
   },
   {
     id: "dreamlike",
-    label: "onírica",
-    noun: "sonho",
-    description: "sonho, fantasia, realismo mágico, maravilhoso, fábula, mito, imaginação, surreal",
+    label: "dreamlike",
+    noun: "dream",
+    description: "dream, fantasy, magical realism, the marvelous, fable, myth, imagination, the surreal",
     color: "#5d4b8b",
   },
   {
     id: "nostalgic",
-    label: "nostálgica",
+    label: "nostalgic",
     noun: "nostalgia",
-    description: "memória, infância, passado, lembrança, tempo perdido, saudade de uma época",
+    description: "memory, childhood, the past, remembrance, lost time, longing for another era",
     color: "#c18f8a",
   },
   {
     id: "tense",
-    label: "tensa",
-    noun: "tensão",
-    description: "suspense, perigo, mistério, perseguição, investigação, urgência, medo",
+    label: "tense",
+    noun: "tension",
+    description: "suspense, danger, mystery, pursuit, investigation, urgency, fear",
     color: "#4b4f55",
   },
   {
     id: "raw",
-    label: "crua",
-    noun: "crueza",
-    description: "secura, realismo duro, miséria, fome, injustiça social, denúncia, brutalidade sem enfeite",
+    label: "raw",
+    noun: "rawness",
+    description: "dryness, harsh realism, poverty, hunger, social injustice, exposé, unadorned brutality",
     color: "#cdbd9b",
   },
 ];
@@ -113,44 +113,44 @@ export const ATMOSPHERE_BY_ID = Object.fromEntries(
 ) as Record<AtmosphereId, Atmosphere>;
 
 export const PACE_LEVELS = [
-  { value: 1, label: "lento", description: "ritmo lento, demorado, de frases longas e pouca ação" },
-  { value: 2, label: "pausado", description: "ritmo pausado, que avança sem pressa" },
-  { value: 3, label: "fluido", description: "ritmo fluido e equilibrado" },
-  { value: 4, label: "ágil", description: "ritmo ágil, capítulos curtos, muita ação" },
-  { value: 5, label: "vertiginoso", description: "ritmo vertiginoso, frenético, impossível de largar" },
+  { value: 1, label: "slow", description: "slow, lingering pace, with long sentences and little action" },
+  { value: 2, label: "unhurried", description: "unhurried pace that moves along without rushing" },
+  { value: 3, label: "flowing", description: "flowing, balanced pace" },
+  { value: 4, label: "brisk", description: "brisk pace, short chapters, plenty of action" },
+  { value: 5, label: "breakneck", description: "breakneck, frantic pace, impossible to put down" },
 ] as const;
 
 export const DENSITY_LEVELS = [
-  { value: 1, label: "leve", description: "leitura leve e acessível" },
-  { value: 2, label: "equilibrada", description: "leitura de densidade equilibrada" },
-  { value: 3, label: "densa", description: "leitura densa, que pede atenção" },
-  { value: 4, label: "exigente", description: "leitura exigente, complexa, experimental ou erudita" },
+  { value: 1, label: "light", description: "light, accessible read" },
+  { value: 2, label: "balanced", description: "read of balanced density" },
+  { value: 3, label: "dense", description: "dense read that asks for attention" },
+  { value: 4, label: "demanding", description: "demanding read: complex, experimental or erudite" },
 ] as const;
 
 export const STYLES = [
-  { id: "lyrical", label: "lírico", description: "linguagem poética, musical, cheia de imagens" },
-  { id: "spare", label: "seco", description: "frases curtas, diretas, sem enfeite" },
-  { id: "wry", label: "irônico", description: "narrador irônico, espirituoso, que brinca com o leitor" },
-  { id: "experimental", label: "experimental", description: "forma inventiva, fragmentada ou fora do convencional" },
-  { id: "colloquial", label: "coloquial", description: "voz oral, popular, próxima da fala" },
-  { id: "classical", label: "clássico", description: "prosa elegante, tradicional, de construção cuidadosa" },
-  { id: "introspective", label: "introspectivo", description: "mergulho na consciência, fluxo de pensamento" },
-  { id: "essayistic", label: "ensaístico", description: "argumentativo, reflexivo, analítico" },
-  { id: "documentary", label: "documental", description: "jornalístico, factual, de testemunho" },
-  { id: "fable", label: "fabular", description: "tom de fábula, alegoria ou parábola" },
+  { id: "lyrical", label: "lyrical", description: "poetic, musical language, full of imagery" },
+  { id: "spare", label: "spare", description: "short, direct sentences, no ornament" },
+  { id: "wry", label: "wry", description: "ironic, witty narrator who plays with the reader" },
+  { id: "experimental", label: "experimental", description: "inventive, fragmented or unconventional form" },
+  { id: "colloquial", label: "colloquial", description: "oral, popular voice, close to speech" },
+  { id: "classical", label: "classical", description: "elegant, traditional, carefully built prose" },
+  { id: "introspective", label: "introspective", description: "a dive into consciousness, stream of thought" },
+  { id: "essayistic", label: "essayistic", description: "argumentative, reflective, analytical" },
+  { id: "documentary", label: "documentary", description: "journalistic, factual, testimonial" },
+  { id: "fable", label: "fable-like", description: "the tone of a fable, allegory or parable" },
 ] as const;
 
 export const EXPERIENCES = [
-  { id: "one_sitting", label: "para ler de uma sentada", description: "curto e envolvente, lê-se de uma vez" },
-  { id: "slow_read", label: "para ler devagar", description: "pede leitura lenta, saboreando cada página" },
-  { id: "lingering", label: "para pensar por dias", description: "deixa perguntas, continua depois do fim" },
-  { id: "moving", label: "para se emocionar", description: "comove, faz chorar, toca fundo" },
-  { id: "funny", label: "para rir", description: "diverte, faz rir" },
-  { id: "gripping", label: "para perder o sono", description: "prende, dá medo ou ansiedade para saber o fim" },
-  { id: "transporting", label: "para viajar longe", description: "transporta para outro lugar, época ou mundo" },
-  { id: "relatable", label: "para se reconhecer", description: "espelha a vida comum, o leitor se vê ali" },
-  { id: "challenging", label: "para desafiar certezas", description: "provoca, incomoda, muda o modo de ver" },
-  { id: "consoling", label: "para se consolar", description: "acolhe, conforta em tempos difíceis" },
+  { id: "one_sitting", label: "to read in one sitting", description: "short and absorbing, read in one go" },
+  { id: "slow_read", label: "to read slowly", description: "asks for slow reading, savoring each page" },
+  { id: "lingering", label: "to think about for days", description: "leaves questions, goes on after the ending" },
+  { id: "moving", label: "to be moved", description: "touching, brings tears, strikes deep" },
+  { id: "funny", label: "to laugh", description: "entertaining, makes you laugh" },
+  { id: "gripping", label: "to lose sleep over", description: "gripping, makes you afraid or anxious to know the ending" },
+  { id: "transporting", label: "to travel far", description: "carries you to another place, time or world" },
+  { id: "relatable", label: "to recognize yourself", description: "mirrors ordinary life, readers see themselves in it" },
+  { id: "challenging", label: "to challenge certainties", description: "provokes, unsettles, changes how you see things" },
+  { id: "consoling", label: "to find comfort", description: "welcoming, comforting in hard times" },
 ] as const;
 
 export type StyleId = (typeof STYLES)[number]["id"];
@@ -168,21 +168,21 @@ export const EXPERIENCE_BY_ID = Object.fromEntries(
 ) as Record<ExperienceId, (typeof EXPERIENCES)[number]>;
 
 export const GENRES = [
-  "Romance",
-  "Novela",
-  "Contos",
-  "Poesia",
-  "Ensaio",
-  "Crônica",
-  "Memórias",
-  "Reportagem",
-  "Teatro",
-  "Ficção científica",
-  "Fantasia",
-  "Policial",
-  "Quadrinhos",
-  "Infantojuvenil",
-  "Não ficção",
+  "Novel",
+  "Novella",
+  "Short stories",
+  "Poetry",
+  "Essay",
+  "Chronicles",
+  "Memoir",
+  "Reportage",
+  "Theater",
+  "Science fiction",
+  "Fantasy",
+  "Crime",
+  "Comics",
+  "Young readers",
+  "Nonfiction",
 ] as const;
 
 export function paceLabel(value: number | null | undefined): string | null {
@@ -205,10 +205,8 @@ export function experienceLabel(id: string): string {
   return EXPERIENCE_BY_ID[id as ExperienceId]?.label ?? id;
 }
 
-const CONFIDENCE_LABELS: Record<string, string> = { high: "alta", medium: "média", low: "baixa", none: "nenhuma" };
-
 export function confidenceLabel(value: string | null | undefined): string {
-  return value ? (CONFIDENCE_LABELS[value] ?? value) : "—";
+  return value || "—";
 }
 
 export function attributeLabel(attribute: string): string {
@@ -237,21 +235,21 @@ export function describeProfile(profile: SemanticProfile): string {
     const detailed = profile.atmospheres
       .map((id) => `${ATMOSPHERE_BY_ID[id].label} (${ATMOSPHERE_BY_ID[id].description.split(",").slice(0, 3).join(",")})`)
       .join("; ");
-    parts.push(`Atmosfera ${detailed}.`);
+    parts.push(`Atmosphere: ${detailed}.`);
   }
   const pace = PACE_LEVELS.find((level) => level.value === profile.pace);
   if (pace) parts.push(`${pace.description[0].toUpperCase()}${pace.description.slice(1)}.`);
   const density = DENSITY_LEVELS.find((level) => level.value === profile.density);
   if (density) parts.push(`${density.description[0].toUpperCase()}${density.description.slice(1)}.`);
   if (profile.styles.length > 0) {
-    parts.push(`Estilo ${profile.styles.map((id) => `${STYLE_BY_ID[id].label}: ${STYLE_BY_ID[id].description}`).join("; ")}.`);
+    parts.push(`Style: ${profile.styles.map((id) => `${STYLE_BY_ID[id].label} (${STYLE_BY_ID[id].description})`).join("; ")}.`);
   }
   if (profile.experiences.length > 0) {
     parts.push(
-      `Um livro ${profile.experiences.map((id) => `${EXPERIENCE_BY_ID[id].label} (${EXPERIENCE_BY_ID[id].description})`).join("; ")}.`,
+      `A book ${profile.experiences.map((id) => `${EXPERIENCE_BY_ID[id].label} (${EXPERIENCE_BY_ID[id].description})`).join("; ")}.`,
     );
   }
-  if (profile.themes.length > 0) parts.push(`Temas: ${profile.themes.join(", ")}.`);
+  if (profile.themes.length > 0) parts.push(`Themes: ${profile.themes.join(", ")}.`);
   if (profile.portrait) parts.push(profile.portrait);
   return parts.join(" ");
 }

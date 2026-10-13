@@ -11,17 +11,17 @@ export type SearchState =
   | { status: "error"; query: string; message: string };
 
 export const EXAMPLES = [
-  "quero algo melancólico, mas reconfortante",
-  "um livro sobre solidão, mas sem ser deprimente",
-  "algo que pareça uma tarde chuvosa",
-  "para quem gostou de Clarice Lispector",
-  "uma história curta que me deixe pensando por dias",
-  "um romance delicado, mas não previsível",
+  "something melancholic, but comforting",
+  "a book about loneliness, but not a depressing one",
+  "something that feels like a rainy afternoon",
+  "for those who liked Clarice Lispector",
+  "a short story that keeps me thinking for days",
+  "a delicate novel, but not a predictable one",
 ];
 
-function join(items: string[]): string {
+function join(items: string[], conjunction = "and"): string {
   if (items.length <= 1) return items.join("");
-  return `${items.slice(0, -1).join(", ")} e ${items[items.length - 1]}`;
+  return `${items.slice(0, -1).join(", ")} ${conjunction} ${items[items.length - 1]}`;
 }
 
 function Entry({ label, children }: { label: string; children: ReactNode }) {
@@ -38,72 +38,72 @@ function Reading({ interpretation }: { interpretation: Interpretation }) {
   const { reference } = interpretation;
   if (reference?.inCatalog && reference.similar) {
     entries.push(
-      <Entry key="ref" label="ponto de partida">
-        {reference.kind === "author" ? `os livros de ${reference.label} que estão na estante` : reference.label}
+      <Entry key="ref" label="starting point">
+        {reference.kind === "author" ? `the books by ${reference.label} on the shelf` : reference.label}
       </Entry>,
     );
   } else if (reference?.inCatalog) {
     entries.push(
-      <Entry key="ref" label={reference.kind === "author" ? "autoria" : "livro"}>
+      <Entry key="ref" label={reference.kind === "author" ? "author" : "book"}>
         {reference.label}
       </Entry>,
     );
   }
   if (interpretation.atmospheres.length > 0) {
     entries.push(
-      <Entry key="atm" label="atmosfera">
+      <Entry key="atm" label="atmosphere">
         {join(interpretation.atmospheres.map(atmosphereLabel))}
       </Entry>,
     );
   }
   if (interpretation.inferredAtmospheres.length > 0) {
     entries.push(
-      <Entry key="inf" label={interpretation.atmospheres.length > 0 ? "também me soou" : "me soou"}>
+      <Entry key="inf" label={interpretation.atmospheres.length > 0 ? "it also sounded" : "it sounded"}>
         {join(interpretation.inferredAtmospheres.map(atmosphereLabel))}
       </Entry>,
     );
   }
   if (interpretation.avoidAtmospheres.length > 0) {
     entries.push(
-      <Entry key="avoid" label="deixei de lado">
-        o que é {join(interpretation.avoidAtmospheres.map(atmosphereLabel))}
+      <Entry key="avoid" label="I set aside">
+        anything {join(interpretation.avoidAtmospheres.map(atmosphereLabel), "or")}
       </Entry>,
     );
   }
   if (interpretation.pace) {
     entries.push(
-      <Entry key="pace" label="ritmo">
-        {interpretation.pace === "slow" ? "sem pressa" : "ágil"}
+      <Entry key="pace" label="pace">
+        {interpretation.pace === "slow" ? "unhurried" : "brisk"}
       </Entry>,
     );
   }
   if (interpretation.length) {
     entries.push(
-      <Entry key="len" label="extensão">
-        {interpretation.length === "short" ? "poucas páginas" : "muitas páginas"}
+      <Entry key="len" label="length">
+        {interpretation.length === "short" ? "few pages" : "many pages"}
       </Entry>,
     );
   }
   if (interpretation.era) {
     entries.push(
-      <Entry key="era" label="época">
-        {interpretation.era === "classic" ? "clássicos" : "contemporâneos"}
+      <Entry key="era" label="era">
+        {interpretation.era === "classic" ? "classics" : "contemporary"}
       </Entry>,
     );
   }
   if (interpretation.genres.length > 0) {
     entries.push(
-      <Entry key="gen" label="forma">
+      <Entry key="gen" label="form">
         {join(interpretation.genres.map((genre) => genre.toLowerCase()))}
       </Entry>,
     );
   }
   if (entries.length === 0) {
-    return <p className="italic text-ink-soft">Procurei pelo sentido do que você escreveu, comparando com as sinopses e as leituras de cada livro.</p>;
+    return <p className="italic text-ink-soft">I searched for the meaning of what you wrote, comparing it with each book’s synopsis and reading.</p>;
   }
   return (
     <p className="flex flex-wrap items-baseline gap-x-5 gap-y-1">
-      <span className="eyebrow text-ink">Li seu pedido assim</span>
+      <span className="eyebrow text-ink">How I read your request</span>
       {entries}
     </p>
   );
@@ -169,10 +169,10 @@ export function SearchBar({
   const count = response?.results.length ?? 0;
 
   return (
-    <section aria-label="Busca por intenção">
+    <section aria-label="Search by intent">
       <form role="search" onSubmit={submit} className="relative">
         <label htmlFor={inputId} className="eyebrow text-ink-soft">
-          Pergunte à estante — com as suas palavras
+          Ask the shelf — in your own words
         </label>
         <div className="mt-1 flex items-end gap-3 border-b-2 border-ink focus-within:border-vermilion">
           <textarea
@@ -207,11 +207,11 @@ export function SearchBar({
               }}
               className="eyebrow mb-3 shrink-0 text-ink-soft hover:text-vermilion"
             >
-              Limpar
+              Clear
             </button>
           ) : null}
           <button type="submit" className="button mb-2 shrink-0" disabled={state.status === "loading"}>
-            Procurar
+            Search
           </button>
         </div>
       </form>
@@ -219,7 +219,7 @@ export function SearchBar({
       <div id={statusId} aria-live="polite" className="mt-3 min-h-[3.25rem] text-[0.98rem] leading-snug">
         {state.status === "idle" ? (
           <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-            <span className="eyebrow text-ink-soft">Experimente</span>
+            <span className="eyebrow text-ink-soft">Try</span>
             {EXAMPLES.slice(0, 5).map((example) => (
               <button
                 key={example}
@@ -236,13 +236,13 @@ export function SearchBar({
           </div>
         ) : null}
 
-        {state.status === "loading" && slow ? <p className="italic text-ink-soft">Lendo a estante…</p> : null}
+        {state.status === "loading" && slow ? <p className="italic text-ink-soft">Reading the shelf…</p> : null}
 
         {state.status === "error" ? (
           <p className="text-vermilion">
             {state.message}{" "}
             <button type="button" className="ink-link" onClick={() => onSearch(state.query)}>
-              Tentar de novo
+              Try again
             </button>
           </p>
         ) : null}
@@ -255,12 +255,12 @@ export function SearchBar({
             ) : null}
             <p className="eyebrow text-ink-soft">
               {count === 0
-                ? "nenhum livro destacado"
-                : `${count} ${count === 1 ? "livro destacado" : "livros destacados"}`}
+                ? "no books highlighted"
+                : `${count} ${count === 1 ? "book highlighted" : "books highlighted"}`}
               {" · "}
               {state.response.fallback === "lexical"
-                ? "busca por palavras (IA indisponível)"
-                : `busca semântica local · ${state.response.engine.embedModel} · ${state.response.engine.tookMs} ms`}
+                ? "keyword search (AI unavailable)"
+                : `local semantic search · ${state.response.engine.embedModel} · ${state.response.engine.tookMs} ms`}
             </p>
           </div>
         ) : null}

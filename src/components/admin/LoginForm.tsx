@@ -11,12 +11,12 @@ export function LoginForm({ destination, configured }: { destination: string; co
       <input type="hidden" name="from" value={destination} />
       <div>
         <label htmlFor="password" className="eyebrow text-ink-soft">
-          Senha do balcão
+          Counter password
         </label>
         <input id="password" name="password" type="password" className="field" autoComplete="current-password" required autoFocus disabled={!configured} />
       </div>
       <FormFeedback state={state} />
-      <SubmitButton pendingLabel="Entrando…">Entrar</SubmitButton>
+      <SubmitButton pendingLabel="Signing in…">Sign in</SubmitButton>
     </form>
   );
 }

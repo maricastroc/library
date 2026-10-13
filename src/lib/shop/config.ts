@@ -9,8 +9,8 @@ export type ShopConfig = {
 };
 
 export const DEFAULT_SHOP: ShopConfig = {
-  name: "Entrelinhas",
-  tagline: "Livraria independente. Estante viva.",
+  name: "Subtext",
+  tagline: "Independent bookshop. Living shelf.",
   bookseller: "",
   city: "",
   contact: "",

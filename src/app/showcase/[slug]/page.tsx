@@ -18,8 +18,8 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: PageProps<"/showcase/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const showcase = getShowcaseBySlug(slug);
-  if (!showcase || !showcase.published) return { title: "Vitrine" };
-  const description = showcase.intro ?? `Uma seleção de ${showcase.items.length} livros da livraria.`;
+  if (!showcase || !showcase.published) return { title: "Showcase" };
+  const description = showcase.intro ?? `A selection of ${showcase.items.length} ${showcase.items.length === 1 ? "book" : "books"} from the bookshop.`;
   return { title: showcase.title, description, openGraph: { title: showcase.title, description, type: "article" } };
 }
 
@@ -42,7 +42,7 @@ export default async function ShowcasePage({ params }: PageProps<"/showcase/[slu
     <div className="min-h-dvh overflow-x-clip" style={{ background: palette.background, color: palette.ink }}>
       <div className="mx-auto w-full max-w-[1320px] px-5 pb-24 sm:px-10">
         <header className="flex flex-wrap items-end justify-between gap-4 pt-6">
-          <Link href="/" className="text-[1.6rem]" aria-label={`${shop.name}, ir para a estante`}>
+          <Link href="/" className="text-[1.6rem]" aria-label={`${shop.name}, go to the shelf`}>
             <Wordmark name={shop.name} />
           </Link>
           <CopyLink className="eyebrow border border-current px-3 py-2 hover:opacity-70" />
@@ -50,13 +50,13 @@ export default async function ShowcasePage({ params }: PageProps<"/showcase/[slu
 
         {showcase.published ? null : (
           <p role="status" className="eyebrow mt-6 inline-block border border-current px-3 py-2">
-            rascunho — só você vê esta página
+            draft — only you can see this page
           </p>
         )}
 
         <section aria-labelledby="showcase-heading" className="pt-16 sm:pt-24">
           <p className="eyebrow opacity-80">
-            Vitrine · {entries.length} {entries.length === 1 ? "livro" : "livros"}
+            Showcase · {entries.length} {entries.length === 1 ? "book" : "books"}
             {shop.city ? ` · ${shop.city}` : ""}
           </p>
           <h1 id="showcase-heading" className="display-italic mt-4 max-w-[16ch] text-balance text-[clamp(3rem,10.5vw,9.5rem)] leading-[0.9]">
@@ -74,13 +74,13 @@ export default async function ShowcasePage({ params }: PageProps<"/showcase/[slu
           ) : null}
         </section>
 
-        <nav aria-label="Livros desta vitrine" className="mt-16 overflow-x-auto pb-2">
+        <nav aria-label="Books in this showcase" className="mt-16 overflow-x-auto pb-2">
           <ul className="flex min-w-max items-end gap-[3px] border-b-[3px] border-current pt-4">
             {entries.map(({ book, identity }, index) => (
               <li key={book.id} style={{ width: identity.width * 1.1, height: identity.height * 1.1 }}>
                 <a
                   href={`#book-${index + 1}`}
-                  aria-label={`${book.title}, de ${book.author}`}
+                  aria-label={`${book.title}, by ${book.author}`}
                   className="block h-full w-full transition-transform duration-300 hover:-translate-y-2 focus-visible:-translate-y-2"
                 >
                   <SpineFace identity={identity} scale={1.1} className="relative block h-full w-full overflow-hidden outline outline-1 outline-black/10" />
@@ -126,22 +126,22 @@ export default async function ShowcasePage({ params }: PageProps<"/showcase/[slu
                       <span className="handwriting text-[1.9rem]" style={{ color: palette.accent }}>
                         {exampleNote}
                       </span>
-                      <span className="eyebrow mt-1 block text-[9px] opacity-70">nota de exemplo da demonstração</span>
+                      <span className="eyebrow mt-1 block text-[9px] opacity-70">sample note for the demo</span>
                     </p>
                   ) : null}
                   {book.atmospheres.length > 0 ? (
                     <p className="eyebrow mt-5 opacity-80">
                       {book.atmospheres.map(atmosphereLabel).join(" · ")}
-                      {book.pages ? ` · ${book.pages} páginas` : ""}
+                      {book.pages ? ` · ${book.pages} ${book.pages === 1 ? "page" : "pages"}` : ""}
                     </p>
                   ) : null}
                   <div className="mt-5 flex flex-wrap items-baseline gap-x-6 gap-y-2">
                     <Link href={`/?book=${book.slug}`} className="eyebrow border-b border-current pb-0.5 hover:opacity-70">
-                      Abrir o livro na estante →
+                      Open the book on the shelf →
                     </Link>
                     <span className="eyebrow opacity-80">
-                      {book.stock === 0 ? "esgotado" : (price ?? "preço sob consulta")}
-                      {book.priceIsDemo && price && book.stock !== 0 ? " · demonstrativo" : ""}
+                      {book.stock === 0 ? "out of stock" : (price ?? "price on request")}
+                      {book.priceIsDemo && price && book.stock !== 0 ? " · demo" : ""}
                     </span>
                   </div>
                 </div>
@@ -156,7 +156,7 @@ export default async function ShowcasePage({ params }: PageProps<"/showcase/[slu
             <p className="eyebrow mt-2 opacity-80">{[shop.tagline, shop.city, shop.contact].filter(Boolean).join(" · ")}</p>
           </div>
           <Link href="/" className="eyebrow border border-current px-4 py-3 hover:opacity-70">
-            Ver a estante inteira
+            See the whole shelf
           </Link>
         </footer>
       </div>

@@ -37,6 +37,25 @@ describe("database migrations", () => {
     expect(database.prepare("SELECT palette FROM showcases").get()).toEqual({ palette: "ink" });
   });
 
+  it("translates genres and synopsis sources and rebuilds the text index", () => {
+    const database = new Database(":memory:");
+    database.exec(SCHEMA_SQL);
+    database.pragma("user_version = 2");
+    database
+      .prepare(
+        "INSERT INTO books (id, slug, title, author, dedupe_key, genre, synopsis, synopsis_source) VALUES (1, 'a', 'A', 'B', 'a|b', 'Ficção científica', 'A lighthouse keeper.', 'Wikipédia (CC BY-SA 4.0)')",
+      )
+      .run();
+
+    migrate(database);
+
+    expect(database.prepare("SELECT genre, synopsis_source FROM books").get()).toEqual({
+      genre: "Science fiction",
+      synopsis_source: "Wikipedia (CC BY-SA 4.0)",
+    });
+    expect(database.prepare("SELECT rowid FROM books_fts WHERE books_fts MATCH 'science'").all()).toEqual([{ rowid: 1 }]);
+  });
+
   it("is a no-op on a database that is already current", () => {
     const database = new Database(":memory:");
     database.exec(SCHEMA_SQL);

@@ -3,11 +3,13 @@ import { normalizeText } from "@/lib/catalog/text";
 import type { LexicalResult } from "./types";
 
 export const STOPWORDS = new Set(
-  `a o as os um uma uns umas de do da dos das em no na nos nas por para pra pro com sem que e ou mas se eu me meu minha
-   quero queria procuro busco gostaria algo alguma algum alguns livro livros historia historias sobre tipo como mais muito
-   muita bem ser seja sejam e sao ao aos quem gostou gosta gosto tem ter isso esse essa este esta pelo pela nao nem so ja
-   tambem ler leitura indicacao recomendacao recomenda indica preciso dias deixe pareca parece ficar fique estou esta
-   to ta uns coisa coisas the of`
+  `a an the of in on at by for to from with without and or but if so as is are was were be been being am do does did
+   i me my mine we you your it its this that these those there here what which who whom whose how when where why
+   want wants wanted looking look need needs would like liked likes love loved enjoy enjoyed something anything some any
+   book books story stories about kind type sort more most much very really well too also just only not no nor
+   read reading recommend recommendation recommendations suggestion suggestions please give find show can could
+   feel feels make makes made keep keeps leave leaves let lets get gets thing things one ones them they their
+   will have has had into than then up out over days`
     .split(/\s+/)
     .filter(Boolean),
 );

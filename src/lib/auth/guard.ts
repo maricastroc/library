@@ -13,7 +13,7 @@ export async function requireAdmin(): Promise<void> {
 
 export class NotAuthorizedError extends Error {
   constructor() {
-    super("Sessão expirada. Entre de novo no balcão.");
+    super("Session expired. Sign in to the counter again.");
     this.name = "NotAuthorizedError";
   }
 }

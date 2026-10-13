@@ -22,14 +22,14 @@ export function Colophon({ embedModel, chatModel }: { embedModel: string; chatMo
       <div className="grid gap-x-12 gap-y-12 lg:grid-cols-[1.25fr_1fr_1fr]">
         <section aria-labelledby="legend-heading">
           <h2 id="legend-heading" className="display text-[2rem] leading-none">
-            Como ler a estante
+            How to read the shelf
           </h2>
           <p className="mt-3 max-w-[34rem] text-ink-soft">
-            Nenhuma lombada é decorada ao acaso. Cada uma é desenhada a partir do que o catálogo sabe sobre o livro.
+            No spine is decorated at random. Each one is drawn from what the catalog knows about the book.
           </p>
           <dl className="mt-6 space-y-5">
             <div>
-              <dt className="eyebrow text-ink">A cor é a atmosfera predominante</dt>
+              <dt className="eyebrow text-ink">Color is the prevailing atmosphere</dt>
               <dd className="mt-2 flex flex-wrap gap-x-4 gap-y-2">
                 {ATMOSPHERE_SPECTRUM.map((id) => (
                   <span key={id} className="inline-flex items-center gap-1.5 font-label text-[0.82rem]">
@@ -41,39 +41,39 @@ export function Colophon({ embedModel, chatModel }: { embedModel: string; chatMo
             </div>
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
-                <dt className="eyebrow text-ink">A espessura são as páginas</dt>
+                <dt className="eyebrow text-ink">Thickness is the page count</dt>
                 <dd className="mt-2 flex items-end gap-1 text-[0.9rem] text-ink-soft">
                   <MiniSpine width={8} height={34} color="#34506b" />
                   <MiniSpine width={14} height={34} color="#34506b" />
                   <MiniSpine width={22} height={34} color="#34506b" />
-                  <span className="ml-2">de 100 a 800 páginas</span>
+                  <span className="ml-2">from 100 to 800 pages</span>
                 </dd>
               </div>
               <div>
-                <dt className="eyebrow text-ink">A altura é a densidade da leitura</dt>
+                <dt className="eyebrow text-ink">Height is the density of the reading</dt>
                 <dd className="mt-2 flex items-end gap-1 text-[0.9rem] text-ink-soft">
                   <MiniSpine width={12} height={22} color="#7b1f2e" />
                   <MiniSpine width={12} height={28} color="#7b1f2e" />
                   <MiniSpine width={12} height={34} color="#7b1f2e" />
-                  <span className="ml-2">de leve a exigente</span>
+                  <span className="ml-2">from light to demanding</span>
                 </dd>
               </div>
               <div>
-                <dt className="eyebrow text-ink">As faixas são o ritmo</dt>
+                <dt className="eyebrow text-ink">The bands are the pace</dt>
                 <dd className="mt-2 flex items-end gap-1 text-[0.9rem] text-ink-soft">
                   <MiniSpine width={14} height={34} color="#24483e" bands={1} />
                   <MiniSpine width={14} height={34} color="#24483e" bands={3} />
                   <MiniSpine width={14} height={34} color="#24483e" bands={5} />
-                  <span className="ml-2">de lento a vertiginoso</span>
+                  <span className="ml-2">from slow to breakneck</span>
                 </dd>
               </div>
               <div>
-                <dt className="eyebrow text-ink">A letra é a forma do livro</dt>
+                <dt className="eyebrow text-ink">The typeface is the book’s form</dt>
                 <dd className="mt-2 text-[0.9rem] leading-snug text-ink-soft">
-                  <span className="face-serif text-[0.72rem] text-ink">Romance</span>,{" "}
-                  <span className="face-italic text-ink">poesia e novela</span>,{" "}
-                  <span className="face-grotesque text-[0.78rem] text-ink">ensaio</span>,{" "}
-                  <span className="face-mono text-[0.72rem] text-ink">ficção científica</span>.
+                  <span className="face-serif text-[0.72rem] text-ink">Novel</span>,{" "}
+                  <span className="face-italic text-ink">poetry and novella</span>,{" "}
+                  <span className="face-grotesque text-[0.78rem] text-ink">essay</span>,{" "}
+                  <span className="face-mono text-[0.72rem] text-ink">science fiction</span>.
                 </dd>
               </div>
             </div>
@@ -82,11 +82,11 @@ export function Colophon({ embedModel, chatModel }: { embedModel: string; chatMo
                 <span aria-hidden className="relative inline-block h-5 w-[11px] bg-paper-light shadow-[0_0_0_0.5px_rgb(28_26_23/0.4)]">
                   <span className="absolute inset-x-[2.5px] top-1 h-[1.5px] bg-vermilion" />
                 </span>
-                marcador de papel: há uma nota da livreira
+                paper bookmark: there is a bookseller’s note
               </span>
               <span className="inline-flex items-center gap-2">
                 <MiniSpine width={12} height={20} color={KRAFT} />
-                papel pardo: a IA ainda não leu a sinopse
+                kraft paper: the AI hasn’t read the synopsis yet
               </span>
             </div>
           </dl>
@@ -94,48 +94,48 @@ export function Colophon({ embedModel, chatModel }: { embedModel: string; chatMo
 
         <section aria-labelledby="ai-heading">
           <h2 id="ai-heading" className="eyebrow text-ink">
-            Como a estante responde
+            How the shelf answers
           </h2>
           <div className="mt-3 space-y-3 text-[0.98rem] leading-relaxed text-ink-soft">
             <p>
-              Cada sinopse foi lida por um modelo aberto que roda neste computador ({chatModel}, via Ollama). Ele
-              descreve atmosfera, ritmo, densidade, estilo e temas, e precisa apontar o trecho da sinopse que sustenta
-              cada leitura.
+              Each synopsis was read by an open model running on this computer ({chatModel}, via Ollama). It
+              describes atmosphere, pace, density, style and themes, and has to point to the excerpt of the synopsis
+              that supports each reading.
             </p>
             <p>
-              Sua pergunta vira um vetor ({embedModel}) e é comparada com essas leituras. Quando a estante não tem uma
-              boa resposta, ela diz.
+              Your question becomes a vector ({embedModel}) and is compared with those readings. When the shelf has
+              no good answer, it says so.
             </p>
-            <p>A livreira pode corrigir qualquer classificação. Notas pessoais são sempre escritas por gente.</p>
+            <p>The bookseller can correct any classification. Personal notes are always written by people.</p>
           </div>
         </section>
 
         <section aria-labelledby="sources-heading">
           <h2 id="sources-heading" className="eyebrow text-ink">
-            De onde vêm os dados
+            Where the data comes from
           </h2>
           <div className="mt-3 space-y-3 text-[0.98rem] leading-relaxed text-ink-soft">
             <p>
-              Dados bibliográficos e capas:{" "}
+              Bibliographic data and covers:{" "}
               <a className="ink-link" href="https://openlibrary.org" target="_blank" rel="noreferrer">
                 Open Library
               </a>
-              . Sinopses:{" "}
+              . Synopses:{" "}
               <a className="ink-link" href="https://pt.wikipedia.org" target="_blank" rel="noreferrer">
-                Wikipédia
+                Portuguese Wikipedia
               </a>
-              , sob licença{" "}
+              , translated into English, under the{" "}
               <a
                 className="ink-link"
-                href="https://creativecommons.org/licenses/by-sa/4.0/deed.pt-br"
+                href="https://creativecommons.org/licenses/by-sa/4.0/deed.en"
                 target="_blank"
                 rel="noreferrer"
               >
                 CC BY-SA 4.0
-              </a>
-              .
+              </a>{" "}
+              license.
             </p>
-            <p>Preços e estoque marcados como demonstrativos não são dados comerciais reais.</p>
+            <p>Prices and stock marked as demo are not real commercial data.</p>
           </div>
         </section>
       </div>

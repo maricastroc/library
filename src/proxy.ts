@@ -9,11 +9,11 @@ export function proxy(request: NextRequest) {
   const isApi = pathname.startsWith("/api/admin");
 
   if (isApi) {
-    if (!authorized) return NextResponse.json({ error: "Acesso restrito ao balcão da livraria." }, { status: 401 });
+    if (!authorized) return NextResponse.json({ error: "Access restricted to the bookshop counter." }, { status: 401 });
     if (request.method !== "GET" && request.method !== "HEAD") {
       const origin = request.headers.get("origin");
       if (origin && new URL(origin).host !== request.nextUrl.host) {
-        return NextResponse.json({ error: "Origem não permitida." }, { status: 403 });
+        return NextResponse.json({ error: "Origin not allowed." }, { status: 403 });
       }
     }
     return NextResponse.next();

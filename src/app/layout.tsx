@@ -40,11 +40,11 @@ const caveat = Caveat({
 
 export const metadata: Metadata = {
   title: {
-    default: "Entrelinhas — livraria independente, estante viva",
-    template: "%s — Entrelinhas",
+    default: "Subtext — independent bookshop, living shelf",
+    template: "%s — Subtext",
   },
   description:
-    "Uma estante digital que responde ao que você quer sentir. Descubra livros por atmosfera, ritmo e intenção, com a curadoria de uma livraria independente.",
+    "A digital shelf that answers to what you want to feel. Discover books by atmosphere, pace and intent, curated by an independent bookshop.",
 };
 
 export const viewport: Viewport = {
@@ -56,7 +56,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="pt-BR"
+      lang="en"
       className={`${fraunces.variable} ${newsreader.variable} ${bricolage.variable} ${plexMono.variable} ${caveat.variable}`}
     >
       <body>{children}</body>

@@ -9,10 +9,10 @@ import { layoutShelf, neighborInDirection } from "@/lib/shelf/layout";
 function book(overrides: Partial<ShelfBook> = {}): ShelfBook {
   return {
     id: 1,
-    slug: "livro-autora",
-    title: "Um Livro",
-    author: "Uma Autora",
-    genre: "Romance",
+    slug: "book-author",
+    title: "A Book",
+    author: "An Author",
+    genre: "Novel",
     pages: 240,
     year: 1990,
     priceCents: 4990,
@@ -66,7 +66,7 @@ describe("spine identity", () => {
   });
 
   it("respects size limits and never returns an empty title", () => {
-    const long = spineIdentity(book({ title: "Uma Aprendizagem ou O Livro dos Prazeres e Outras Histórias Muito Compridas", pages: 90, genre: "Poesia", density: 1 }));
+    const long = spineIdentity(book({ title: "An Apprenticeship or The Book of Pleasures and Other Very Long Stories", pages: 90, genre: "Poetry", density: 1 }));
     expect(long.height).toBeGreaterThanOrEqual(SPINE_MIN_HEIGHT);
     expect(long.height).toBeLessThanOrEqual(SPINE_MAX_HEIGHT);
     expect(long.title.length).toBeGreaterThan(3);
@@ -77,15 +77,15 @@ describe("spine identity", () => {
 const many: ShelfBook[] = Array.from({ length: 120 }, (_, index) =>
   book({
     id: index + 1,
-    slug: `livro-${index + 1}`,
-    title: `Livro número ${index + 1}`,
-    author: `Autora ${String.fromCharCode(65 + (index % 20))}`,
+    slug: `book-${index + 1}`,
+    title: `Book number ${index + 1}`,
+    author: `Author ${String.fromCharCode(65 + (index % 20))}`,
     pages: 100 + ((index * 37) % 600),
     atmospheres: [ATMOSPHERE_IDS[index % ATMOSPHERE_IDS.length]],
     pace: (index % 5) + 1,
     density: (index % 4) + 1,
     priceCents: 3000 + index * 50,
-    note: index % 9 === 0 ? "Uma nota" : null,
+    note: index % 9 === 0 ? "A note" : null,
   }),
 );
 const identities = new Map(many.map((item) => [item.id, spineIdentity(item)]));

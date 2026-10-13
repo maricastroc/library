@@ -30,7 +30,7 @@ export function synopsisText(book: BookDetail): string {
   const parts = [`${book.author}.`];
   if (book.genre) parts.push(`${book.genre}.`);
   if (book.synopsis) parts.push(book.synopsis);
-  if (book.note) parts.push(`Nota da livreira: ${book.note}`);
+  if (book.note) parts.push(`Bookseller's note: ${book.note}`);
   return parts.join(" ");
 }
 

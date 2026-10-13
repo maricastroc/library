@@ -31,8 +31,8 @@ export type VectorIndex = {
 };
 
 type GlobalWithIndex = typeof globalThis & {
-  __entrelinhasIndex?: VectorIndex;
-  __entrelinhasAnchors?: { model: string; vectors: Map<AtmosphereId, Float32Array> };
+  __subtextIndex?: VectorIndex;
+  __subtextAnchors?: { model: string; vectors: Map<AtmosphereId, Float32Array> };
 };
 
 const AMBIGUOUS_NAME_TOKENS = new Set(
@@ -89,7 +89,7 @@ function buildAuthors(books: BookDetail[]): AuthorEntry[] {
 export function getVectorIndex(): VectorIndex {
   const scope = globalThis as GlobalWithIndex;
   const signature = catalogSignature();
-  if (scope.__entrelinhasIndex?.signature === signature) return scope.__entrelinhasIndex;
+  if (scope.__subtextIndex?.signature === signature) return scope.__subtextIndex;
 
   const database = db();
   const details = listBookDetails();
@@ -124,7 +124,7 @@ export function getVectorIndex(): VectorIndex {
       .filter((entry) => entry.folded.length >= 6 && entry.folded.split(" ").length >= 2),
     genres: [...new Set(details.map((book) => book.genre).filter((genre): genre is string => Boolean(genre)))],
   };
-  scope.__entrelinhasIndex = index;
+  scope.__subtextIndex = index;
   return index;
 }
 
@@ -152,13 +152,13 @@ export async function embedCached(prompts: string[]): Promise<{ vectors: Float32
 
 export async function atmosphereAnchors(): Promise<Map<AtmosphereId, Float32Array>> {
   const scope = globalThis as GlobalWithIndex;
-  if (scope.__entrelinhasAnchors?.model === EMBED_MODEL) return scope.__entrelinhasAnchors.vectors;
+  if (scope.__subtextAnchors?.model === EMBED_MODEL) return scope.__subtextAnchors.vectors;
   const prompts = ATMOSPHERES.map((atmosphere) =>
-    documentPrompt(`Um livro de atmosfera ${atmosphere.label}: ${atmosphere.description}.`),
+    documentPrompt(`A book with a ${atmosphere.label} atmosphere: ${atmosphere.description}.`),
   );
   const { vectors } = await embedCached(prompts);
   const anchors = new Map<AtmosphereId, Float32Array>();
   ATMOSPHERES.forEach((atmosphere, position) => anchors.set(atmosphere.id, vectors[position]));
-  scope.__entrelinhasAnchors = { model: EMBED_MODEL, vectors: anchors };
+  scope.__subtextAnchors = { model: EMBED_MODEL, vectors: anchors };
   return anchors;
 }

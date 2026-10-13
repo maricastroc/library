@@ -7,11 +7,11 @@ import { ensureBackgroundEnrichment } from "@/lib/semantic/pipeline";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
-  if (!(await isAdmin())) return NextResponse.json({ error: "Acesso restrito ao balcão da livraria." }, { status: 401 });
+  if (!(await isAdmin())) return NextResponse.json({ error: "Access restricted to the bookshop counter." }, { status: 401 });
   const form = await request.formData().catch(() => null);
   const file = form?.get("file");
-  if (!(file instanceof File)) return NextResponse.json({ error: "Envie um arquivo CSV." }, { status: 400 });
-  if (file.size > IMPORT_MAX_BYTES) return NextResponse.json({ error: "O arquivo passa de 2 MB." }, { status: 413 });
+  if (!(file instanceof File)) return NextResponse.json({ error: "Upload a CSV file." }, { status: 400 });
+  if (file.size > IMPORT_MAX_BYTES) return NextResponse.json({ error: "The file is over 2 MB." }, { status: 413 });
 
   const buffer = Buffer.from(await file.arrayBuffer());
   let text = buffer.toString("utf8");

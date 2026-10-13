@@ -1,10 +1,10 @@
-# Entrelinhas
+# Subtext
 
-Estante digital para livrarias independentes. O visitante descreve o que quer sentir ("algo melancólico, mas reconfortante") e a estante reorganiza as lombadas, explica por que cada livro foi indicado e abre o livro escolhido. A IA é aberta e roda neste computador, via Ollama.
+A digital shelf for independent bookshops. The visitor describes what they want to feel ("something melancholic, but comforting") and the shelf rearranges its spines, explains why each book was suggested and opens the chosen book. The AI is open and runs on this computer, through Ollama.
 
-## Rodar
+## Running
 
-Requisitos: Node 22+, [Ollama](https://ollama.com) com os modelos `embeddinggemma` e `gemma4:e4b`.
+Requirements: Node 22+, [Ollama](https://ollama.com) with the `embeddinggemma` and `gemma4:e4b` models.
 
 ```bash
 ollama pull embeddinggemma && ollama pull gemma4:e4b
@@ -15,36 +15,36 @@ npm run ai:enrich
 npm run dev
 ```
 
-Edite `.env.local` antes de subir: `ADMIN_PASSWORD` (8+ caracteres) e `SESSION_SECRET` (24+ caracteres) protegem o balcão em `/admin`.
+Edit `.env.local` before starting: `ADMIN_PASSWORD` (8+ characters) and `SESSION_SECRET` (24+ characters) protect the counter at `/admin`.
 
-O catálogo inicial já está em `data/seed/catalog.json`. Para refazer a coleta na Open Library e na Wikipédia: `npm run catalog:fetch`.
+The initial catalog is already in `data/seed/catalog.json`. To fetch it again from Open Library and Wikipedia: `npm run catalog:fetch`. The fetch brings synopses in Portuguese; the ones in the repository were translated into English afterwards.
 
-## Comandos
+## Commands
 
-| comando | o que faz |
+| command | what it does |
 | --- | --- |
-| `npm run dev` | aplicação em desenvolvimento |
-| `npm run build && npm start` | versão de produção |
-| `npm test` | testes automatizados |
-| `npm run lint` · `npm run typecheck` | verificações estáticas |
-| `npm run db:seed` | carrega o catálogo inicial (`--complete` inclui livros sem sinopse; `--notes` aplica as notas de exemplo; `--refresh-meta` atualiza dados bibliográficos) |
-| `npm run ai:enrich` | embeddings e classificação dos livros pendentes (`--all` refaz tudo; `--retry` refaz os que falharam) |
-| `npm run ai:eval -- --judge` | compara busca por palavras e busca semântica; grava `data/eval/REPORT.md` e `data/eval/results.json` |
+| `npm run dev` | application in development |
+| `npm run build && npm start` | production build |
+| `npm test` | automated tests |
+| `npm run lint` · `npm run typecheck` | static checks |
+| `npm run db:seed` | loads the initial catalog (`--complete` includes books without a synopsis; `--notes` applies the sample notes; `--refresh-meta` updates bibliographic data; `--refresh-titles` and `--refresh-synopsis` update titles and synopses) |
+| `npm run ai:enrich` | embeddings and classification of pending books (`--all` redoes everything; `--retry` redoes the ones that failed) |
+| `npm run ai:eval -- --judge` | compares keyword search and semantic search; writes `data/eval/REPORT.md` and `data/eval/results.json` |
 
-## Onde está cada coisa
+## Where everything lives
 
-| caminho | responsabilidade |
+| path | responsibility |
 | --- | --- |
-| `src/lib/catalog` | livros, ISBN, importação CSV |
-| `src/lib/semantic` | taxonomia, cliente Ollama, classificação, embeddings, fila de enriquecimento |
-| `src/lib/search` | interpretação da consulta, busca lexical, busca semântica, justificativas |
-| `src/lib/shelf` | regras visuais das lombadas, ordenação e layout da estante |
-| `src/lib/shop`, `src/lib/showcase`, `src/lib/interest`, `src/lib/auth` | configuração da livraria, vitrines, reservas, sessão do balcão |
-| `src/lib/db` | conexão SQLite, esquema e migrações |
-| `src/components/shelf`, `src/components/book`, `src/components/showcase` | experiência pública: estante, livro aberto, vitrine |
-| `src/components/admin`, `src/app/admin` | balcão da livraria |
-| `scripts` | coleta do catálogo, carga, enriquecimento, avaliação |
+| `src/lib/catalog` | books, ISBN, CSV import |
+| `src/lib/semantic` | taxonomy, Ollama client, classification, embeddings, enrichment queue |
+| `src/lib/search` | query interpretation, lexical search, semantic search, explanations |
+| `src/lib/shelf` | visual rules for the spines, sorting and shelf layout |
+| `src/lib/shop`, `src/lib/showcase`, `src/lib/interest`, `src/lib/auth` | bookshop settings, showcases, reservations, counter session |
+| `src/lib/db` | SQLite connection, schema and migrations |
+| `src/components/shelf`, `src/components/book`, `src/components/showcase` | public experience: shelf, open book, showcase |
+| `src/components/admin`, `src/app/admin` | the bookshop's counter |
+| `scripts` | catalog fetch, seeding, enrichment, evaluation |
 
-O código (arquivos, rotas, funções, valores internos, classes CSS) está em inglês; os textos da interface, os prompts do modelo e os dados do catálogo estão em português.
+Everything is in English: the code (files, routes, functions, internal values, CSS classes), the interface, the model prompts and the catalog data. Books carry the title of their English-language edition when one exists; author names and publishers stay as printed on the Brazilian editions the shop sells.
 
-Decisões de arquitetura e pendências: [DECISIONS.md](DECISIONS.md).
+Architecture decisions and open items: [DECISIONS.md](DECISIONS.md).

@@ -27,7 +27,7 @@ function IndexRow({ book, result, onOpen }: { book: ShelfBook; result?: SearchRe
           ) : null}
         </span>
         <span className="eyebrow shrink-0 text-ink-soft">
-          {book.stock === 0 ? "esgotado" : (price ?? "sem preço")}
+          {book.stock === 0 ? "out of stock" : (price ?? "no price")}
         </span>
       </button>
     </li>
@@ -52,7 +52,7 @@ export function IndexList({
     <div className="border-t-[3px] border-ink pt-6">
       {matches && matches.length > 0 ? (
         <section className="mb-10">
-          <h2 className="eyebrow mb-2 text-vermilion">A estante respondeu · {matches.length}</h2>
+          <h2 className="eyebrow mb-2 text-vermilion">The shelf answered · {matches.length}</h2>
           <ol className="gap-x-12 sm:columns-2">
             {matches.map((id) => {
               const book = byId.get(id);

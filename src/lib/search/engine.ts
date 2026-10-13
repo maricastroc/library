@@ -95,7 +95,7 @@ function themeMatches(themes: string[], queryTokens: string[]): string[] {
 }
 
 const BIBLIOGRAPHIC_SENTENCE =
-  /(publicad[oa]|lançad[oa]|editora|edição|prêmio|premiad[oa]|adaptad[oa]|adaptação|traduzid[oa]|tradução|vendid[oa]s?|exemplares|filme|minissérie|telenovela|best-?seller|lista d[eo]s|considerad[oa] (?:um|uma|pel[oa])|escrit[oa] por|é um(?:a)? (?:romance|livro|novela|obra|conto|coletânea|peça|poema|ensaio))/i;
+  /(published|released|publisher|edition|prize|award|adapted|adaptation|translated|translation|copies|film|miniseries|telenovela|best-?seller|list of|considered (?:an?|one|by)|regarded as|written by|is an? (?:[\w-]+ )?(?:novel|book|novella|work|short story|collection|play|poem|essay))/i;
 
 function bestQuote(entry: IndexedBook, queryVector: Float32Array, reference: number): { text: string; value: number } | null {
   let best: { text: string; value: number } | null = null;
@@ -111,7 +111,7 @@ function bestQuote(entry: IndexedBook, queryVector: Float32Array, reference: num
 
 function listLabels(labels: string[]): string {
   if (labels.length <= 1) return labels.join("");
-  return `${labels.slice(0, -1).join(", ")} e ${labels[labels.length - 1]}`;
+  return `${labels.slice(0, -1).join(", ")} and ${labels[labels.length - 1]}`;
 }
 
 type Scored = {
@@ -140,7 +140,7 @@ function buildReasons(entry: IndexedBook, context: Context, queryVector: Float32
   const classified = book.semanticStatus === "ready";
 
   if (parsed.reference?.inCatalog && !parsed.reference.similar && parsed.reference.bookIds.includes(book.id)) {
-    reasons.push({ kind: "author", label: parsed.reference.kind === "author" ? `de ${book.author}` : "é o livro que você citou" });
+    reasons.push({ kind: "author", label: parsed.reference.kind === "author" ? `by ${book.author}` : "this is the book you mentioned" });
   }
 
   if (parsed.reference?.similar && context.referenceBooks.length > 0 && classified) {
@@ -149,22 +149,22 @@ function buildReasons(entry: IndexedBook, context: Context, queryVector: Float32
     const sharedAtmospheres = book.atmospheres.filter((id) => referenceAtmospheres.has(id)).slice(0, 2).map(atmosphereLabel);
     const sharedStyles = book.styles.filter((id) => referenceStyles.has(id)).slice(0, 1).map(styleLabel);
     const shared = [
-      sharedAtmospheres.length > 0 ? `atmosfera ${listLabels(sharedAtmospheres)}` : null,
-      sharedStyles.length > 0 ? `estilo ${listLabels(sharedStyles)}` : null,
+      sharedAtmospheres.length > 0 ? `${listLabels(sharedAtmospheres)} atmosphere` : null,
+      sharedStyles.length > 0 ? `${listLabels(sharedStyles)} style` : null,
     ].filter((item): item is string => item !== null);
     if (shared.length > 0) {
-      const target = parsed.reference.kind === "author" ? `${parsed.reference.label}` : "o livro citado";
-      reasons.push({ kind: "reference", label: `em comum com ${target}: ${shared.join("; ")}` });
+      const target = parsed.reference.kind === "author" ? `${parsed.reference.label}` : "the book you mentioned";
+      reasons.push({ kind: "reference", label: `in common with ${target}: ${shared.join("; ")}` });
     }
   }
 
   const matchedAtmospheres = book.atmospheres.filter((id) => context.wanted.includes(id) || context.inferred.includes(id));
   if (matchedAtmospheres.length > 0) {
-    reasons.push({ kind: "atmosphere", label: `atmosfera ${listLabels(matchedAtmospheres.map(atmosphereLabel))}` });
+    reasons.push({ kind: "atmosphere", label: `${listLabels(matchedAtmospheres.map(atmosphereLabel))} atmosphere` });
   }
 
   const themes = themeMatches(book.themes, context.queryTokens).slice(0, 3);
-  if (themes.length > 0) reasons.push({ kind: "theme", label: `temas: ${themes.join(", ")}` });
+  if (themes.length > 0) reasons.push({ kind: "theme", label: `themes: ${themes.join(", ")}` });
 
   const matchedExperiences = book.experiences.filter((id) => parsed.experiences.includes(id));
   if (matchedExperiences.length > 0) {
@@ -173,34 +173,34 @@ function buildReasons(entry: IndexedBook, context: Context, queryVector: Float32
 
   if (parsed.pace && book.pace) {
     const matches = parsed.pace === "slow" ? book.pace <= 2 : book.pace >= 4;
-    if (matches) reasons.push({ kind: "pace", label: `ritmo ${paceLabel(book.pace)}` });
+    if (matches) reasons.push({ kind: "pace", label: `${paceLabel(book.pace)} pace` });
   }
   if (parsed.length && book.pages) {
     const matches = parsed.length === "short" ? book.pages <= 200 : book.pages >= 420;
-    if (matches) reasons.push({ kind: "length", label: `${book.pages} páginas` });
+    if (matches) reasons.push({ kind: "length", label: `${book.pages} pages` });
   }
   if (parsed.era && book.year) {
     const matches = parsed.era === "classic" ? book.year <= 1975 : book.year >= 1985;
-    if (matches) reasons.push({ kind: "era", label: `publicado em ${book.year}` });
+    if (matches) reasons.push({ kind: "era", label: `published in ${book.year}` });
   }
   if (parsed.genres.length > 0 && book.genre && parsed.genres.includes(book.genre)) {
     reasons.push({ kind: "genre", label: book.genre.toLowerCase() });
   }
   if (book.note) {
-    reasons.push({ kind: "note", label: book.noteOrigin === "example" ? "tem nota de exemplo" : "tem nota da livreira" });
+    reasons.push({ kind: "note", label: book.noteOrigin === "example" ? "has a sample note" : "has a bookseller's note" });
   }
 
   const quote = parsed.reference?.similar && !parsed.hasFreeText ? null : bestQuote(entry, queryVector, context.topSyn);
   if (reasons.filter((reason) => reason.kind !== "note").length === 0) {
     reasons.unshift({
       kind: "similarity",
-      label: quote ? "a sinopse se aproxima do que você descreveu" : "proximidade geral com a sinopse",
+      label: quote ? "the synopsis comes close to what you described" : "overall closeness to the synopsis",
     });
   }
 
   let caveat: string | null = null;
-  if (!classified) caveat = "Este livro ainda não tem leitura da IA; aparece só pela proximidade com a sinopse.";
-  else if (book.confidence === "low") caveat = "A classificação deste livro se apoia em uma sinopse curta.";
+  if (!classified) caveat = "This book has no AI reading yet; it appears only because its synopsis is close.";
+  else if (book.confidence === "low") caveat = "This book's classification rests on a short synopsis.";
   return { reasons, quote: quote?.text ?? null, caveat };
 }
 
@@ -261,7 +261,7 @@ export async function semanticSearch(
       query: parsed.original,
       interpretation: toInterpretation(emptyContext, [], index),
       confidence: "none",
-      message: "O catálogo ainda não foi indexado pela IA. Assim que os embeddings forem gerados, a busca por intenção passa a funcionar.",
+      message: "The catalog has not been indexed by the AI yet. Once the embeddings are generated, search by intent will start working.",
       results: [],
       engine: { ...engine, tookMs: Date.now() - started },
     };
@@ -284,7 +284,7 @@ export async function semanticSearch(
       const phraseFolded = normalizeText(phrase);
       const handledByCue =
         parsed.avoidAtmospheres.length > 0 ||
-        /\b(long|curt|lent|rapid|parad|arrastad|extens|breve)/.test(phraseFolded);
+        /\b(long|short|slow|fast|quick|brief|lengthy|dragg)/.test(phraseFolded);
       const fromAnchors = inferAtmospheres(avoidVectors[position], anchors, [...wanted, ...avoided]);
       const strong = fromAnchors.filter((id) => dot(avoidVectors[position], anchors.get(id) as Float32Array) >= 0.36);
       for (const id of strong) if (!avoidedInferred.includes(id) && !inferred.includes(id)) avoidedInferred.push(id);
@@ -408,10 +408,10 @@ export async function semanticSearch(
   const missingReference = Boolean(useFull && parsed.reference && !parsed.reference.inCatalog);
   if (missingReference && parsed.reference) {
     if (parsed.hasFreeText && confidence !== "none") {
-      message = `${parsed.reference.label} não está neste catálogo, então não consigo comparar com essa referência. Mostro o que mais se aproxima do restante do seu pedido.`;
+      message = `${parsed.reference.label} is not in this catalog, so I cannot compare against that reference. Here is what comes closest to the rest of your request.`;
       if (confidence === "high") confidence = "medium";
     } else {
-      message = `${parsed.reference.label} não está neste catálogo. Sem conhecer os livros dessa referência, prefiro não inventar uma semelhança.`;
+      message = `${parsed.reference.label} is not in this catalog. Without knowing that reference's books, I would rather not invent a resemblance.`;
       confidence = "none";
     }
   }
@@ -419,11 +419,11 @@ export async function semanticSearch(
   let limit = options.limit ?? SEARCH_TUNING.maxResults;
   let picked: Scored[] = [];
   if (confidence === "none") {
-    message = message ?? "Não encontrei nesta estante nada que responda bem a esse pedido. Talvez o catálogo não tenha esse tipo de livro.";
+    message = message ?? "I found nothing on this shelf that answers this request well. The catalog may not have this kind of book.";
   } else {
     if (confidence === "low") {
       limit = Math.min(limit, 3);
-      message = message ?? "A estante não tem uma resposta clara para esse pedido. Estes são os livros mais próximos, mas a correspondência é fraca.";
+      message = message ?? "The shelf has no clear answer for this request. These are the closest books, but the match is weak.";
     }
     const top = ranked[0]?.score ?? 0;
     picked = ranked.filter((item, position) => position < SEARCH_TUNING.minResults || item.score >= top - SEARCH_TUNING.scoreWindow).slice(0, limit);
@@ -434,14 +434,14 @@ export async function semanticSearch(
     }
   }
   if (unassessable.length > 0) {
-    const note = `Não tenho como avaliar "${unassessable.join('", "')}" com os dados do catálogo; considerei o restante do pedido.`;
+    const note = `I have no way to assess "${unassessable.join('", "')}" with the catalog data; I considered the rest of your request.`;
     message = message ? `${message} ${note}` : note;
   }
 
   const results: SearchResult[] = picked.map((item) => {
     const { reasons, quote, caveat } = useFull
       ? buildReasons(item.entry, context, queryVector)
-      : { reasons: [{ kind: "similarity" as const, label: "proximidade com a sinopse" }], quote: null, caveat: null };
+      : { reasons: [{ kind: "similarity" as const, label: "closeness to the synopsis" }], quote: null, caveat: null };
     return {
       id: item.entry.book.id,
       slug: item.entry.book.slug,

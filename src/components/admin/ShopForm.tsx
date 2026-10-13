@@ -9,25 +9,25 @@ export function ShopForm({ shop }: { shop: ShopConfig }) {
   const [state, action] = useActionState(saveShop, INITIAL_FORM_STATE);
   return (
     <form action={action} className="space-y-5">
-      <Field label="Nome da livraria" name="name" error={state.fields?.name}>
+      <Field label="Bookshop name" name="name" error={state.fields?.name}>
         <input id="name" name="name" className="field" defaultValue={shop.name} required maxLength={60} />
       </Field>
-      <Field label="Frase de apresentação" name="tagline">
+      <Field label="Tagline" name="tagline">
         <input id="tagline" name="tagline" className="field" defaultValue={shop.tagline} maxLength={120} />
       </Field>
-      <Field label="Quem assina as notas" name="bookseller" hint="Aparece nas plaquinhas e dentro do livro. Vazio mostra “a livreira”.">
+      <Field label="Who signs the notes" name="bookseller" hint="Shown on the shelf talkers and inside the book. Left empty, it shows “the bookseller”.">
         <input id="bookseller" name="bookseller" className="field" defaultValue={shop.bookseller} maxLength={60} />
       </Field>
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Cidade" name="city">
+        <Field label="City" name="city">
           <input id="city" name="city" className="field" defaultValue={shop.city} maxLength={80} />
         </Field>
-        <Field label="Contato público" name="contact" hint="Telefone, e-mail ou endereço mostrado nas vitrines.">
+        <Field label="Public contact" name="contact" hint="Phone, email or address shown on the showcases.">
           <input id="contact" name="contact" className="field" defaultValue={shop.contact} maxLength={120} />
         </Field>
       </div>
       <div className="flex flex-wrap items-center gap-4">
-        <SubmitButton>Salvar</SubmitButton>
+        <SubmitButton>Save</SubmitButton>
         <FormFeedback state={state} />
       </div>
     </form>

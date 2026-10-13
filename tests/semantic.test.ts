@@ -6,54 +6,55 @@ import { attributeLabel, confidenceLabel, describeProfile } from "@/lib/semantic
 import { blobToVector, centroid, dot, vectorToBlob } from "@/lib/semantic/vectors";
 
 const SYNOPSIS =
-  "Nas profundezas do sertão baiano, as irmãs Bibiana e Belonísia encontram uma velha e misteriosa faca na mala guardada sob a cama da avó. Ocorre então um acidente.";
+  "Deep in the sertão of Bahia, the sisters Bibiana and Belonísia find an old and mysterious knife in the suitcase kept under their grandmother's bed. Then an accident happens.";
 
 describe("evidence", () => {
   it("locates a quote ignoring accents and case, and returns the original text", () => {
-    expect(locateQuote(SYNOPSIS, "nas profundezas do sertao baiano")).toBe("Nas profundezas do sertão baiano");
-    expect(locateQuote(SYNOPSIS, "velha e misteriosa faca na mala")).toBe("velha e misteriosa faca na mala");
+    expect(locateQuote(SYNOPSIS, "deep in the sertao of bahia")).toBe("Deep in the sertão of Bahia");
+    expect(locateQuote(SYNOPSIS, "old and mysterious knife in the suitcase")).toBe("old and mysterious knife in the suitcase");
   });
 
   it("rejects quotes that are not in the synopsis", () => {
-    expect(locateQuote(SYNOPSIS, "as irmãs vivem felizes para sempre")).toBeNull();
-    expect(locateQuote(SYNOPSIS, "faca")).toBeNull();
+    expect(locateQuote(SYNOPSIS, "the sisters live happily ever after")).toBeNull();
+    expect(locateQuote(SYNOPSIS, "knife")).toBeNull();
   });
 
   it("cleans themes returned by the model", () => {
-    expect(cleanThemes(["Luto.", "luto", "  Relação entre irmãs ", "x", 42, "um tema com palavras demais para ser tema"])).toEqual([
-      "luto",
-      "relação entre irmãs",
+    expect(cleanThemes(["Grief.", "grief", "  Bond between sisters ", "x", 42, "a theme with far too many words in it"])).toEqual([
+      "grief",
+      "bond between sisters",
     ]);
   });
 
   it("changes the hash when the synopsis changes", () => {
-    const base = { title: "A", author: "B", genre: "Romance", synopsis: SYNOPSIS, subjects: [] };
+    const base = { title: "A", author: "B", genre: "Novel", synopsis: SYNOPSIS, subjects: [] };
     expect(enrichmentInputHash(base)).toBe(enrichmentInputHash({ ...base }));
-    expect(enrichmentInputHash(base)).not.toBe(enrichmentInputHash({ ...base, synopsis: `${SYNOPSIS} Mais.` }));
+    expect(enrichmentInputHash(base)).not.toBe(enrichmentInputHash({ ...base, synopsis: `${SYNOPSIS} More.` }));
   });
 });
 
 describe("taxonomy labels", () => {
-  it("describes a reading profile in Portuguese", () => {
+  it("describes a reading profile in English", () => {
     const text = describeProfile({
       atmospheres: ["melancholic", "comforting"],
       pace: 2,
       density: 3,
       styles: ["lyrical"],
       experiences: ["slow_read"],
-      themes: ["luto"],
+      themes: ["grief"],
       portrait: null,
     });
-    expect(text).toContain("melancólica");
-    expect(text).toContain("acolhedora");
-    expect(text).toContain("luto");
+    expect(text).toContain("melancholic");
+    expect(text).toContain("comforting");
+    expect(text).toContain("to read slowly");
+    expect(text).toContain("grief");
   });
 
-  it("maps internal ids to Portuguese display labels", () => {
-    expect(attributeLabel("melancholic")).toBe("melancólica");
-    expect(attributeLabel("wry")).toBe("irônico");
-    expect(attributeLabel("isolamento")).toBe("isolamento");
-    expect(confidenceLabel("medium")).toBe("média");
+  it("maps internal ids to display labels", () => {
+    expect(attributeLabel("fable")).toBe("fable-like");
+    expect(attributeLabel("one_sitting")).toBe("to read in one sitting");
+    expect(attributeLabel("isolation")).toBe("isolation");
+    expect(confidenceLabel("medium")).toBe("medium");
     expect(confidenceLabel(null)).toBe("—");
   });
 });
@@ -61,7 +62,7 @@ describe("taxonomy labels", () => {
 describe("text and vectors", () => {
   it("splits a synopsis into sentences", () => {
     expect(splitSentences(SYNOPSIS)).toHaveLength(1);
-    expect(splitSentences(`${SYNOPSIS} E para sempre suas vidas estarão ligadas, a ponto de uma precisar ser a voz da outra.`)).toHaveLength(2);
+    expect(splitSentences(`${SYNOPSIS} And their lives will be bound together forever, to the point that one must become the voice of the other.`)).toHaveLength(2);
   });
 
   it("preserves vectors through storage", () => {

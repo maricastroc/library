@@ -1,7 +1,7 @@
 const BASE_URL = process.env.OLLAMA_URL ?? "http://127.0.0.1:11434";
 
-export const EMBED_MODEL = process.env.ENTRELINHAS_EMBED_MODEL ?? "embeddinggemma";
-export const CHAT_MODEL = process.env.ENTRELINHAS_CHAT_MODEL ?? "gemma4:e4b";
+export const EMBED_MODEL = process.env.SUBTEXT_EMBED_MODEL ?? "embeddinggemma";
+export const CHAT_MODEL = process.env.SUBTEXT_CHAT_MODEL ?? "gemma4:e4b";
 
 export class OllamaError extends Error {
   constructor(
@@ -25,14 +25,14 @@ async function post<T>(path: string, body: unknown, timeoutMs: number): Promise<
   } catch (error) {
     const name = error instanceof Error ? error.name : "";
     if (name === "TimeoutError" || name === "AbortError") {
-      throw new OllamaError("O modelo local demorou demais para responder.", "timeout");
+      throw new OllamaError("The local model took too long to respond.", "timeout");
     }
-    throw new OllamaError("Não foi possível falar com o Ollama neste computador.", "unavailable");
+    throw new OllamaError("Could not reach Ollama on this computer.", "unavailable");
   }
   if (!response.ok) {
     const detail = await response.text().catch(() => "");
     const kind = response.status === 404 ? "model" : "response";
-    throw new OllamaError(`Ollama respondeu ${response.status}: ${detail.slice(0, 200)}`, kind);
+    throw new OllamaError(`Ollama replied ${response.status}: ${detail.slice(0, 200)}`, kind);
   }
   return (await response.json()) as T;
 }
@@ -70,7 +70,7 @@ export async function embedTexts(prompts: string[], timeoutMs = 60000): Promise<
       timeoutMs,
     );
     if (!data.embeddings || data.embeddings.length !== batch.length) {
-      throw new OllamaError("O modelo de embeddings devolveu uma resposta incompleta.", "response");
+      throw new OllamaError("The embedding model returned an incomplete response.", "response");
     }
     for (const embedding of data.embeddings) result.push(normalize(Float32Array.from(embedding)));
   }
@@ -89,11 +89,11 @@ export type ChatOptions = {
 export function extractJson(content: string): unknown {
   const start = content.indexOf("{");
   const end = content.lastIndexOf("}");
-  if (start === -1 || end <= start) throw new OllamaError("O modelo local não devolveu um JSON.", "response");
+  if (start === -1 || end <= start) throw new OllamaError("The local model did not return JSON.", "response");
   try {
     return JSON.parse(content.slice(start, end + 1));
   } catch {
-    throw new OllamaError("O modelo local devolveu um JSON inválido.", "response");
+    throw new OllamaError("The local model returned invalid JSON.", "response");
   }
 }
 
@@ -132,7 +132,7 @@ export async function chatText(options: ChatOptions): Promise<string> {
     options.timeoutMs ?? 60000,
   );
   const content = data.message?.content?.trim();
-  if (!content) throw new OllamaError("O modelo local devolveu uma resposta vazia.", "response");
+  if (!content) throw new OllamaError("The local model returned an empty response.", "response");
   return content;
 }
 

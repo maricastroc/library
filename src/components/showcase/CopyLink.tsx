@@ -19,7 +19,7 @@ export function CopyLink({ className = "" }: { className?: string }) {
       }}
     >
       <span aria-live="polite">
-        {status === "copied" ? "Link copiado" : status === "failed" ? "Copie o endereço da página" : "Copiar link da vitrine"}
+        {status === "copied" ? "Link copied" : status === "failed" ? "Copy the page address" : "Copy showcase link"}
       </span>
     </button>
   );

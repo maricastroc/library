@@ -37,14 +37,14 @@ export type IsbnResult = { ok: true; isbn: string } | { ok: false; reason: strin
 export function normalizeIsbn(value: string): IsbnResult {
   const cleaned = cleanIsbn(value);
   if (cleaned.length === 13) {
-    return isValidIsbn13(cleaned) ? { ok: true, isbn: cleaned } : { ok: false, reason: "dígito verificador inválido" };
+    return isValidIsbn13(cleaned) ? { ok: true, isbn: cleaned } : { ok: false, reason: "invalid check digit" };
   }
   if (cleaned.length === 10) {
     return isValidIsbn10(cleaned)
       ? { ok: true, isbn: isbn10To13(cleaned) }
-      : { ok: false, reason: "dígito verificador inválido" };
+      : { ok: false, reason: "invalid check digit" };
   }
-  return { ok: false, reason: "o ISBN deve ter 10 ou 13 dígitos" };
+  return { ok: false, reason: "an ISBN must have 10 or 13 digits" };
 }
 
 export function pickIsbn(candidates: string[]): string | null {

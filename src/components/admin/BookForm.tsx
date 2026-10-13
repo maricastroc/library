@@ -9,7 +9,7 @@ import { Field, SubmitButton, INITIAL_FORM_STATE, FormFeedback } from "./FormPar
 
 function priceValue(cents: number | null | undefined): string {
   if (cents === null || cents === undefined) return "";
-  return (cents / 100).toFixed(2).replace(".", ",");
+  return (cents / 100).toFixed(2);
 }
 
 export function BookForm({ book }: { book: BookDetail | null }) {
@@ -22,18 +22,18 @@ export function BookForm({ book }: { book: BookDetail | null }) {
     <form action={action} className="space-y-6" noValidate>
       {book ? <input type="hidden" name="id" value={book.id} /> : null}
       <div className="grid gap-x-8 gap-y-5 md:grid-cols-2">
-        <Field label="Título" name="title" error={errors.title}>
+        <Field label="Title" name="title" error={errors.title}>
           <input id="title" name="title" className="field" defaultValue={book?.title ?? ""} required maxLength={200} {...invalid("title")} />
         </Field>
-        <Field label="Autor(a)" name="author" error={errors.author}>
+        <Field label="Author" name="author" error={errors.author}>
           <input id="author" name="author" className="field" defaultValue={book?.author ?? ""} required maxLength={160} {...invalid("author")} />
         </Field>
-        <Field label="ISBN" name="isbn" error={errors.isbn} hint="10 ou 13 dígitos. Deixe vazio se não tiver certeza.">
+        <Field label="ISBN" name="isbn" error={errors.isbn} hint="10 or 13 digits. Leave it empty if you’re not sure.">
           <input id="isbn" name="isbn" className="field font-mono text-[0.95rem]" defaultValue={formatIsbn(book?.isbn ?? null) ?? ""} inputMode="numeric" {...invalid("isbn")} />
         </Field>
-        <Field label="Gênero" name="genre">
+        <Field label="Genre" name="genre">
           <select id="genre" name="genre" className="field" defaultValue={book?.genre ?? ""}>
-            <option value="">Sem gênero</option>
+            <option value="">No genre</option>
             {genres.map((genre) => (
               <option key={genre} value={genre}>
                 {genre}
@@ -41,42 +41,42 @@ export function BookForm({ book }: { book: BookDetail | null }) {
             ))}
           </select>
         </Field>
-        <Field label="Editora" name="publisher">
+        <Field label="Publisher" name="publisher">
           <input id="publisher" name="publisher" className="field" defaultValue={book?.publisher ?? ""} maxLength={120} />
         </Field>
         <div className="grid grid-cols-2 gap-6">
-          <Field label="Ano" name="year" error={errors.year}>
+          <Field label="Year" name="year" error={errors.year}>
             <input id="year" name="year" className="field" defaultValue={book?.year ?? ""} inputMode="numeric" {...invalid("year")} />
           </Field>
-          <Field label="Páginas" name="pages" error={errors.pages}>
+          <Field label="Pages" name="pages" error={errors.pages}>
             <input id="pages" name="pages" className="field" defaultValue={book?.pages ?? ""} inputMode="numeric" {...invalid("pages")} />
           </Field>
         </div>
         <Field
-          label="Preço (R$)"
+          label="Price (R$)"
           name="price"
           error={errors.price}
-          hint={book?.priceIsDemo ? "Valor demonstrativo. Ao alterar, passa a valer como preço real." : undefined}
+          hint={book?.priceIsDemo ? "Demo price. Once you change it, it counts as the real price." : undefined}
         >
-          <input id="price" name="price" className="field" defaultValue={priceValue(book?.priceCents)} inputMode="decimal" placeholder="49,90" {...invalid("price")} />
+          <input id="price" name="price" className="field" defaultValue={priceValue(book?.priceCents)} inputMode="decimal" placeholder="49.90" {...invalid("price")} />
         </Field>
         <Field
-          label="Exemplares em estoque"
+          label="Copies in stock"
           name="stock"
           error={errors.stock}
-          hint={book?.stockIsDemo ? "Estoque demonstrativo. Ao alterar, passa a valer como real." : "Zero mostra o livro como esgotado."}
+          hint={book?.stockIsDemo ? "Demo stock. Once you change it, it counts as real." : "Zero shows the book as out of stock."}
         >
           <input id="stock" name="stock" className="field" defaultValue={book?.stock ?? ""} inputMode="numeric" {...invalid("stock")} />
         </Field>
       </div>
 
-      <Field label="Sinopse" name="synopsis" hint="É este texto que a IA lê para descrever o livro. Sem sinopse, a busca por intenção não o encontra.">
+      <Field label="Synopsis" name="synopsis" hint="This is the text the AI reads to describe the book. Without a synopsis, search by intent won’t find it.">
         <textarea id="synopsis" name="synopsis" className="field min-h-[11rem] leading-relaxed" defaultValue={book?.synopsis ?? ""} maxLength={6000} />
       </Field>
 
       <div className="ruled bg-[#fbf7ea] px-5 pb-4 pt-4 shadow-[0_14px_22px_-18px_rgb(28_26_23/0.5)]">
         <label htmlFor="note" className="eyebrow text-ink-soft">
-          Sua nota para este livro
+          Your note for this book
         </label>
         <textarea
           id="note"
@@ -86,17 +86,17 @@ export function BookForm({ book }: { book: BookDetail | null }) {
           rows={3}
           maxLength={280}
           defaultValue={book?.note ?? ""}
-          placeholder="Escreva como se deixasse um bilhete na prateleira…"
+          placeholder="Write as if you were leaving a note on the shelf…"
         />
         <p className="eyebrow mt-1 text-[9px] text-ink-soft">
           {book?.noteOrigin === "example"
-            ? "Esta é uma nota de exemplo da demonstração. Ao reescrever, ela passa a ser assinada por você."
-            : "Aparece na estante como plaquinha e dentro do livro. Só gente escreve notas: a IA nunca preenche este campo."}
+            ? "This is a sample note from the demo. Once you rewrite it, it’s signed by you."
+            : "Appears on the shelf as a shelf talker and inside the book. Only people write notes: the AI never fills in this field."}
         </p>
       </div>
 
       <div className="flex flex-wrap items-center gap-4">
-        <SubmitButton>{book ? "Salvar livro" : "Cadastrar livro"}</SubmitButton>
+        <SubmitButton>{book ? "Save book" : "Add book"}</SubmitButton>
         <FormFeedback state={state} />
       </div>
     </form>

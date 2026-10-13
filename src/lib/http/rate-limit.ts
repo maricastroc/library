@@ -1,10 +1,10 @@
 type Bucket = { count: number; resetAt: number };
-type GlobalWithBuckets = typeof globalThis & { __entrelinhasBuckets?: Map<string, Bucket> };
+type GlobalWithBuckets = typeof globalThis & { __subtextBuckets?: Map<string, Bucket> };
 
 function buckets(): Map<string, Bucket> {
   const scope = globalThis as GlobalWithBuckets;
-  if (!scope.__entrelinhasBuckets) scope.__entrelinhasBuckets = new Map();
-  return scope.__entrelinhasBuckets;
+  if (!scope.__subtextBuckets) scope.__subtextBuckets = new Map();
+  return scope.__subtextBuckets;
 }
 
 export function clientKey(request: Request): string {

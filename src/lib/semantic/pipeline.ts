@@ -14,12 +14,12 @@ export type EnrichmentState = {
   lastError: string | null;
 };
 
-type GlobalWithState = typeof globalThis & { __entrelinhasEnrichment?: EnrichmentState };
+type GlobalWithState = typeof globalThis & { __subtextEnrichment?: EnrichmentState };
 
 function state(): EnrichmentState {
   const scope = globalThis as GlobalWithState;
-  if (!scope.__entrelinhasEnrichment) {
-    scope.__entrelinhasEnrichment = {
+  if (!scope.__subtextEnrichment) {
+    scope.__subtextEnrichment = {
       running: false,
       startedAt: null,
       finishedAt: null,
@@ -29,7 +29,7 @@ function state(): EnrichmentState {
       lastError: null,
     };
   }
-  return scope.__entrelinhasEnrichment;
+  return scope.__subtextEnrichment;
 }
 
 export function enrichmentState(): EnrichmentState {
@@ -131,7 +131,7 @@ export async function runEnrichment(options: RunOptions = {}): Promise<Enrichmen
           current.processed += 1;
           options.onProgress?.({ done: current.processed + current.failed, total, title, result });
         } catch (error) {
-          const message = error instanceof Error ? error.message : "erro desconhecido";
+          const message = error instanceof Error ? error.message : "unknown error";
           current.lastError = message;
           if (error instanceof OllamaError && (error.kind === "unavailable" || error.kind === "model")) {
             setSemanticStatus(id, "pending");
@@ -139,7 +139,7 @@ export async function runEnrichment(options: RunOptions = {}): Promise<Enrichmen
           } else {
             current.failed += 1;
             setSemanticStatus(id, "error", message);
-            options.onProgress?.({ done: current.processed + current.failed, total, title, result: `erro: ${message}` });
+            options.onProgress?.({ done: current.processed + current.failed, total, title, result: `error: ${message}` });
           }
         } finally {
           current.current = current.current.filter((item) => item !== title);
@@ -148,7 +148,7 @@ export async function runEnrichment(options: RunOptions = {}): Promise<Enrichmen
     };
     await Promise.all(Array.from({ length: options.concurrency ?? 4 }, () => worker()));
   } catch (error) {
-    current.lastError = error instanceof Error ? error.message : "erro desconhecido";
+    current.lastError = error instanceof Error ? error.message : "unknown error";
   } finally {
     current.running = false;
     current.finishedAt = new Date().toISOString();

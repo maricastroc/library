@@ -57,6 +57,27 @@ const LEGACY_EXPERIENCE: Record<string, string> = {
   desafiar: "challenging",
   consolar: "consoling",
 };
+const LEGACY_GENRE: Record<string, string> = {
+  Romance: "Novel",
+  Novela: "Novella",
+  Contos: "Short stories",
+  Poesia: "Poetry",
+  Ensaio: "Essay",
+  "Crônica": "Chronicles",
+  "Memórias": "Memoir",
+  Reportagem: "Reportage",
+  Teatro: "Theater",
+  "Ficção científica": "Science fiction",
+  Fantasia: "Fantasy",
+  Policial: "Crime",
+  Quadrinhos: "Comics",
+  Infantojuvenil: "Young readers",
+  "Não ficção": "Nonfiction",
+};
+const LEGACY_SYNOPSIS_SOURCE: Record<string, string> = {
+  "Wikipédia (CC BY-SA 4.0)": "Wikipedia (CC BY-SA 4.0)",
+  "Catálogo da livraria": "Bookshop catalog",
+};
 
 function remapColumn(database: Database.Database, table: string, column: string, mapping: Record<string, string>): void {
   const statement = database.prepare(`UPDATE ${table} SET ${column} = ? WHERE ${column} = ?`);
@@ -87,8 +108,19 @@ function translateStoredValues(database: Database.Database): void {
   }
 }
 
+function translateCatalogLabels(database: Database.Database): void {
+  remapColumn(database, "books", "genre", LEGACY_GENRE);
+  remapColumn(database, "books", "synopsis_source", LEGACY_SYNOPSIS_SOURCE);
+  database.exec(
+    `DELETE FROM books_fts;
+     INSERT INTO books_fts (rowid, title, author, genre, synopsis, staff_note)
+       SELECT id, title, author, COALESCE(genre, ''), COALESCE(synopsis, ''), COALESCE(staff_note, '') FROM books;`,
+  );
+}
+
 const MIGRATIONS: { version: number; run: (database: Database.Database) => void }[] = [
   { version: 2, run: translateStoredValues },
+  { version: 3, run: translateCatalogLabels },
 ];
 
 export const LATEST_SCHEMA_VERSION = MIGRATIONS[MIGRATIONS.length - 1].version;

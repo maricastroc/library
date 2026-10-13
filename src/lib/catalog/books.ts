@@ -289,7 +289,7 @@ const COLUMN_BY_FIELD: Record<string, string> = {
 export function updateBook(id: number, patch: BookPatch): { semanticInputChanged: boolean } {
   const database = db();
   const current = database.prepare("SELECT * FROM books WHERE id = ?").get(id) as Record<string, unknown> | undefined;
-  if (!current) throw new Error("Livro não encontrado.");
+  if (!current) throw new Error("Book not found.");
   const sets: string[] = [];
   const values: Record<string, unknown> = { id };
   let semanticInputChanged = false;

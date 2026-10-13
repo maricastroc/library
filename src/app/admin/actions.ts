@@ -36,16 +36,16 @@ function reindexLater(id: number) {
 
 export async function login(_previous: FormState, form: FormData): Promise<FormState> {
   if (!adminConfigured()) {
-    return { ok: false, message: "O balcão ainda não foi configurado. Defina ADMIN_PASSWORD e SESSION_SECRET em .env.local." };
+    return { ok: false, message: "The counter hasn’t been set up yet. Set ADMIN_PASSWORD and SESSION_SECRET in .env.local." };
   }
   const headerList = await headers();
   const client = headerList.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
   if (!allowRequest("login", client, 6, 5 * 60_000)) {
-    return { ok: false, message: "Muitas tentativas. Aguarde alguns minutos." };
+    return { ok: false, message: "Too many attempts. Wait a few minutes." };
   }
-  if (!verifyPassword(text(form, "password"))) return { ok: false, message: "Senha incorreta." };
+  if (!verifyPassword(text(form, "password"))) return { ok: false, message: "Wrong password." };
   const token = createSessionToken();
-  if (!token) return { ok: false, message: "Não foi possível abrir a sessão." };
+  if (!token) return { ok: false, message: "Couldn’t start the session." };
   const store = await cookies();
   store.set(SESSION_COOKIE, token, {
     httpOnly: true,
@@ -68,29 +68,29 @@ function readBookForm(form: FormData): { input: BookInput; errors: Record<string
   const errors: Record<string, string> = {};
   const title = text(form, "title");
   const author = text(form, "author");
-  if (!title) errors.title = "Informe o título.";
-  if (!author) errors.author = "Informe quem escreveu.";
+  if (!title) errors.title = "Enter the title.";
+  if (!author) errors.author = "Enter who wrote it.";
 
   let isbn: string | null = null;
   const rawIsbn = text(form, "isbn");
   if (rawIsbn) {
     const result = normalizeIsbn(rawIsbn);
     if (result.ok) isbn = result.isbn;
-    else errors.isbn = `ISBN inválido: ${result.reason}.`;
+    else errors.isbn = `Invalid ISBN: ${result.reason}.`;
   }
 
   let priceCents: number | null = null;
   const rawPrice = text(form, "price");
   if (rawPrice) {
     priceCents = parsePrice(rawPrice);
-    if (priceCents === null) errors.price = "Use um valor em reais, como 49,90.";
+    if (priceCents === null) errors.price = "Use an amount in reais, like 49.90.";
   }
 
   const integer = (key: string, label: string, min: number, max: number): number | null => {
     const raw = text(form, key);
     if (!raw) return null;
     if (!/^\d+$/.test(raw) || Number(raw) < min || Number(raw) > max) {
-      errors[key] = `${label} precisa ser um número entre ${min} e ${max}.`;
+      errors[key] = `${label} must be a number between ${min} and ${max}.`;
       return null;
     }
     return Number(raw);
@@ -105,10 +105,10 @@ function readBookForm(form: FormData): { input: BookInput; errors: Record<string
       genre: text(form, "genre") || null,
       synopsis: text(form, "synopsis") || null,
       publisher: text(form, "publisher") || null,
-      year: integer("year", "Ano", 1, 2100),
-      pages: integer("pages", "Páginas", 1, 20000),
+      year: integer("year", "Year", 1, 2100),
+      pages: integer("pages", "Pages", 1, 20000),
       priceCents,
-      stock: integer("stock", "Estoque", 0, 100000),
+      stock: integer("stock", "Stock", 0, 100000),
       note: text(form, "note") || null,
     },
   };
@@ -118,17 +118,17 @@ export async function saveBook(_previous: FormState, form: FormData): Promise<Fo
   await assertAdmin();
   const id = Number(text(form, "id")) || null;
   const { input, errors } = readBookForm(form);
-  if (Object.keys(errors).length > 0) return { ok: false, message: "Revise os campos marcados.", fields: errors };
+  if (Object.keys(errors).length > 0) return { ok: false, message: "Check the highlighted fields.", fields: errors };
 
   const duplicate = findExistingBook({ isbn: input.isbn, title: input.title, author: input.author });
   if (duplicate !== null && duplicate !== id) {
-    return { ok: false, message: "Já existe um livro com este ISBN ou com o mesmo título e autor.", fields: { title: "Livro duplicado." } };
+    return { ok: false, message: "There’s already a book with this ISBN or with the same title and author.", fields: { title: "Duplicate book." } };
   }
 
   if (id === null) {
     const newId = insertBook({
       ...input,
-      synopsisSource: input.synopsis ? "Catálogo da livraria" : null,
+      synopsisSource: input.synopsis ? "Bookshop catalog" : null,
       noteOrigin: input.note ? "bookseller" : null,
     });
     ensureBackgroundEnrichment();
@@ -138,14 +138,14 @@ export async function saveBook(_previous: FormState, form: FormData): Promise<Fo
   }
 
   const current = getBookById(id);
-  if (!current) return { ok: false, message: "Livro não encontrado." };
+  if (!current) return { ok: false, message: "Book not found." };
   const synopsisChanged = (input.synopsis ?? null) !== (current.synopsis ?? null);
   const { semanticInputChanged } = updateBook(id, {
     ...input,
     priceIsDemo: input.priceCents === current.priceCents ? current.priceIsDemo : false,
     stockIsDemo: input.stock === current.stock ? current.stockIsDemo : false,
     noteOrigin: input.note ? (input.note === current.note ? (current.noteOrigin ?? "bookseller") : "bookseller") : null,
-    ...(synopsisChanged ? { synopsisSource: input.synopsis ? "Catálogo da livraria" : null, synopsisUrl: null } : {}),
+    ...(synopsisChanged ? { synopsisSource: input.synopsis ? "Bookshop catalog" : null, synopsisUrl: null } : {}),
   });
   const classificationInputChanged =
     synopsisChanged || input.title !== current.title || input.author !== current.author || (input.genre ?? null) !== (current.genre ?? null);
@@ -159,7 +159,7 @@ export async function saveBook(_previous: FormState, form: FormData): Promise<Fo
   revalidatePath("/");
   return {
     ok: true,
-    message: classificationInputChanged && current.semanticOrigin === "ai" ? "Livro salvo. A IA vai reler a sinopse em segundo plano." : "Livro salvo.",
+    message: classificationInputChanged && current.semanticOrigin === "ai" ? "Book saved. The AI will reread the synopsis in the background." : "Book saved.",
   };
 }
 
@@ -167,14 +167,14 @@ export async function saveClassification(_previous: FormState, form: FormData): 
   await assertAdmin();
   const id = Number(text(form, "id"));
   const book = getBookById(id);
-  if (!book) return { ok: false, message: "Livro não encontrado." };
+  if (!book) return { ok: false, message: "Book not found." };
 
   const atmospheres = form
     .getAll("atmospheres")
     .map(String)
     .filter((value): value is AtmosphereId => ATMOSPHERE_IDS.includes(value as AtmosphereId))
     .slice(0, 3);
-  if (atmospheres.length === 0) return { ok: false, message: "Escolha pelo menos uma atmosfera." };
+  if (atmospheres.length === 0) return { ok: false, message: "Choose at least one atmosphere." };
   const styles = form.getAll("styles").map(String).filter((value): value is StyleId => STYLE_IDS.includes(value as StyleId)).slice(0, 2);
   const experiences = form
     .getAll("experiences")
@@ -200,7 +200,7 @@ export async function saveClassification(_previous: FormState, form: FormData): 
   reindexLater(id);
   revalidatePath("/admin", "layout");
   revalidatePath("/");
-  return { ok: true, message: "Classificação salva como revisão da livreira. A IA não vai sobrescrever." };
+  return { ok: true, message: "Classification saved as the bookseller’s review. The AI won’t overwrite it." };
 }
 
 export async function reclassifyBook(form: FormData): Promise<void> {
@@ -263,9 +263,9 @@ export async function saveShowcase(_previous: FormState, form: FormData): Promis
   const id = Number(text(form, "id")) || null;
   const title = text(form, "title");
   const items = readShowcaseItems(text(form, "items"));
-  if (title.length < 3) return { ok: false, message: "Dê um título à vitrine.", fields: { title: "Título muito curto." } };
-  if (title.length > 90) return { ok: false, message: "O título passa de 90 caracteres.", fields: { title: "Título longo demais." } };
-  if (items.length === 0) return { ok: false, message: "Escolha pelo menos um livro para a vitrine." };
+  if (title.length < 3) return { ok: false, message: "Give the showcase a title.", fields: { title: "Title too short." } };
+  if (title.length > 90) return { ok: false, message: "The title is over 90 characters.", fields: { title: "Title too long." } };
+  if (items.length === 0) return { ok: false, message: "Choose at least one book for the showcase." };
   const input = {
     title,
     intro: text(form, "intro").slice(0, 900) || null,
@@ -280,11 +280,11 @@ export async function saveShowcase(_previous: FormState, form: FormData): Promis
     redirect(`/admin/showcases/${created.id}?created=1`);
   }
   const updated = updateShowcase(id, input);
-  if (!updated) return { ok: false, message: "Vitrine não encontrada." };
+  if (!updated) return { ok: false, message: "Showcase not found." };
   revalidatePath("/admin", "layout");
   revalidatePath("/");
   revalidatePath(`/showcase/${updated.slug}`);
-  return { ok: true, message: updated.published ? "Vitrine salva e publicada." : "Vitrine salva como rascunho." };
+  return { ok: true, message: updated.published ? "Showcase saved and published." : "Showcase saved as a draft." };
 }
 
 export async function removeShowcase(form: FormData): Promise<void> {
@@ -298,7 +298,7 @@ export async function removeShowcase(form: FormData): Promise<void> {
 export async function saveShop(_previous: FormState, form: FormData): Promise<FormState> {
   await assertAdmin();
   const name = text(form, "name");
-  if (name.length < 2) return { ok: false, message: "A livraria precisa de um nome.", fields: { name: "Nome muito curto." } };
+  if (name.length < 2) return { ok: false, message: "The bookshop needs a name.", fields: { name: "Name too short." } };
   saveShopConfig({
     name,
     tagline: text(form, "tagline"),
@@ -307,5 +307,5 @@ export async function saveShop(_previous: FormState, form: FormData): Promise<Fo
     contact: text(form, "contact"),
   });
   revalidatePath("/", "layout");
-  return { ok: true, message: "Dados da livraria salvos." };
+  return { ok: true, message: "Bookshop details saved." };
 }

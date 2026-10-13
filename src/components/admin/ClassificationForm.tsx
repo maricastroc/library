@@ -62,7 +62,7 @@ export function ClassificationForm({ book }: { book: BookDetail }) {
 
       <div className="space-y-6">
         <fieldset>
-          <legend className="eyebrow text-ink-soft">Atmosfera — até três, na ordem de predominância</legend>
+          <legend className="eyebrow text-ink-soft">Atmosphere — up to three, in order of predominance</legend>
           <div className="mt-2 flex flex-wrap gap-1.5">
             {ATMOSPHERES.map((atmosphere) => {
               const position = atmospheres.indexOf(atmosphere.id);
@@ -76,7 +76,7 @@ export function ClassificationForm({ book }: { book: BookDetail }) {
                 >
                   <span aria-hidden className="inline-block h-3.5 w-2.5" style={{ background: atmosphere.color, outline: "1px solid rgb(255 255 255 / 0.35)" }} />
                   {atmosphere.label}
-                  {position >= 0 ? <span className="eyebrow text-[9px]">{position + 1}º</span> : null}
+                  {position >= 0 ? <span className="eyebrow text-[9px]">{["1st", "2nd", "3rd"][position]}</span> : null}
                 </button>
               );
             })}
@@ -97,7 +97,7 @@ export function ClassificationForm({ book }: { book: BookDetail }) {
 
         <div className="grid gap-6 sm:grid-cols-2">
           <fieldset>
-            <legend className="eyebrow text-ink-soft">Ritmo</legend>
+            <legend className="eyebrow text-ink-soft">Pace</legend>
             <div className="mt-2 flex flex-wrap gap-1.5">
               {PACE_LEVELS.map((level) => (
                 <button
@@ -113,7 +113,7 @@ export function ClassificationForm({ book }: { book: BookDetail }) {
             </div>
           </fieldset>
           <fieldset>
-            <legend className="eyebrow text-ink-soft">Densidade</legend>
+            <legend className="eyebrow text-ink-soft">Density</legend>
             <div className="mt-2 flex flex-wrap gap-1.5">
               {DENSITY_LEVELS.map((level) => (
                 <button
@@ -131,7 +131,7 @@ export function ClassificationForm({ book }: { book: BookDetail }) {
         </div>
 
         <fieldset>
-          <legend className="eyebrow text-ink-soft">Estilo de escrita — até dois</legend>
+          <legend className="eyebrow text-ink-soft">Writing style — up to two</legend>
           <div className="mt-2 flex flex-wrap gap-1.5">
             {STYLES.map((style) => (
               <button
@@ -148,7 +148,7 @@ export function ClassificationForm({ book }: { book: BookDetail }) {
         </fieldset>
 
         <fieldset>
-          <legend className="eyebrow text-ink-soft">Experiência de leitura — até duas</legend>
+          <legend className="eyebrow text-ink-soft">Reading experience — up to two</legend>
           <div className="mt-2 flex flex-wrap gap-1.5">
             {EXPERIENCES.map((experience) => (
               <button
@@ -166,31 +166,31 @@ export function ClassificationForm({ book }: { book: BookDetail }) {
 
         <div>
           <label htmlFor="themes" className="eyebrow text-ink-soft">
-            Temas — separados por vírgula
+            Themes — separated by commas
           </label>
           <input id="themes" name="themes" className="field" defaultValue={book.themes.join(", ")} maxLength={300} />
         </div>
         <div>
           <label htmlFor="portrait" className="eyebrow text-ink-soft">
-            Retrato de leitura — uma frase sobre a sensação de ler
+            Reading portrait — one sentence on what it feels like to read
           </label>
           <textarea id="portrait" name="portrait" className="field resize-none italic" rows={2} maxLength={300} defaultValue={book.portrait ?? ""} />
         </div>
         <div className="flex flex-wrap items-center gap-4">
-          <SubmitButton>Salvar minha revisão</SubmitButton>
+          <SubmitButton>Save my review</SubmitButton>
           <FormFeedback state={state} />
         </div>
       </div>
 
       <div className="flex flex-col items-center gap-3 lg:w-40">
-        <p className="eyebrow text-ink-soft">na estante</p>
+        <p className="eyebrow text-ink-soft">on the shelf</p>
         <div className="flex h-[260px] items-end border-b-[3px] border-ink px-6">
           <div style={{ width: preview.width, height: preview.height }} className="transition-[width,height] duration-300">
             <SpineFace identity={preview} className="relative block h-full w-full overflow-hidden" />
           </div>
         </div>
         <p className="max-w-[10rem] text-center text-[0.8rem] leading-snug text-ink-soft">
-          A lombada muda com a classificação: cor, altura e faixas.
+          The spine changes with the classification: color, height and bands.
         </p>
       </div>
     </form>

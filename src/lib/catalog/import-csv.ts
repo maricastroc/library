@@ -21,17 +21,17 @@ export const IMPORT_MAX_ROWS = 2000;
 const SHORT_SYNOPSIS = 140;
 
 const HEADER_ALIASES: Record<ImportField, string[]> = {
-  isbn: ["isbn", "isbn13", "isbn 13", "isbn10", "isbn 10", "ean", "codigo de barras"],
-  title: ["titulo", "title", "nome", "livro", "nome do livro"],
-  author: ["autor", "autora", "autores", "author", "autoria", "autor a"],
-  synopsis: ["sinopse", "descricao", "resumo", "description", "synopsis"],
-  genre: ["genero", "categoria", "genre", "secao", "assunto"],
-  price: ["preco", "valor", "price", "preco de venda", "preco r"],
-  stock: ["estoque", "quantidade", "qtd", "qtde", "stock", "saldo", "disponibilidade"],
-  note: ["nota da livreira", "nota", "nota do livreiro", "nota livreira", "recomendacao", "nota da livraria"],
-  pages: ["paginas", "numero de paginas", "n de paginas", "pages"],
-  year: ["ano", "ano de publicacao", "publicacao", "year"],
-  publisher: ["editora", "publisher", "selo"],
+  isbn: ["isbn", "isbn13", "isbn 13", "isbn10", "isbn 10", "ean", "barcode"],
+  title: ["title", "name", "book", "book title"],
+  author: ["author", "authors", "written by"],
+  synopsis: ["synopsis", "description", "summary", "blurb"],
+  genre: ["genre", "category", "section", "subject"],
+  price: ["price", "sale price", "price r"],
+  stock: ["stock", "quantity", "qty", "in stock", "availability"],
+  note: ["bookseller s note", "bookseller note", "booksellers note", "note", "staff note", "recommendation"],
+  pages: ["pages", "page count", "number of pages"],
+  year: ["year", "publication year", "published"],
+  publisher: ["publisher", "imprint"],
 };
 
 function detectDelimiter(text: string): string {
@@ -79,11 +79,11 @@ const emptyTotals = () => ({ total: 0, created: 0, updated: 0, duplicates: 0, er
 export function analyzeCsv(text: string): ImportPlan {
   const plan: ImportPlan = { fatal: null, delimiter: ",", columns: [], rows: [], totals: emptyTotals() };
   if (Buffer.byteLength(text, "utf8") > IMPORT_MAX_BYTES) {
-    plan.fatal = "O arquivo passa de 2 MB. Divida o catálogo em partes menores.";
+    plan.fatal = "The file is larger than 2 MB. Split the catalog into smaller parts.";
     return plan;
   }
   if (text.trim().length === 0) {
-    plan.fatal = "O arquivo está vazio.";
+    plan.fatal = "The file is empty.";
     return plan;
   }
   plan.delimiter = detectDelimiter(text);
@@ -99,15 +99,15 @@ export function analyzeCsv(text: string): ImportPlan {
       trim: true,
     }) as string[][];
   } catch (error) {
-    plan.fatal = `Não foi possível ler o CSV: ${error instanceof Error ? error.message : "formato inválido"}.`;
+    plan.fatal = `Could not read the CSV: ${error instanceof Error ? error.message : "invalid format"}.`;
     return plan;
   }
   if (records.length < 2) {
-    plan.fatal = "O arquivo precisa de uma linha de cabeçalho e pelo menos um livro.";
+    plan.fatal = "The file needs a header row and at least one book.";
     return plan;
   }
   if (records.length - 1 > IMPORT_MAX_ROWS) {
-    plan.fatal = `O arquivo tem ${records.length - 1} linhas; o limite por importação é ${IMPORT_MAX_ROWS}.`;
+    plan.fatal = `The file has ${records.length - 1} rows; the limit per import is ${IMPORT_MAX_ROWS}.`;
     return plan;
   }
 
@@ -120,7 +120,7 @@ export function analyzeCsv(text: string): ImportPlan {
   });
   const missing = (["title", "author"] as ImportField[]).filter((field) => !seenFields.has(field));
   if (missing.length > 0) {
-    plan.fatal = `Faltam colunas obrigatórias: ${missing.map((field) => FIELD_LABELS[field]).join(" e ")}. Cabeçalhos encontrados: ${records[0].join(", ")}.`;
+    plan.fatal = `Required columns are missing: ${missing.map((field) => FIELD_LABELS[field]).join(" and ")}. Headers found: ${records[0].join(", ")}.`;
     return plan;
   }
 
@@ -135,43 +135,43 @@ export function analyzeCsv(text: string): ImportPlan {
     const issues: ImportIssue[] = [];
     const title = values.title ?? "";
     const author = values.author ?? "";
-    if (!title) issues.push({ level: "error", message: "Título vazio." });
-    if (!author) issues.push({ level: "error", message: "Autor vazio." });
+    if (!title) issues.push({ level: "error", message: "Empty title." });
+    if (!author) issues.push({ level: "error", message: "Empty author." });
 
     let isbn: string | null = null;
     if (values.isbn) {
       const result = normalizeIsbn(values.isbn);
       if (result.ok) isbn = result.isbn;
-      else issues.push({ level: "error", message: `ISBN "${values.isbn}" inválido: ${result.reason}.` });
+      else issues.push({ level: "error", message: `Invalid ISBN "${values.isbn}": ${result.reason}.` });
     }
 
     let priceCents: number | null | undefined;
     if (values.price) {
       priceCents = parsePrice(values.price);
-      if (priceCents === null) issues.push({ level: "error", message: `Preço "${values.price}" não é um valor em reais.` });
+      if (priceCents === null) issues.push({ level: "error", message: `Price "${values.price}" is not an amount in reais.` });
     }
     let stock: number | null | undefined;
     if (values.stock) {
       stock = parseInteger(values.stock, 0, 100000);
-      if (stock === null) issues.push({ level: "error", message: `Estoque "${values.stock}" precisa ser um número inteiro, zero ou maior.` });
+      if (stock === null) issues.push({ level: "error", message: `Stock "${values.stock}" must be a whole number, zero or greater.` });
     }
     let pages: number | null | undefined;
     if (values.pages) {
       pages = parseInteger(values.pages, 1, 20000);
-      if (pages === null) issues.push({ level: "warning", message: `Páginas "${values.pages}" ignorado: não é um número.` });
+      if (pages === null) issues.push({ level: "warning", message: `Pages "${values.pages}" ignored: not a number.` });
     }
     let year: number | null | undefined;
     if (values.year) {
       year = parseInteger(values.year, 1, 2100);
-      if (year === null) issues.push({ level: "warning", message: `Ano "${values.year}" ignorado: não é um ano válido.` });
+      if (year === null) issues.push({ level: "warning", message: `Year "${values.year}" ignored: not a valid year.` });
     }
 
     const synopsis = values.synopsis ?? "";
     if (seenFields.has("synopsis")) {
       if (!synopsis) {
-        issues.push({ level: "warning", message: "Sem sinopse: o livro entra na estante, mas a busca por intenção não consegue encontrá-lo." });
+        issues.push({ level: "warning", message: "No synopsis: the book goes on the shelf, but search by intent cannot find it." });
       } else if (synopsis.length < SHORT_SYNOPSIS) {
-        issues.push({ level: "warning", message: "Sinopse curta: a IA pode não conseguir classificar este livro." });
+        issues.push({ level: "warning", message: "Short synopsis: the AI may not be able to classify this book." });
       }
     }
 
@@ -182,11 +182,11 @@ export function analyzeCsv(text: string): ImportPlan {
       return;
     }
 
-    const keys = [isbn ? `isbn:${isbn}` : null, `obra:${dedupeKey(title, author)}`].filter((key): key is string => key !== null);
+    const keys = [isbn ? `isbn:${isbn}` : null, `work:${dedupeKey(title, author)}`].filter((key): key is string => key !== null);
     const repeated = keys.map((key) => seenKeys.get(key)).find((value) => value !== undefined);
     if (repeated !== undefined) {
       row.status = "duplicate";
-      row.issues.push({ level: "warning", message: `Repete a linha ${repeated}; só a primeira ocorrência é importada.` });
+      row.issues.push({ level: "warning", message: `Repeats row ${repeated}; only the first occurrence is imported.` });
       plan.rows.push(row);
       return;
     }
@@ -197,7 +197,7 @@ export function analyzeCsv(text: string): ImportPlan {
     if (values.genre) data.genre = values.genre;
     if (synopsis) {
       data.synopsis = synopsis;
-      data.synopsisSource = "Catálogo da livraria";
+      data.synopsisSource = "Bookshop catalog";
     }
     if (values.publisher) data.publisher = values.publisher;
     if (typeof priceCents === "number") data.priceCents = priceCents;
@@ -217,19 +217,19 @@ export function analyzeCsv(text: string): ImportPlan {
       const changes: string[] = [];
       if (existing) {
         if (data.isbn && data.isbn !== existing.isbn) changes.push("ISBN");
-        if (data.genre && data.genre !== existing.genre) changes.push("gênero");
-        if (data.synopsis && data.synopsis !== existing.synopsis) changes.push("sinopse");
-        if (data.publisher && data.publisher !== existing.publisher) changes.push("editora");
-        if (data.priceCents !== undefined && (data.priceCents !== existing.priceCents || existing.priceIsDemo)) changes.push("preço");
-        if (data.stock !== undefined && (data.stock !== existing.stock || existing.stockIsDemo)) changes.push("estoque");
-        if (data.pages !== undefined && data.pages !== existing.pages) changes.push("páginas");
-        if (data.year !== undefined && data.year !== existing.year) changes.push("ano");
-        if (data.note && (data.note !== existing.note || existing.noteOrigin !== "bookseller")) changes.push("nota da livreira");
+        if (data.genre && data.genre !== existing.genre) changes.push("genre");
+        if (data.synopsis && data.synopsis !== existing.synopsis) changes.push("synopsis");
+        if (data.publisher && data.publisher !== existing.publisher) changes.push("publisher");
+        if (data.priceCents !== undefined && (data.priceCents !== existing.priceCents || existing.priceIsDemo)) changes.push("price");
+        if (data.stock !== undefined && (data.stock !== existing.stock || existing.stockIsDemo)) changes.push("stock");
+        if (data.pages !== undefined && data.pages !== existing.pages) changes.push("pages");
+        if (data.year !== undefined && data.year !== existing.year) changes.push("year");
+        if (data.note && (data.note !== existing.note || existing.noteOrigin !== "bookseller")) changes.push("bookseller's note");
       }
       row.changes = changes;
       if (changes.length === 0) {
         row.status = "duplicate";
-        row.issues.push({ level: "warning", message: "Já está no catálogo, sem nada a atualizar." });
+        row.issues.push({ level: "warning", message: "Already in the catalog, with nothing to update." });
       } else {
         row.status = "update";
       }
@@ -291,7 +291,7 @@ export function applyImportPlan(plan: ImportPlan, filename: string | null): Impo
       const { semanticInputChanged } = updateBook(row.existingId, patch);
       if (semanticInputChanged && (patch.synopsis !== undefined || patch.genre !== undefined)) {
         database
-          .prepare("UPDATE book_semantics SET status = 'pendente', error = NULL WHERE book_id = ? AND origin = 'ia'")
+          .prepare("UPDATE book_semantics SET status = 'pending', error = NULL WHERE book_id = ? AND origin = 'ai'")
           .run(row.existingId);
       }
       outcome.affectedIds.push(row.existingId);

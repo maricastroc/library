@@ -254,7 +254,7 @@ export function OpenBook({
       .then((detail) => setDetailState({ status: "ready", detail }))
       .catch(() => {
         if (!controller.signal.aborted) {
-          setDetailState({ status: "error", message: "Não foi possível carregar os detalhes deste livro. Feche e tente de novo." });
+          setDetailState({ status: "error", message: "Couldn’t load this book’s details. Close it and try again." });
         }
       });
     return () => controller.abort();
@@ -299,7 +299,7 @@ export function OpenBook({
       <span aria-hidden className="text-[1.1rem] leading-none">
         ←
       </span>
-      Devolver à estante
+      Return to the shelf
       <kbd className="ml-1 hidden border border-paper/40 px-1.5 py-0.5 text-[9px] sm:inline">Esc</kbd>
     </button>
   );
@@ -322,7 +322,7 @@ export function OpenBook({
           <>
             <div className="absolute inset-x-0 top-0 z-20 flex items-center justify-between px-5 py-2">
               {closeButton}
-              <p className="eyebrow hidden text-paper/70 md:block">{shopName} · livro aberto</p>
+              <p className="eyebrow hidden text-paper/70 md:block">{shopName} · open book</p>
             </div>
             <div
               ref={revealRef}

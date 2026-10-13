@@ -79,14 +79,14 @@ export function ShelfExperience({ books, shop, showcases, initialQuery, initialS
     try {
       const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`, { signal: controller.signal });
       const data = (await response.json()) as SearchResponse & { error?: string };
-      if (!response.ok) throw new Error(data.error ?? "A estante não conseguiu responder agora.");
+      if (!response.ok) throw new Error(data.error ?? "The shelf couldn’t answer just now.");
       setSearch({ status: "done", query, response: data });
     } catch (error) {
       if (controller.signal.aborted) return;
       setSearch({
         status: "error",
         query,
-        message: error instanceof Error && error.message ? error.message : "A estante não conseguiu responder agora.",
+        message: error instanceof Error && error.message ? error.message : "The shelf couldn’t answer just now.",
       });
     }
   }, []);
@@ -206,9 +206,9 @@ export function ShelfExperience({ books, shop, showcases, initialQuery, initialS
           <section id="showcases" aria-labelledby="showcases-heading" className="mt-24 scroll-mt-8 border-t-[3px] border-ink pt-8">
             <div className="flex flex-wrap items-baseline justify-between gap-3">
               <h2 id="showcases-heading" className="display text-[2rem] leading-none">
-                Vitrines da casa
+                House showcases
               </h2>
-              <p className="eyebrow text-ink-soft">seleções montadas pela livreira</p>
+              <p className="eyebrow text-ink-soft">selections put together by the bookseller</p>
             </div>
             <ul className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {showcases.map((showcase) => (
@@ -219,7 +219,7 @@ export function ShelfExperience({ books, shop, showcases, initialQuery, initialS
                     style={{ background: showcase.background, color: showcase.ink }}
                   >
                     <span className="eyebrow opacity-80">
-                      vitrine · {showcase.count} {showcase.count === 1 ? "livro" : "livros"}
+                      showcase · {showcase.count} {showcase.count === 1 ? "book" : "books"}
                     </span>
                     <span>
                       <span className="display-italic block text-balance text-[1.9rem] leading-[1.02]">{showcase.title}</span>

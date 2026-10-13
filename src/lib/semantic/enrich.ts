@@ -16,7 +16,7 @@ import {
 } from "./taxonomy";
 
 export const MIN_SYNOPSIS_LENGTH = 140;
-export const ENRICHMENT_VERSION = "v2";
+export const ENRICHMENT_VERSION = "v3";
 
 export type EnrichmentInput = {
   title: string;
@@ -47,41 +47,41 @@ type RawClassification = {
   evidence?: unknown;
 };
 
-const SYSTEM_PROMPT = `Você cataloga livros para uma livraria independente brasileira. Sua tarefa é descrever COMO é a experiência de ler cada livro, para que leitores encontrem livros por sensação e não só por gênero.
+const SYSTEM_PROMPT = `You catalog books for an independent Brazilian bookshop. Your task is to describe WHAT IT FEELS LIKE to read each book, so readers can find books by feeling and not only by genre.
 
-Regras:
-- Baseie-se apenas no texto fornecido (título, autor, gênero, assuntos e sinopse). Não acrescente fatos de enredo, personagens ou prêmios que não estejam no texto.
-- Escolha os valores somente entre as opções listadas.
-- "atmospheres": de 1 a 3 identificadores, do mais predominante para o menos.
-- "pace": inteiro de 1 a 5. "density": inteiro de 1 a 4.
-- "styles": 1 ou 2 identificadores. "experiences": 1 ou 2 identificadores.
-- "themes": de 3 a 5 temas curtos em português, em minúsculas (ex.: "luto", "relação entre irmãs", "desigualdade social").
-- "portrait": uma frase em português (máximo 200 caracteres) sobre a sensação de leitura que o texto sugere. Não repita o título nem o nome do autor, não revele o final e não invente detalhes.
-- "evidence": exatamente 2 itens. Em "quote", copie literalmente da sinopse um pedaço curto (de 5 a 14 palavras) que justifique o atributo indicado em "attribute". O trecho precisa existir palavra por palavra na sinopse.
+Rules:
+- Rely only on the text provided (title, author, genre, subjects and synopsis). Do not add plot facts, characters or prizes that are not in the text.
+- Choose values only from the options listed.
+- "atmospheres": 1 to 3 identifiers, from the most to the least predominant.
+- "pace": integer from 1 to 5. "density": integer from 1 to 4.
+- "styles": 1 or 2 identifiers. "experiences": 1 or 2 identifiers.
+- "themes": 3 to 5 short themes in English, in lowercase (e.g. "grief", "bond between sisters", "social inequality").
+- "portrait": one sentence in English (200 characters at most) about the reading experience the text suggests. Do not repeat the title or the author's name, do not reveal the ending and do not invent details.
+- "evidence": exactly 2 items. In "quote", copy literally from the synopsis a short passage (5 to 14 words) that justifies the attribute named in "attribute". The passage must exist word for word in the synopsis.
 
-Opções de atmosfera:
+Atmosphere options:
 ${ATMOSPHERES.map((atmosphere) => `- ${atmosphere.id}: ${atmosphere.description}`).join("\n")}
 
-Ritmo (1 a 5):
+Pace (1 to 5):
 ${PACE_LEVELS.map((level) => `- ${level.value}: ${level.description}`).join("\n")}
 
-Densidade (1 a 4):
+Density (1 to 4):
 ${DENSITY_LEVELS.map((level) => `- ${level.value}: ${level.description}`).join("\n")}
 
-Opções de estilo:
+Style options:
 ${STYLES.map((style) => `- ${style.id}: ${style.description}`).join("\n")}
 
-Opções de experiência de leitura:
+Reading experience options:
 ${EXPERIENCES.map((experience) => `- ${experience.id}: ${experience.description}`).join("\n")}
 
-Responda somente com um objeto JSON, sem texto antes ou depois, neste formato:
+Reply only with a JSON object, with no text before or after, in this format:
 {"atmospheres":["..."],"pace":0,"density":0,"styles":["..."],"experiences":["..."],"themes":["..."],"portrait":"...","evidence":[{"attribute":"...","quote":"..."}]}`;
 
 function buildUserPrompt(input: EnrichmentInput): string {
-  const lines = [`Título: ${input.title}`, `Autor: ${input.author}`];
-  if (input.genre) lines.push(`Gênero: ${input.genre}`);
-  if (input.subjects.length > 0) lines.push(`Assuntos do catálogo: ${input.subjects.slice(0, 8).join("; ")}`);
-  lines.push("", "Sinopse:", (input.synopsis ?? "").slice(0, 2400));
+  const lines = [`Title: ${input.title}`, `Author: ${input.author}`];
+  if (input.genre) lines.push(`Genre: ${input.genre}`);
+  if (input.subjects.length > 0) lines.push(`Catalog subjects: ${input.subjects.slice(0, 8).join("; ")}`);
+  lines.push("", "Synopsis:", (input.synopsis ?? "").slice(0, 2400));
   return lines.join("\n");
 }
 
@@ -170,7 +170,7 @@ export async function classifyBook(input: EnrichmentInput): Promise<EnrichmentOu
   if (synopsis.length < MIN_SYNOPSIS_LENGTH) {
     return {
       status: "insufficient",
-      reason: "Sinopse ausente ou curta demais para uma classificação responsável.",
+      reason: "Synopsis missing or too short for a responsible classification.",
     };
   }
 
@@ -184,7 +184,7 @@ export async function classifyBook(input: EnrichmentInput): Promise<EnrichmentOu
 
   const atmospheres = pickEnum<AtmosphereId>(raw.atmospheres, ATMOSPHERE_IDS, 3);
   if (atmospheres.length === 0) {
-    return { status: "insufficient", reason: "O modelo não conseguiu atribuir uma atmosfera a partir da sinopse." };
+    return { status: "insufficient", reason: "The model could not assign an atmosphere from the synopsis." };
   }
 
   const evidence: Evidence[] = [];
