@@ -47,9 +47,46 @@ describe("spine identity", () => {
     expect(spineIdentity(book({ atmospheres: ["luminous"] })).color).not.toBe(spineIdentity(book({ atmospheres: ["dark"] })).color);
   });
 
+  it("binds each book by its era and kind", () => {
+    expect(spineIdentity(book({ year: 1850 })).binding).toBe("leather");
+    expect(spineIdentity(book({ year: 1910 })).binding).toBe("cloth");
+    expect(["banded", "cloth"]).toContain(spineIdentity(book({ year: 1950 })).binding);
+    expect(spineIdentity(book({ year: 1985 })).binding).toBe("trade");
+    expect(spineIdentity(book({ year: 2015 })).binding).toBe("minimal");
+    expect(spineIdentity(book({ year: 1950, genre: "Poetry" })).binding).toBe("wrapper");
+    expect(spineIdentity(book({ year: 1965, genre: "Science fiction" })).binding).toBe("pocket");
+    expect(spineIdentity(book({ year: 1990, genre: "Essay" })).binding).toBe("jacket");
+    expect(spineIdentity(book({ year: 1850, genre: "Poetry" })).binding).toBe("leather");
+  });
+
+  it("gives books by the same author the same ornaments", () => {
+    const first = spineIdentity(book({ slug: "one", title: "One", year: 1910 }));
+    const second = spineIdentity(book({ slug: "two", title: "Another Title", year: 1912, pages: 480 }));
+    expect([second.ornament, second.mark, second.variant]).toEqual([first.ornament, first.mark, first.variant]);
+  });
+
+  it("keeps labels and plates readable", () => {
+    for (const year of [1850, 1910, 1950, 1985, 2015]) {
+      for (const genre of ["Novel", "Poetry", "Science fiction", "Essay"]) {
+        for (const atmosphere of ATMOSPHERE_IDS) {
+          const identity = spineIdentity(book({ year, genre, atmospheres: [atmosphere], pages: 520 }));
+          expect(contrastRatio(identity.panel, identity.panelInk), `${identity.binding} ${atmosphere}`).toBeGreaterThanOrEqual(4.5);
+        }
+      }
+    }
+  });
+
+  it("stacks the title across a wide spine only when every word fits", () => {
+    const wide = spineIdentity(book({ title: "War and Peace", year: 1869, pages: 1200, density: 4 }));
+    expect(wide.stack).toEqual(["WAR", "AND", "PEACE"]);
+    const narrow = spineIdentity(book({ title: "War and Peace", year: 1869, pages: 150 }));
+    expect(narrow.stack).toBeNull();
+  });
+
   it("shows unread books in kraft paper with no bands", () => {
     const identity = spineIdentity(book({ semanticStatus: "pending", atmospheres: [], pace: null, density: null }));
     expect(identity.classified).toBe(false);
+    expect(identity.binding).toBe("kraft");
     expect(identity.bands).toBe(0);
     expect(contrastRatio(identity.color, KRAFT)).toBeLessThan(1.4);
   });
@@ -145,6 +182,18 @@ describe("shelf layout", () => {
     expect(layout.talkers).toHaveLength(0);
     const lowestMatch = Math.max(...matches.map((id) => layout.spines.get(id)?.y ?? 0));
     expect(layout.spines.get(1)?.y ?? 0).toBeGreaterThan(lowestMatch);
+  });
+
+  it("keeps the relevance rank when the answers are shown in another order", () => {
+    const ranks = new Map([
+      [40, 1],
+      [7, 2],
+      [99, 3],
+    ]);
+    const layout = layoutShelf({ groups: arrangeBooks(many, "atmosphere"), identities, noted, width: 1200, matches: [99, 40, 7], ranks });
+    expect(layout.order.slice(0, 3)).toEqual([99, 40, 7]);
+    expect(layout.captions.map((caption) => caption.rank)).toEqual([3, 1, 2]);
+    expect(layout.spines.get(40)?.rank).toBe(1);
   });
 
   it("moves with arrow keys following visual order", () => {

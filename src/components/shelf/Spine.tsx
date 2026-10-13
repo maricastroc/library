@@ -13,6 +13,7 @@ export type SpineProps = {
   scale: number;
   label: string;
   tabbable: boolean;
+  active: boolean;
   absent: boolean;
   readDelay: number;
   onOpen: (id: number) => void;
@@ -20,7 +21,7 @@ export type SpineProps = {
   register: (id: number, element: HTMLButtonElement | null) => void;
 };
 
-function SpineBase({ book, identity, placed, scale, label, tabbable, absent, readDelay, onOpen, onActive, register }: SpineProps) {
+function SpineBase({ book, identity, placed, scale, label, tabbable, active, absent, readDelay, onOpen, onActive, register }: SpineProps) {
   const style = {
     "--x": `${placed.x}px`,
     "--y": `${placed.y}px`,
@@ -38,6 +39,7 @@ function SpineBase({ book, identity, placed, scale, label, tabbable, absent, rea
       style={style}
       data-id={book.id}
       data-state={placed.state}
+      data-active={active ? "true" : undefined}
       data-absent={absent ? "true" : undefined}
       tabIndex={tabbable ? 0 : -1}
       aria-label={label}
@@ -51,7 +53,7 @@ function SpineBase({ book, identity, placed, scale, label, tabbable, absent, rea
         if (event.pointerType === "mouse") onActive(null, false);
       }}
     >
-      {book.note ? <span aria-hidden className="bookmark-flag" /> : null}
+      {book.note ? <span aria-hidden className="bookmark-flag" data-kind={book.id % 3} /> : null}
       <SpineFace identity={identity} scale={scale} />
     </button>
   );

@@ -4,17 +4,30 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ShelfBook } from "@/lib/catalog/types";
 import type { SearchResponse, SearchResult } from "@/lib/search/types";
-import { SORT_OPTIONS, arrangeBooks, type SortKey } from "@/lib/shelf/arrange";
+import { SORT_OPTIONS, arrangeBooks, type AnswerSortKey, type SortKey } from "@/lib/shelf/arrange";
 import { spineIdentity } from "@/lib/shelf/identity";
 import type { ShopConfig } from "@/lib/shop/config";
 import { OpenBook, type Box, type OpenBookHandle } from "@/components/book/OpenBook";
 import { SearchBar, type SearchState } from "./SearchBar";
 import { Masthead } from "./Masthead";
 import { Shelf, type ShelfHandle } from "./Shelf";
+import { SpineFace } from "./SpineFace";
 import { IndexList } from "./IndexList";
 import { SortControls, type ViewMode } from "./SortControls";
 
-export type ShowcaseLink = { slug: string; title: string; intro: string | null; count: number; background: string; ink: string };
+export type ShowcaseLink = {
+  slug: string;
+  title: string;
+  intro: string | null;
+  count: number;
+  bookIds: number[];
+  background: string;
+  ink: string;
+  accent: string;
+};
+
+const SHOWCASE_SPINES = 12;
+const SHOWCASE_TITLES = 6;
 
 type ShelfExperienceProps = {
   books: ShelfBook[];
@@ -47,6 +60,7 @@ export function ShelfExperience({ books, shop, showcases, initialQuery, initialS
   const bySlug = useMemo(() => new Map(books.map((book) => [book.slug, book])), [books]);
 
   const [sort, setSort] = useState<SortKey>(initialSort);
+  const [answerSort, setAnswerSort] = useState<AnswerSortKey>("relevance");
   const [view, setView] = useState<ViewMode>("shelf");
   const [search, setSearch] = useState<SearchState>(
     initialQuery.length >= 2 ? { status: "loading", query: initialQuery, response: null } : { status: "idle" },
@@ -70,6 +84,7 @@ export function ShelfExperience({ books, shop, showcases, initialQuery, initialS
     }
     const controller = new AbortController();
     abortRef.current = controller;
+    setAnswerSort("relevance");
     setSearch((current) => ({
       status: "loading",
       query,
@@ -129,6 +144,25 @@ export function ShelfExperience({ books, shop, showcases, initialQuery, initialS
     return map;
   }, [response]);
   const groups = useMemo(() => arrangeBooks(books, sort), [books, sort]);
+  const ranks = useMemo(() => new Map((matches ?? []).map((id, index) => [id, index + 1])), [matches]);
+  const orderedMatches = useMemo(() => {
+    if (!matches || answerSort === "relevance") return matches;
+    const answered = matches.map((id) => byId.get(id)).filter((book): book is ShelfBook => Boolean(book));
+    return arrangeBooks(answered, answerSort).flatMap((group) => group.books.map((book) => book.id));
+  }, [matches, answerSort, byId]);
+  const showcaseBooks = useMemo(
+    () =>
+      new Map(
+        showcases.map((showcase) => [
+          showcase.slug,
+          showcase.bookIds
+            .map((id) => byId.get(id))
+            .filter((book): book is ShelfBook => Boolean(book))
+            .map((book) => ({ book, identity: spineIdentity(book) })),
+        ]),
+      ),
+    [showcases, byId],
+  );
 
   const openBook = useCallback(
     (id: number) => {
@@ -160,7 +194,9 @@ export function ShelfExperience({ books, shop, showcases, initialQuery, initialS
     requestAnimationFrame(() => shelfRef.current?.focusSpine(current.id));
   }, []);
 
-  const changeSort = useCallback((key: SortKey) => {
+  const changeSort = useCallback((key: AnswerSortKey) => {
+    setAnswerSort(key);
+    if (key === "relevance") return;
     setSort(key);
     writeUrl({ sort: key === "atmosphere" ? null : key }, "replace");
   }, []);
@@ -175,22 +211,29 @@ export function ShelfExperience({ books, shop, showcases, initialQuery, initialS
       <Masthead name={shop.name} tagline={shop.tagline} total={books.length} showcaseCount={showcases.length} />
 
       <main>
-        <div className="pt-10 sm:pt-14">
+        <div className="pt-12 sm:pt-20">
           <SearchBar state={search} onSearch={(query) => void runSearch(query)} onClear={clearSearch} />
         </div>
 
-        <div className="mt-8 sm:mt-10">
-          <SortControls value={sort} onChange={changeSort} view={view} onViewChange={setView} />
+        <div className="mt-12 sm:mt-16">
+          <SortControls
+            value={matches ? answerSort : sort}
+            onChange={changeSort}
+            searching={Boolean(matches)}
+            view={view}
+            onViewChange={setView}
+          />
         </div>
 
-        <div className="mt-8">
+        <div key={view} className="view-enter mt-6">
           {view === "shelf" ? (
             <Shelf
               ref={shelfRef}
               books={books}
               groups={groups}
               arrangement={SORT_OPTIONS.find((option) => option.key === sort)?.label.toLowerCase() ?? sort}
-              matches={matches}
+              matches={orderedMatches}
+              ranks={ranks}
               results={results}
               reading={reading}
               openId={open?.id ?? null}
@@ -198,38 +241,83 @@ export function ShelfExperience({ books, shop, showcases, initialQuery, initialS
               onOpen={openBook}
             />
           ) : (
-            <IndexList groups={groups} matches={matches} results={results} byId={byId} onOpen={openBook} />
+            <IndexList groups={groups} matches={orderedMatches} results={results} byId={byId} onOpen={openBook} />
           )}
         </div>
 
         {showcases.length > 0 ? (
-          <section id="showcases" aria-labelledby="showcases-heading" className="mt-24 scroll-mt-8 border-t-[3px] border-ink pt-8">
+          <section id="showcases" aria-labelledby="showcases-heading" className="mt-28 scroll-mt-8 border-t-[3px] border-ink pt-10">
             <div className="flex flex-wrap items-baseline justify-between gap-3">
-              <h2 id="showcases-heading" className="display text-[2rem] leading-none">
+              <h2 id="showcases-heading" className="display text-[clamp(2.2rem,3.8vw,3.5rem)] leading-[0.96]">
                 House showcases
               </h2>
               <p className="eyebrow text-ink-soft">selections put together by the bookseller</p>
             </div>
-            <ul className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {showcases.map((showcase) => (
-                <li key={showcase.slug}>
-                  <Link
-                    href={`/showcase/${showcase.slug}`}
-                    className="group flex min-h-[11rem] flex-col justify-between p-5 transition-transform duration-300 hover:-translate-y-1"
-                    style={{ background: showcase.background, color: showcase.ink }}
-                  >
-                    <span className="eyebrow opacity-80">
-                      showcase · {showcase.count} {showcase.count === 1 ? "book" : "books"}
-                    </span>
-                    <span>
-                      <span className="display-italic block text-balance text-[1.9rem] leading-[1.02]">{showcase.title}</span>
-                      {showcase.intro ? (
-                        <span className="mt-2 line-clamp-2 text-[0.95rem] leading-snug opacity-85">{showcase.intro}</span>
+            <ul className="mt-7 space-y-5">
+              {showcases.map((showcase, position) => {
+                const selection = showcaseBooks.get(showcase.slug) ?? [];
+                const standing = selection.slice(0, SHOWCASE_SPINES);
+                const scale = standing.length <= 5 ? 1.5 : standing.length <= 8 ? 1.28 : 1.1;
+                const listed = selection.slice(0, SHOWCASE_TITLES);
+                return (
+                  <li key={showcase.slug}>
+                    <Link
+                      href={`/showcase/${showcase.slug}`}
+                      aria-label={`${showcase.title}, showcase with ${showcase.count} ${showcase.count === 1 ? "book" : "books"}`}
+                      className="showcase-band"
+                      data-flip={position % 2 === 1 ? "true" : undefined}
+                      style={{ background: showcase.background, color: showcase.ink }}
+                    >
+                      <span className="showcase-band-text">
+                        <span className="eyebrow opacity-75">
+                          showcase · {showcase.count} {showcase.count === 1 ? "book" : "books"}
+                        </span>
+                        <span className="display-italic mt-4 block text-balance text-[clamp(2.5rem,5.4vw,5.25rem)] leading-[0.94]">
+                          {showcase.title}
+                        </span>
+                        {showcase.intro ? (
+                          <span className="mt-5 block max-w-[34rem] text-[1.05rem] leading-[1.5] opacity-85">{showcase.intro}</span>
+                        ) : null}
+                        <span className="showcase-band-cue eyebrow mt-7 inline-flex items-center gap-2" style={{ color: showcase.accent }}>
+                          open the showcase <span aria-hidden>→</span>
+                        </span>
+                      </span>
+
+                      {standing.length > 0 ? (
+                        <span aria-hidden className="showcase-band-books">
+                          <span className="showcase-band-row">
+                            {standing.map(({ book, identity }, index) => (
+                              <span
+                                key={book.id}
+                                className="showcase-band-spine"
+                                style={{ width: identity.width * scale, height: identity.height * scale, transitionDelay: `${index * 45}ms` }}
+                              >
+                                <SpineFace identity={identity} scale={scale} className="relative block h-full w-full overflow-hidden" />
+                              </span>
+                            ))}
+                          </span>
+                          <span className="showcase-band-list">
+                            {listed.map(({ book }, index) => (
+                              <span key={book.id} className="flex items-baseline gap-3">
+                                <span className="eyebrow w-5 shrink-0 text-[9px]" style={{ color: showcase.accent }}>
+                                  {String(index + 1).padStart(2, "0")}
+                                </span>
+                                <span className="min-w-0">
+                                  <span className="display-italic line-clamp-2 text-[1.08rem] leading-tight">{book.title}</span>
+                                  <span className="eyebrow block truncate text-[9px] opacity-70">{book.author}</span>
+                                </span>
+                              </span>
+                            ))}
+                            {selection.length > listed.length ? (
+                              <span className="eyebrow pl-8 text-[9px] opacity-70">and {selection.length - listed.length} more</span>
+                            ) : null}
+                          </span>
+                        </span>
                       ) : null}
-                    </span>
-                  </Link>
-                </li>
-              ))}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </section>
         ) : null}

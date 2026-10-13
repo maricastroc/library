@@ -12,10 +12,10 @@ import {
   type KeyboardEvent,
   type Ref,
 } from "react";
-import { formatPrice } from "@/lib/catalog/text";
+import { formatPrice, hashString } from "@/lib/catalog/text";
 import type { ShelfBook } from "@/lib/catalog/types";
 import type { SearchResult } from "@/lib/search/types";
-import { atmosphereLabel } from "@/lib/semantic/taxonomy";
+import { ATMOSPHERE_BY_ID, atmosphereLabel } from "@/lib/semantic/taxonomy";
 import type { ShelfGroup } from "@/lib/shelf/arrange";
 import { spineIdentity, type SpineIdentity } from "@/lib/shelf/identity";
 import { layoutShelf, neighborInDirection, type PlacedSpine, type ShelfLayout } from "@/lib/shelf/layout";
@@ -32,6 +32,7 @@ type ShelfProps = {
   groups: ShelfGroup[];
   arrangement: string;
   matches: number[] | null;
+  ranks: Map<number, number>;
   results: Map<number, SearchResult>;
   reading: boolean;
   openId: number | null;
@@ -40,6 +41,22 @@ type ShelfProps = {
 };
 
 const countBooks = (count: number) => `${count} ${count === 1 ? "book" : "books"}`;
+
+const NOTE_PAPERS = ["card", "kraft", "slip", "ledger"] as const;
+const NOTE_FIXINGS = ["thread", "tape", "pin"] as const;
+
+function noteStyle(id: number, note: string, slot: number) {
+  const seed = hashString(`note-${id}`);
+  const long = note.length > 58;
+  const width = Math.min(slot, (long ? 150 : 124) + (seed % 4) * 9);
+  return {
+    paper: NOTE_PAPERS[seed % NOTE_PAPERS.length],
+    fixing: NOTE_FIXINGS[(seed >> 3) % NOTE_FIXINGS.length],
+    width,
+    drop: 5 + ((seed >> 5) % 4) * 3,
+    size: long ? 16.5 : note.length > 40 ? 18 : 20,
+  };
+}
 
 const position = (x: number, y: number, extra?: CSSProperties) =>
   ({ "--x": `${x}px`, "--y": `${y}px`, ...extra }) as CSSProperties;
@@ -58,7 +75,7 @@ function describe(book: ShelfBook, result: SearchResult | undefined, rank: numbe
   return parts.join(" ");
 }
 
-export function Shelf({ ref, books, groups, arrangement, matches, results, reading, openId, bookseller, onOpen }: ShelfProps) {
+export function Shelf({ ref, books, groups, arrangement, matches, ranks, results, reading, openId, bookseller, onOpen }: ShelfProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const elements = useRef(new Map<number, HTMLButtonElement>());
   const rangeRef = useRef({ top: -400, bottom: 1600 });
@@ -102,8 +119,8 @@ export function Shelf({ ref, books, groups, arrangement, matches, results, readi
 
   const layout = useMemo(() => {
     if (width <= 0) return null;
-    return layoutShelf({ groups, identities, noted, width, matches: matches ?? undefined });
-  }, [groups, identities, noted, width, matches]);
+    return layoutShelf({ groups, identities, noted, width, matches: matches ?? undefined, ranks });
+  }, [groups, identities, noted, width, matches, ranks]);
 
   const labels = useMemo(() => {
     const map = new Map<number, string>();
@@ -249,13 +266,13 @@ export function Shelf({ ref, books, groups, arrangement, matches, results, readi
             <div
               key={`${arrangement}:${divider.key}`}
               aria-hidden
-              className="placed spine-enter flex flex-col items-center justify-between border-x border-t border-ink/30 bg-paper-light py-2"
+              className="placed spine-enter shelf-divider"
               style={position(divider.x, divider.y, { width: divider.w, height: divider.h })}
             >
               <span className="eyebrow whitespace-nowrap text-[9.5px] text-ink" style={{ writingMode: "vertical-rl" }}>
                 {divider.label}
               </span>
-              <span className="eyebrow text-[9px] text-ink-soft">{divider.count}</span>
+              <span className="display-italic text-[0.8rem] leading-none text-ink-soft">{divider.count}</span>
             </div>
           ))}
 
@@ -272,6 +289,7 @@ export function Shelf({ ref, books, groups, arrangement, matches, results, readi
                 scale={scale}
                 label={labels.get(book.id) ?? book.title}
                 tabbable={tabbableId === book.id}
+                active={active === book.id}
                 absent={openId === book.id}
                 readDelay={Math.round((placed.x / layout.width) * 700 + placed.row * 90)}
                 onOpen={onOpen}
@@ -284,19 +302,46 @@ export function Shelf({ ref, books, groups, arrangement, matches, results, readi
           {layout.talkers.map((talker) => {
             const book = byId.get(talker.id);
             if (!book?.note) return null;
+            const note = noteStyle(book.id, book.note, talker.w);
+            const left = Math.min(talker.w - note.width, Math.max(0, talker.anchor - note.width / 2));
             return (
               <div
                 key={talker.id}
                 aria-hidden
-                className="placed placed-animated z-[1] cursor-pointer pt-[7px]"
+                className="placed placed-animated z-[1]"
                 style={position(talker.x, talker.y, { width: talker.w })}
-                onClick={() => onOpen(book.id)}
               >
-                <div className="shelf-talker relative px-3 pb-2 pt-2.5" style={{ rotate: `${talker.tilt}deg` }}>
-                  <p className="handwriting line-clamp-3 text-[19px] text-ink">{book.note}</p>
-                  <p className="eyebrow mt-1.5 text-[8.5px] text-ink-soft">
-                    {book.noteOrigin === "example" ? "sample note" : `— ${bookseller || "the bookseller"}`}
-                  </p>
+                <div
+                  className="shelf-talker"
+                  data-paper={note.paper}
+                  data-fixing={note.fixing}
+                  data-active={active === book.id ? "true" : undefined}
+                  style={
+                    {
+                      "--tilt": `${talker.tilt}deg`,
+                      "--drop": `${note.drop}px`,
+                      "--anchor": `${talker.anchor - left}px`,
+                      marginLeft: left,
+                      width: note.width,
+                    } as CSSProperties
+                  }
+                  onClick={() => onOpen(book.id)}
+                  onPointerEnter={(event) => {
+                    if (event.pointerType === "mouse") setActive(book.id);
+                  }}
+                  onPointerLeave={(event) => {
+                    if (event.pointerType === "mouse") setActive(null);
+                  }}
+                >
+                  <span className="shelf-talker-thread" />
+                  <div className="shelf-talker-paper">
+                    <p className="handwriting text-ink" style={{ fontSize: note.size }}>
+                      {book.note}
+                    </p>
+                    <p className="shelf-talker-sign">
+                      {book.noteOrigin === "example" ? "sample note" : `— ${bookseller || "the bookseller"}`}
+                    </p>
+                  </div>
                 </div>
               </div>
             );
@@ -351,12 +396,25 @@ export function Shelf({ ref, books, groups, arrangement, matches, results, readi
                 activeSpine.y - 20,
               )}
             >
-              <div className="w-[232px] -translate-y-full bg-ink px-3 py-2 text-paper">
-                <p className="display-italic text-[1.05rem] leading-tight">{activeBook.title}</p>
-                <p className="eyebrow mt-1 text-[9.5px] text-paper/80">
-                  {activeBook.author}
-                  {formatPrice(activeBook.priceCents) ? ` · ${formatPrice(activeBook.priceCents)}` : ""}
-                  {activeBook.stock === 0 ? " · out of stock" : ""}
+              <div key={activeBook.id} className="shelf-preview">
+                <p className="eyebrow text-[9px] text-ink-soft">
+                  {[activeBook.genre, activeBook.year].filter(Boolean).join(" · ") || "on the shelf"}
+                </p>
+                <p className="display mt-1 text-[1.08rem] leading-[1.05]">{activeBook.title}</p>
+                <p className="mt-0.5 text-[0.86rem] italic leading-tight text-ink-soft">{activeBook.author}</p>
+                {activeBook.atmospheres.length > 0 ? (
+                  <p className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-0.5 font-label text-[0.74rem] leading-tight">
+                    {activeBook.atmospheres.map((id) => (
+                      <span key={id} className="inline-flex items-center gap-1">
+                        <span className="inline-block h-2.5 w-1.5" style={{ background: ATMOSPHERE_BY_ID[id].color }} />
+                        {ATMOSPHERE_BY_ID[id].label}
+                      </span>
+                    ))}
+                  </p>
+                ) : null}
+                <p className="eyebrow mt-2 flex justify-between gap-3 border-t border-ink/20 pt-1.5 text-[9px] text-ink-soft">
+                  <span>{activeBook.stock === 0 ? "out of stock" : (formatPrice(activeBook.priceCents) ?? "no price")}</span>
+                  <span>open ↵</span>
                 </p>
               </div>
             </div>

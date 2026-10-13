@@ -23,7 +23,7 @@ import {
   WhyBlock,
   SynopsisBlock,
   TitleBlock,
-  CoverPlate,
+  Frontispiece,
   type DetailState,
 } from "./BookBlocks";
 import { Cover } from "./Cover";
@@ -159,6 +159,10 @@ export function OpenBook({
 
   useMotionValueEvent(flight, "change", applyFlight);
 
+  useLayoutEffect(() => {
+    applyFlight(flight.get());
+  }, [wide, applyFlight, flight]);
+
   const finish = useCallback(
     (fromHistory: boolean) => {
       if (finished.current) return;
@@ -265,14 +269,18 @@ export function OpenBook({
   const cover = <Cover title={book.title} author={book.author} genre={book.genre} identity={identity} shopName={shopName} />;
 
   const leftPage = (
-    <div className="flex h-full flex-col gap-5 overflow-y-auto px-9 pb-8 pt-9 quiet-scroll">
-      <div className="flex items-start justify-between gap-5">
-        <div className="min-w-0 flex-1">
-          <TitleBlock book={book} titleId={titleId} />
+    <div className="book-page quiet-scroll">
+      <p className="page-head">
+        <span className="display-italic normal-case tracking-normal">{shopName}</span>
+        <span>the reading</span>
+      </p>
+      <TitleBlock book={book} titleId={titleId} />
+      <div className="book-spread">
+        <Frontispiece detail={detail}>{cover}</Frontispiece>
+        <div className="min-w-0">
+          <ReadingBlock book={book} detail={detail} />
         </div>
-        {detail ? <CoverPlate detail={detail} /> : null}
       </div>
-      <ReadingBlock book={book} detail={detail} />
       <div className="mt-auto">
         <RecordBlock book={book} detail={detail} />
       </div>
@@ -280,10 +288,14 @@ export function OpenBook({
   );
 
   const rightPage = (
-    <div className="flex h-full flex-col gap-6 overflow-y-auto px-9 pb-8 pt-9 quiet-scroll">
+    <div className="book-page book-page-recto quiet-scroll">
+      <p className="page-head">
+        <span>the book</span>
+        <span className="truncate pl-6">{book.title}</span>
+      </p>
       <WhyBlock result={result} query={query} detail={detail} />
-      <SynopsisBlock state={detailState} />
       <NoteBlock book={book} bookseller={bookseller} />
+      <SynopsisBlock state={detailState} />
       <div className="mt-auto pt-2">
         <Reservation book={book} query={result ? query : null} />
       </div>
@@ -398,15 +410,10 @@ export function OpenBook({
               <TitleBlock book={book} titleId={titleId} compact />
               <WhyBlock result={result} query={query} detail={detail} />
               <NoteBlock book={book} bookseller={bookseller} />
-              <SynopsisBlock state={detailState} dropCap={false} />
               <ReadingBlock book={book} detail={detail} />
-              <div className="flex items-end justify-between gap-5">
-                <div className="min-w-0 flex-1">
-                  <RecordBlock book={book} detail={detail} />
-                </div>
-                {detail ? <CoverPlate detail={detail} /> : null}
-              </div>
+              <SynopsisBlock state={detailState} />
               <Reservation book={book} query={result ? query : null} />
+              <RecordBlock book={book} detail={detail} />
             </motion.div>
           </div>
         )}

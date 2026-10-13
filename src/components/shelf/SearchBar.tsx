@@ -26,9 +26,9 @@ function join(items: string[], conjunction = "and"): string {
 
 function Entry({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <span className="inline-flex items-baseline gap-1.5">
-      <span className="eyebrow text-ink-soft">{label}</span>
-      <span className="italic">{children}</span>
+    <span className="flex flex-wrap items-baseline gap-x-2 xl:block">
+      <span className="eyebrow text-ink-soft xl:block">{label}</span>
+      <span className="italic leading-snug">{children}</span>
     </span>
   );
 }
@@ -98,14 +98,17 @@ function Reading({ interpretation }: { interpretation: Interpretation }) {
       </Entry>,
     );
   }
-  if (entries.length === 0) {
-    return <p className="italic text-ink-soft">I searched for the meaning of what you wrote, comparing it with each book’s synopsis and reading.</p>;
-  }
   return (
-    <p className="flex flex-wrap items-baseline gap-x-5 gap-y-1">
-      <span className="eyebrow text-ink">How I read your request</span>
-      {entries}
-    </p>
+    <div className="hero-margin-note">
+      <p className="handwriting text-[1.45rem] text-ink-soft">how I read your request —</p>
+      {entries.length === 0 ? (
+        <p className="mt-2 italic leading-snug text-ink-soft">
+          By its meaning, compared with each book’s synopsis and reading.
+        </p>
+      ) : (
+        <p className="mt-2 flex flex-wrap gap-x-5 gap-y-2 xl:block xl:space-y-2.5">{entries}</p>
+      )}
+    </div>
   );
 }
 
@@ -148,13 +151,6 @@ export function SearchBar({
     };
   }, [state.status]);
 
-  useEffect(() => {
-    const element = inputRef.current;
-    if (!element) return;
-    element.style.height = "auto";
-    element.style.height = `${element.scrollHeight}px`;
-  }, [draft]);
-
   const submit = (event?: FormEvent) => {
     event?.preventDefault();
     const value = draft.trim();
@@ -169,102 +165,118 @@ export function SearchBar({
   const count = response?.results.length ?? 0;
 
   return (
-    <section aria-label="Search by intent">
-      <form role="search" onSubmit={submit} className="relative">
-        <label htmlFor={inputId} className="eyebrow text-ink-soft">
-          Ask the shelf — in your own words
-        </label>
-        <div className="mt-1 flex items-end gap-3 border-b-2 border-ink focus-within:border-vermilion">
-          <textarea
-            ref={inputRef}
-            id={inputId}
-            rows={1}
-            inputMode="search"
-            enterKeyHint="search"
-            autoComplete="off"
-            autoCapitalize="none"
-            spellCheck={false}
-            maxLength={240}
-            value={draft}
-            onChange={(event) => setDraft(event.target.value.replace(/\n/g, " "))}
-            onKeyDown={(event) => {
-              if (event.key === "Enter" && !event.shiftKey) {
-                event.preventDefault();
-                submit();
-              }
-            }}
-            aria-describedby={statusId}
-            placeholder={`${EXAMPLES[exampleIndex]}…`}
-            className="display-italic block min-w-0 flex-1 resize-none overflow-hidden bg-transparent py-2 text-[clamp(1.45rem,4.4vw,3.35rem)] leading-[1.12] text-ink placeholder:text-ink-soft/85 focus:outline-none"
-          />
-          {committed ? (
-            <button
-              type="button"
-              onClick={() => {
-                setDraft("");
-                onClear();
-                inputRef.current?.focus();
-              }}
-              className="eyebrow mb-3 shrink-0 text-ink-soft hover:text-vermilion"
-            >
-              Clear
-            </button>
-          ) : null}
-          <button type="submit" className="button mb-2 shrink-0" disabled={state.status === "loading"}>
-            Search
-          </button>
-        </div>
-      </form>
-
-      <div id={statusId} aria-live="polite" className="mt-3 min-h-[3.25rem] text-[0.98rem] leading-snug">
-        {state.status === "idle" ? (
-          <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-            <span className="eyebrow text-ink-soft">Try</span>
-            {EXAMPLES.slice(0, 5).map((example) => (
-              <button
-                key={example}
-                type="button"
-                className="ink-link text-left italic text-ink"
-                onClick={() => {
-                  setDraft(example);
-                  onSearch(example);
+    <section aria-label="Search by intent" className="hero">
+      <div className="min-w-0">
+        <form role="search" onSubmit={submit}>
+          <label htmlFor={inputId} className="block">
+            <span className="eyebrow text-ink-soft">Ask the shelf, in your own words</span>
+            <span className="hero-lead mt-3 block">I’m looking for</span>
+          </label>
+          <div className="hero-field">
+            <div className="hero-grow" data-value={draft || `${EXAMPLES[exampleIndex]}…`}>
+              <textarea
+                ref={inputRef}
+                id={inputId}
+                rows={1}
+                inputMode="search"
+                enterKeyHint="search"
+                autoComplete="off"
+                autoCapitalize="none"
+                spellCheck={false}
+                maxLength={240}
+                value={draft}
+                onChange={(event) => setDraft(event.target.value.replace(/\n/g, " "))}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" && !event.shiftKey) {
+                    event.preventDefault();
+                    submit();
+                  }
                 }}
-              >
-                {example}
+                aria-describedby={statusId}
+                placeholder={`${EXAMPLES[exampleIndex]}…`}
+                className="hero-input"
+              />
+            </div>
+            <div className="flex shrink-0 items-center gap-4 pb-1">
+              {committed ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDraft("");
+                    onClear();
+                    inputRef.current?.focus();
+                  }}
+                  className="eyebrow -mx-2 inline-flex min-h-11 items-center px-3 text-ink underline decoration-ink/40 underline-offset-4 hover:text-vermilion hover:decoration-current"
+                >
+                  Clear
+                </button>
+              ) : null}
+              <button type="submit" className="hero-submit" disabled={state.status === "loading"} aria-label="Search">
+                <span aria-hidden>→</span>
               </button>
-            ))}
+            </div>
+            <svg aria-hidden className="hero-rule" viewBox="0 0 1000 10" preserveAspectRatio="none">
+              <path d="M2 6 C 90 2.5, 210 8.5, 360 5 S 640 2.5, 790 6 S 940 7.5, 998 4.5" />
+            </svg>
           </div>
-        ) : null}
+        </form>
 
-        {state.status === "loading" && slow ? <p className="italic text-ink-soft">Reading the shelf…</p> : null}
+        <div id={statusId} aria-live="polite" className="hero-status">
+          {state.status === "loading" && slow ? <p className="italic text-ink-soft">Reading the shelf…</p> : null}
 
-        {state.status === "error" ? (
-          <p className="text-vermilion">
-            {state.message}{" "}
-            <button type="button" className="ink-link" onClick={() => onSearch(state.query)}>
-              Try again
-            </button>
-          </p>
-        ) : null}
-
-        {state.status === "done" ? (
-          <div className="space-y-1.5">
-            <Reading interpretation={state.response.interpretation} />
-            {state.response.message ? (
-              <p className="max-w-[62rem] border-l-2 border-vermilion pl-3 text-ink">{state.response.message}</p>
-            ) : null}
-            <p className="eyebrow text-ink-soft">
-              {count === 0
-                ? "no books highlighted"
-                : `${count} ${count === 1 ? "book highlighted" : "books highlighted"}`}
-              {" · "}
-              {state.response.fallback === "lexical"
-                ? "keyword search (AI unavailable)"
-                : `local semantic search · ${state.response.engine.embedModel} · ${state.response.engine.tookMs} ms`}
+          {state.status === "error" ? (
+            <p className="text-vermilion">
+              {state.message}{" "}
+              <button type="button" className="ink-link" onClick={() => onSearch(state.query)}>
+                Try again
+              </button>
             </p>
+          ) : null}
+
+          {state.status === "done" ? (
+            <div className="space-y-2">
+              {state.response.message ? (
+                <p className="max-w-[52rem] border-l-2 border-vermilion pl-3 text-ink">{state.response.message}</p>
+              ) : null}
+              <p className="eyebrow text-ink-soft">
+                {count === 0
+                  ? "no books highlighted"
+                  : `${count} ${count === 1 ? "book highlighted" : "books highlighted"}`}
+                {" · "}
+                {state.response.fallback === "lexical"
+                  ? "keyword search (AI unavailable)"
+                  : `local semantic search · ${state.response.engine.embedModel} · ${state.response.engine.tookMs} ms`}
+              </p>
+            </div>
+          ) : null}
+        </div>
+      </div>
+
+      <aside className="hero-margin" aria-live="polite">
+        {state.status === "done" ? (
+          <Reading interpretation={state.response.interpretation} />
+        ) : state.status === "idle" ? (
+          <div className="hero-margin-note">
+            <p className="handwriting text-[1.45rem] text-ink-soft">or borrow a request —</p>
+            <ul className="mt-1.5 flex flex-wrap gap-x-6 gap-y-1 xl:block xl:space-y-1.5">
+              {EXAMPLES.slice(0, 5).map((example) => (
+                <li key={example}>
+                  <button
+                    type="button"
+                    className="margin-request"
+                    onClick={() => {
+                      setDraft(example);
+                      onSearch(example);
+                    }}
+                  >
+                    {example}
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
         ) : null}
-      </div>
+      </aside>
     </section>
   );
 }

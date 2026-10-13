@@ -29,7 +29,7 @@ export type PlacedSpine = {
 };
 
 export type PlacedDivider = { key: string; label: string; count: number; x: number; y: number; w: number; h: number };
-export type PlacedTalker = { id: number; x: number; y: number; w: number; tilt: number };
+export type PlacedTalker = { id: number; x: number; y: number; w: number; tilt: number; anchor: number };
 export type PlacedCaption = { id: number; x: number; y: number; w: number; h: number; rank: number };
 export type PlacedBoard = { key: string; x: number; y: number; w: number };
 export type PlacedLabel = { key: "answer" | "rest"; y: number };
@@ -58,9 +58,9 @@ export function metricsFor(width: number): LayoutMetrics {
     headroom: 30,
     shelfHeight,
     board: 3,
-    hang: compact ? 108 : 102,
+    hang: compact ? 124 : 118,
     hangEmpty: compact ? 46 : 58,
-    dividerWidth: compact ? 20 : 24,
+    dividerWidth: compact ? 18 : 22,
     talkerWidth: compact ? 170 : 160,
     captionWidth: compact ? Math.max(180, width - 74) : medium ? 220 : 232,
     slotGap: compact ? 18 : 34,
@@ -73,6 +73,7 @@ export type LayoutInput = {
   noted: Set<number>;
   width: number;
   matches?: number[];
+  ranks?: Map<number, number>;
   showDividers?: boolean;
 };
 
@@ -121,14 +122,15 @@ export function layoutShelf(input: LayoutInput): ShelfLayout {
         rowStartX = 0;
         rowEndX = 0;
       }
-      spines.set(id, { id, x, y: cursorY + metrics.headroom + (metrics.shelfHeight - h), w, h, row, state: "match", rank: index + 1 });
+      const rank = input.ranks?.get(id) ?? index + 1;
+      spines.set(id, { id, x, y: cursorY + metrics.headroom + (metrics.shelfHeight - h), w, h, row, state: "match", rank });
       captions.push({
         id,
         x: x + w + 14,
         y: cursorY + metrics.headroom,
         w: Math.min(metrics.captionWidth, width - (x + w + 14)),
         h: metrics.shelfHeight,
-        rank: index + 1,
+        rank,
       });
       order.push(id);
       rowEndX = Math.min(width, x + slot);
@@ -203,6 +205,7 @@ export function layoutShelf(input: LayoutInput): ShelfLayout {
             y: cursorY + rowBody + metrics.board,
             w: metrics.talkerWidth,
             tilt: TILTS[talkerCount % TILTS.length],
+            anchor: x + w / 2 - talkerX,
           });
           lastTalkerRight = talkerX + metrics.talkerWidth;
           talkerCount += 1;

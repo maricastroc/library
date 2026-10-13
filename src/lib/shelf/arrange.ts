@@ -4,6 +4,14 @@ import { ATMOSPHERE_BY_ID, GENRES, PACE_LEVELS, type AtmosphereId } from "@/lib/
 
 export type SortKey = "atmosphere" | "pace" | "genre" | "author" | "title" | "price";
 
+export type AnswerSortKey = SortKey | "relevance";
+
+export const RELEVANCE_OPTION: { key: "relevance"; label: string; hint: string } = {
+  key: "relevance",
+  label: "Relevance",
+  hint: "closest to your request first",
+};
+
 export const SORT_OPTIONS: { key: SortKey; label: string; hint: string }[] = [
   { key: "atmosphere", label: "Atmosphere", hint: "from luminous to dark" },
   { key: "pace", label: "Pace", hint: "from slow to breakneck" },
@@ -76,7 +84,7 @@ const UNREAD = "zz-unread";
 const PRICE_BANDS = [
   { id: "1", label: "up to R$ 45", max: 4500 },
   { id: "2", label: "R$ 45 to 60", max: 6000 },
-  { id: "3", label: "R$ 60 a 80", max: 8000 },
+  { id: "3", label: "R$ 60 to 80", max: 8000 },
   { id: "4", label: "over R$ 80", max: Number.POSITIVE_INFINITY },
 ];
 

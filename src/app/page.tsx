@@ -21,8 +21,10 @@ export default async function Home({ searchParams }: PageProps<"/">) {
     title: showcase.title,
     intro: showcase.intro,
     count: showcase.items.length,
+    bookIds: showcase.items.map((item) => item.bookId),
     background: SHOWCASE_PALETTES[showcase.palette].background,
     ink: SHOWCASE_PALETTES[showcase.palette].ink,
+    accent: SHOWCASE_PALETTES[showcase.palette].accent,
   }));
   const requestedSort = first(params.sort);
   const initialSort = SORT_OPTIONS.some((option) => option.key === requestedSort) ? (requestedSort as SortKey) : "atmosphere";

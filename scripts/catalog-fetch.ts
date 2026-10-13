@@ -456,7 +456,7 @@ async function main() {
         genre: seed.genre,
         isbn: ol?.isbn ?? null,
         publisher: ol?.publisher ?? null,
-        year: ol?.year ?? null,
+        year: seed.year !== undefined ? seed.year : (ol?.year ?? null),
         pages: ol?.pages ?? null,
         language: "pt",
         coverUrl: ol?.coverId ? `https://covers.openlibrary.org/b/id/${ol.coverId}-L.jpg` : null,
