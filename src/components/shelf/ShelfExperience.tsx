@@ -211,15 +211,28 @@ export function ShelfExperience({ books, shop, showcases, initialQuery, initialS
     writeUrl({ sort: key === "atmosphere" ? null : key }, "replace");
   }, []);
 
+  const [instantOpening, setInstantOpening] = useState(false);
   const searchFromHead = useCallback(
     (query: string) => {
+      setInstantOpening(true);
       void runSearch(query);
-      shelfTopRef.current?.scrollIntoView({ block: "start" });
+      requestAnimationFrame(() => {
+        shelfTopRef.current?.scrollIntoView({ block: "start" });
+        setInstantOpening(false);
+      });
     },
     [runSearch],
   );
 
   const backToTop = useCallback(() => window.scrollTo({ top: 0 }), []);
+
+  const committed = search.status === "idle" ? "" : search.query;
+  const [draft, setDraft] = useState(committed);
+  const [syncedQuery, setSyncedQuery] = useState(committed);
+  if (committed !== syncedQuery) {
+    setSyncedQuery(committed);
+    setDraft(committed);
+  }
 
   const openBookData = open ? byId.get(open.id) : undefined;
   const openIdentity = useMemo(() => (openBookData ? spineIdentity(openBookData) : null), [openBookData]);
@@ -227,13 +240,27 @@ export function ShelfExperience({ books, shop, showcases, initialQuery, initialS
   const reading = search.status === "loading";
 
   return (
-    <div className="page mx-auto w-full max-w-[1560px] px-4 sm:px-8 lg:px-12" data-opening={search.status === "idle" ? "full" : "fitted"}>
+    <div
+      className="page mx-auto w-full max-w-[1560px] px-4 sm:px-8 lg:px-12"
+      data-opening={search.status === "idle" ? "full" : "fitted"}
+      data-instant={instantOpening ? "true" : undefined}
+    >
       <Masthead name={shop.name} tagline={shop.tagline} total={books.length} showcaseCount={showcases.length} />
-      <RunningHead name={shop.name} state={search} watch={heroRef} onSearch={searchFromHead} onClear={clearSearch} onTop={backToTop} />
+      <RunningHead
+        name={shop.name}
+        state={search}
+        draft={draft}
+        onDraft={setDraft}
+        watch={heroRef}
+        arrangement={SORT_OPTIONS.find((option) => option.key === sort)?.label.toLowerCase() ?? sort}
+        onSearch={searchFromHead}
+        onClear={clearSearch}
+        onTop={backToTop}
+      />
 
       <main className="page-main">
         <div ref={heroRef} className="page-hero pb-12 pt-12 sm:pb-16 sm:pt-20">
-          <SearchBar state={search} onSearch={(query) => void runSearch(query)} onClear={clearSearch} />
+          <SearchBar state={search} draft={draft} onDraft={setDraft} onSearch={(query) => void runSearch(query)} onClear={clearSearch} />
         </div>
 
         <div ref={shelfTopRef} className="pb-5">
@@ -247,7 +274,7 @@ export function ShelfExperience({ books, shop, showcases, initialQuery, initialS
         </div>
 
         <div>
-          <div key={view} className="view-enter mt-6">
+          <div key={view} className="view-enter mt-6" data-running-title="the collection">
             {view === "display" ? (
               <Gallery
                 ref={shelfRef}
@@ -286,7 +313,7 @@ export function ShelfExperience({ books, shop, showcases, initialQuery, initialS
           </div>
 
           {showcases.length > 0 ? (
-            <section id="showcases" aria-labelledby="showcases-heading" className="mt-28 scroll-mt-8 border-t-[3px] border-ink pt-10">
+            <section id="showcases" aria-labelledby="showcases-heading" data-running-title="house showcases" className="mt-28 scroll-mt-8 border-t-[3px] border-ink pt-10">
               <div className="flex flex-wrap items-baseline justify-between gap-3">
                 <h2 id="showcases-heading" className="display text-[clamp(2.2rem,3.8vw,3.5rem)] leading-[0.96]">
                   House showcases

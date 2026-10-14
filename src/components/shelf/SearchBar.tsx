@@ -122,10 +122,14 @@ function Reading({ interpretation, declined }: { interpretation: Interpretation;
 
 export function SearchBar({
   state,
+  draft,
+  onDraft,
   onSearch,
   onClear,
 }: {
   state: SearchState;
+  draft: string;
+  onDraft: (draft: string) => void;
   onSearch: (query: string) => void;
   onClear: () => void;
 }) {
@@ -133,15 +137,8 @@ export function SearchBar({
   const statusId = useId();
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const committed = state.status === "idle" ? "" : state.query;
-  const [draft, setDraft] = useState(committed);
-  const [syncedQuery, setSyncedQuery] = useState(committed);
   const [exampleIndex, setExampleIndex] = useState(0);
   const [slow, setSlow] = useState(false);
-
-  if (committed !== syncedQuery) {
-    setSyncedQuery(committed);
-    setDraft(committed);
-  }
 
   useEffect(() => {
     if (draft.length > 0) return;
@@ -193,7 +190,7 @@ export function SearchBar({
                 spellCheck={false}
                 maxLength={240}
                 value={draft}
-                onChange={(event) => setDraft(event.target.value.replace(/\n/g, " "))}
+                onChange={(event) => onDraft(event.target.value.replace(/\n/g, " "))}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" && !event.shiftKey) {
                     event.preventDefault();
@@ -210,7 +207,7 @@ export function SearchBar({
                 <button
                   type="button"
                   onClick={() => {
-                    setDraft("");
+                    onDraft("");
                     onClear();
                     inputRef.current?.focus();
                   }}
@@ -273,7 +270,7 @@ export function SearchBar({
                     type="button"
                     className="margin-request"
                     onClick={() => {
-                      setDraft(example);
+                      onDraft(example);
                       onSearch(example);
                     }}
                   >

@@ -69,7 +69,7 @@ function Measure({ title, children }: { title: string; children: ReactNode }) {
 
 export function Colophon({ embedModel, chatModel }: { embedModel: string; chatModel: string }) {
   return (
-    <footer id="how-to-read" className="mt-28 scroll-mt-8 border-t-[3px] border-ink pb-20 pt-10">
+    <footer id="how-to-read" data-running-title="how to read the collection" className="mt-28 scroll-mt-8 border-t-[3px] border-ink pb-20 pt-10">
       <section aria-labelledby="legend-heading">
         <div className="grid gap-x-16 gap-y-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-end">
           <div>
