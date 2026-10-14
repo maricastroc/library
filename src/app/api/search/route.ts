@@ -15,7 +15,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Too many searches in a short time. Try again in a minute." }, { status: 429 });
   }
   try {
-    return NextResponse.json(await semanticSearch(query));
+    const requested = Number(request.nextUrl.searchParams.get("limit"));
+    const limit = Number.isInteger(requested) && requested >= 1 && requested <= 10 ? requested : undefined;
+    return NextResponse.json(await semanticSearch(query, { limit }));
   } catch (error) {
     if (error instanceof OllamaError) return NextResponse.json(lexicalFallback(query, error));
     console.error("[search]", error);
