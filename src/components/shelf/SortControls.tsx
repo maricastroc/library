@@ -3,7 +3,7 @@
 import { motion } from "motion/react";
 import { RELEVANCE_OPTION, SORT_OPTIONS, type AnswerSortKey } from "@/lib/shelf/arrange";
 
-export type ViewMode = "shelf" | "index";
+export type ViewMode = "display" | "list";
 
 function Stroke({ layoutId }: { layoutId: string }) {
   return (
@@ -39,7 +39,7 @@ export function SortControls({
     <div className="flex flex-wrap items-baseline justify-between gap-x-10 gap-y-3">
       <fieldset className="flex min-w-0 flex-wrap items-baseline gap-x-4 gap-y-1">
         <legend className="eyebrow float-left mr-4 pt-[0.55rem] text-ink-soft">
-          {searching ? "The answers, arranged by" : "The shelf, arranged by"}
+          {searching ? "The answers, arranged by" : "The collection, arranged by"}
         </legend>
         <div className="flex flex-wrap items-baseline gap-x-1">
           {options.map((option) => {
@@ -70,7 +70,7 @@ export function SortControls({
       </fieldset>
       <div role="group" aria-label="View mode" className="flex items-baseline gap-1">
         <span className="eyebrow mr-2 text-ink-soft">seen as</span>
-        {(["shelf", "index"] as const).map((mode) => (
+        {(["display", "list"] as const).map((mode) => (
           <button
             key={mode}
             type="button"
@@ -79,7 +79,7 @@ export function SortControls({
             className="sort-word"
             data-selected={view === mode ? "true" : undefined}
           >
-            <span>{mode === "shelf" ? "a shelf" : "an index"}</span>
+            <span>{mode === "display" ? "a display" : "a list"}</span>
             {view === mode ? <Stroke layoutId="view-stroke" /> : null}
           </button>
         ))}

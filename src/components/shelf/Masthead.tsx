@@ -22,7 +22,7 @@ export function Masthead({
   showcaseCount: number;
 }) {
   return (
-    <header className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 pt-6 sm:pt-8">
+    <header className="page-masthead flex flex-wrap items-end justify-between gap-x-8 gap-y-4 pt-6 sm:pt-8">
       <div className="flex items-end gap-5">
         <Link href="/" aria-label={`${name}, home page`} className="text-[1.9rem] sm:text-[2.3rem]">
           <Wordmark name={name} />
@@ -30,14 +30,14 @@ export function Masthead({
         <p className="eyebrow hidden max-w-[16rem] pb-1 text-ink-soft sm:block">{tagline}</p>
       </div>
       <nav aria-label="Sections" className="eyebrow flex items-center gap-5 pb-1 text-ink">
-        <span className="hidden text-ink-soft md:inline">{total} {total === 1 ? "book" : "books"} on the shelf</span>
+        <span className="hidden text-ink-soft md:inline">{total} {total === 1 ? "book" : "books"} in the collection</span>
         {showcaseCount > 0 ? (
           <a className="ink-link" href="#showcases">
             Showcases
           </a>
         ) : null}
         <a className="ink-link" href="#how-to-read">
-          How to read the shelf
+          How to read the collection
         </a>
         <Link className="ink-link" href="/admin">
           Counter

@@ -49,7 +49,7 @@ export function ShowcaseEditor({ showcase, books }: { showcase: Showcase | null;
   const suggest = async () => {
     const idea = `${title} ${intro}`.trim();
     if (idea.length < 3) {
-      setSuggestions({ status: "error", list: [], message: "Write the showcase’s title or idea so the shelf can suggest books." });
+      setSuggestions({ status: "error", list: [], message: "Write the showcase’s title or idea so the collection can suggest books." });
       return;
     }
     setSuggestions({ status: "loading", list: [], message: null });
@@ -156,7 +156,7 @@ export function ShowcaseEditor({ showcase, books }: { showcase: Showcase | null;
           Books in the showcase · {items.length}
         </h2>
         {items.length === 0 ? (
-          <p className="py-6 text-ink-soft">No books yet. Search by title below or ask the shelf for suggestions.</p>
+          <p className="py-6 text-ink-soft">No books yet. Search by title below or ask the collection for suggestions.</p>
         ) : (
           <ol className="divide-y divide-ink/15">
             {items.map((item, index) => {
@@ -223,7 +223,7 @@ export function ShowcaseEditor({ showcase, books }: { showcase: Showcase | null;
           </ul>
         </div>
         <div>
-          <p className="eyebrow text-ink-soft">Suggestions from the shelf</p>
+          <p className="eyebrow text-ink-soft">Suggestions from the collection</p>
           <p className="mt-1 text-[0.92rem] text-ink-soft">
             Semantic search looks for books close to the title and the introduction. It only suggests: the choice is yours.
           </p>

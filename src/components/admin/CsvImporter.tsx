@@ -162,7 +162,7 @@ export function CsvImporter() {
       {stage.step === "done" ? (
         <div role="status" className="mt-6 border-l-2 border-ink pl-3">
           <p className="display text-[1.4rem]">
-            {stage.outcome.inserted} {stage.outcome.inserted === 1 ? "book joined" : "books joined"} the shelf
+            {stage.outcome.inserted} {stage.outcome.inserted === 1 ? "book joined" : "books joined"} the collection
             {stage.outcome.updated > 0 ? ` and ${stage.outcome.updated} ${stage.outcome.updated === 1 ? "was updated" : "were updated"}` : ""}.
           </p>
           <p className="mt-1 text-ink-soft">

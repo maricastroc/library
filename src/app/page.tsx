@@ -37,6 +37,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
       initialQuery={first(params.q).replace(/\s+/g, " ").trim().slice(0, 240)}
       initialSort={initialSort}
       initialSlug={first(params.book) || null}
+      density={first(params.density) === "airy" ? "airy" : "balanced"}
     >
       <Colophon embedModel={EMBED_MODEL} chatModel={CHAT_MODEL} />
     </ShelfExperience>

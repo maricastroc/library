@@ -10,8 +10,8 @@ function isTyping(target: EventTarget | null): boolean {
 }
 
 function statusLine(state: SearchState): string | null {
-  if (state.status === "loading") return "reading the shelf…";
-  if (state.status === "error") return "the shelf could not answer";
+  if (state.status === "loading") return "reading the collection…";
+  if (state.status === "error") return "the bookshop could not answer";
   if (state.status !== "done") return null;
   const count = state.response.results.length;
   if (count === 0) return "nothing highlighted";
@@ -93,7 +93,7 @@ export function RunningHead({
           <Wordmark name={name} />
         </button>
 
-        <form role="search" aria-label="Ask the shelf" onSubmit={submit} className="running-head-field">
+        <form role="search" aria-label="Ask the bookshop" onSubmit={submit} className="running-head-field">
           <label htmlFor={inputId} className="eyebrow sr-only shrink-0 text-ink-soft md:not-sr-only">
             I’m looking for
           </label>

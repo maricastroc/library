@@ -21,6 +21,6 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     if (error instanceof OllamaError) return NextResponse.json(lexicalFallback(query, error));
     console.error("[search]", error);
-    return NextResponse.json({ error: "The shelf couldn’t answer just now." }, { status: 500 });
+    return NextResponse.json({ error: "The bookshop couldn’t answer just now." }, { status: 500 });
   }
 }

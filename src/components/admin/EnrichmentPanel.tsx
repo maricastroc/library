@@ -104,7 +104,7 @@ export function EnrichmentPanel({ initial }: { initial: Payload }) {
         {ollamaProblem ? (
           <p role="alert" className="mt-1 text-vermilion">
             {!ollama.available
-              ? "Ollama isn’t responding on this computer. Without it, the shelf can only search by keyword."
+              ? "Ollama isn’t responding on this computer. Without it, the collection can only be searched by keyword."
               : `Model missing from Ollama: ${[!ollama.embedReady ? ollama.embedModel : null, !ollama.chatReady ? ollama.chatModel : null].filter(Boolean).join(" and ")}.`}
           </p>
         ) : null}

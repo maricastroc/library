@@ -74,7 +74,7 @@ export default async function ShowcasePage({ params }: PageProps<"/showcase/[slu
           ) : null}
         </section>
 
-        <nav aria-label="Books in this showcase" className="mt-16 overflow-x-auto pb-2">
+        <nav aria-label="Books in this showcase" className="paper-scroll mt-16 overflow-x-auto pb-3">
           <ul className="flex min-w-max items-end gap-[3px] border-b-[3px] border-current pt-4">
             {entries.map(({ book, identity }, index) => (
               <li key={book.id} style={{ width: identity.width * 1.1, height: identity.height * 1.1 }}>

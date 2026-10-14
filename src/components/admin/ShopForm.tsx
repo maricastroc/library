@@ -15,7 +15,7 @@ export function ShopForm({ shop }: { shop: ShopConfig }) {
       <Field label="Tagline" name="tagline">
         <input id="tagline" name="tagline" className="field" defaultValue={shop.tagline} maxLength={120} />
       </Field>
-      <Field label="Who signs the notes" name="bookseller" hint="Shown on the shelf talkers and inside the book. Left empty, it shows “the bookseller”.">
+      <Field label="Who signs the notes" name="bookseller" hint="Shown on the notes beside the books and inside the jacket. Left empty, it shows “the bookseller”.">
         <input id="bookseller" name="bookseller" className="field" defaultValue={shop.bookseller} maxLength={60} />
       </Field>
       <div className="grid gap-5 sm:grid-cols-2">

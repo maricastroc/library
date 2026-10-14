@@ -28,7 +28,7 @@ export function lexicalFallback(query: string, error: OllamaError): SearchRespon
     confidence: hits.length > 0 ? "low" : "none",
     message:
       hits.length > 0
-        ? `${reason} For now the shelf can only look for the exact words of your search.`
+        ? `${reason} For now the collection can only be searched by the exact words you type.`
         : `${reason} The keyword search found nothing either.`,
     results: hits.map((hit) => ({
       id: hit.id,

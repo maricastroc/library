@@ -74,10 +74,11 @@ export function Colophon({ embedModel, chatModel }: { embedModel: string; chatMo
         <div className="grid gap-x-16 gap-y-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-end">
           <div>
             <h2 id="legend-heading" className="display text-[clamp(2.2rem,3.8vw,3.5rem)] leading-[0.96]">
-              How to read the shelf
+              How to read the collection
             </h2>
             <p className="mt-5 max-w-[30rem] text-[1.15rem] leading-[1.45] text-ink-soft">
-              No spine is decorated at random. Each one is drawn from what the catalog knows about the book.
+              Nothing here is placed by hand or decorated at random. Each binding is drawn from what the catalog knows about the book, and each
+              niche is composed by a few rules.
             </p>
           </div>
           <div>
@@ -121,6 +122,46 @@ export function Colophon({ embedModel, chatModel }: { embedModel: string; chatMo
               );
             })}
           </ul>
+        </div>
+
+        <div className="mt-16">
+          <p className="eyebrow text-ink">How a niche is composed</p>
+          <dl className="legend-measures mt-4">
+            <Measure title="One book faces you">
+              <span aria-hidden className="flex items-end gap-1">
+                <MiniSpine width={30} height={44} color="#c56a45" />
+                <MiniSpine width={9} height={40} color="#34506b" />
+                <MiniSpine width={11} height={44} color="#34506b" />
+              </span>
+              <span>the one with a bookseller’s note; otherwise the first of the group</span>
+            </Measure>
+            <Measure title="Slim books lie flat">
+              <span aria-hidden className="flex flex-col items-start gap-[2px]">
+                <MiniSpine width={34} height={8} color="#24483e" />
+                <MiniSpine width={40} height={7} color="#7b1f2e" />
+                <MiniSpine width={44} height={9} color="#34506b" />
+              </span>
+              <span>poetry, theater and books of up to 170 pages, the largest at the bottom</span>
+            </Measure>
+            <Measure title="The last of a row leans">
+              <span aria-hidden className="flex items-end gap-1">
+                <MiniSpine width={10} height={44} color="#5c4a6b" />
+                <MiniSpine width={10} height={40} color="#5c4a6b" />
+                <span className="inline-block origin-bottom-left rotate-[14deg]">
+                  <MiniSpine width={10} height={42} color="#5c4a6b" />
+                </span>
+              </span>
+              <span>and leans further the faster the group reads</span>
+            </Measure>
+            <Measure title="An answer is a staircase">
+              <span aria-hidden className="flex items-end gap-1">
+                <span className="block h-[30px] w-4 bg-ink/25" />
+                <span className="block h-[20px] w-4 bg-ink/25" />
+                <span className="block h-[11px] w-4 bg-ink/25" />
+              </span>
+              <span>the closest stands highest, the rest step down; arranged by anything else, they stand level</span>
+            </Measure>
+          </dl>
         </div>
 
         <dl className="legend-measures mt-14">
@@ -174,7 +215,7 @@ export function Colophon({ embedModel, chatModel }: { embedModel: string; chatMo
       <div className="mt-16 grid gap-x-16 gap-y-10 border-t border-ink/25 pt-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
         <section aria-labelledby="ai-heading">
           <h2 id="ai-heading" className="eyebrow text-ink">
-            How the shelf answers
+            How the bookshop answers
           </h2>
           <div className="mt-4 gap-x-10 text-[0.98rem] leading-relaxed text-ink-soft sm:columns-2 [&>p+p]:mt-3 [&>p]:break-inside-avoid">
             <p>
@@ -183,7 +224,7 @@ export function Colophon({ embedModel, chatModel }: { embedModel: string; chatMo
               that supports each reading.
             </p>
             <p>
-              Your question becomes a vector ({embedModel}) and is compared with those readings. When the shelf has
+              Your question becomes a vector ({embedModel}) and is compared with those readings. When the collection has
               no good answer, it says so.
             </p>
             <p>The bookseller can correct any classification. Personal notes are always written by people.</p>
@@ -204,7 +245,11 @@ export function Colophon({ embedModel, chatModel }: { embedModel: string; chatMo
               <a className="ink-link" href="https://pt.wikipedia.org" target="_blank" rel="noreferrer">
                 Portuguese Wikipedia
               </a>
-              , translated into English, under the{" "}
+              , translated into English, and{" "}
+              <a className="ink-link" href="https://en.wikipedia.org" target="_blank" rel="noreferrer">
+                English Wikipedia
+              </a>{" "}
+              for books written in English, under the{" "}
               <a
                 className="ink-link"
                 href="https://creativecommons.org/licenses/by-sa/4.0/deed.en"

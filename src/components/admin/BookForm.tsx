@@ -86,12 +86,12 @@ export function BookForm({ book }: { book: BookDetail | null }) {
           rows={3}
           maxLength={280}
           defaultValue={book?.note ?? ""}
-          placeholder="Write as if you were leaving a note on the shelf…"
+          placeholder="Write as if you were leaving a note beside the book…"
         />
         <p className="eyebrow mt-1 text-[9px] text-ink-soft">
           {book?.noteOrigin === "example"
             ? "This is a sample note from the demo. Once you rewrite it, it’s signed by you."
-            : "Appears on the shelf as a shelf talker and inside the book. Only people write notes: the AI never fills in this field."}
+            : "Appears as a handwritten card beside the book and inside its jacket. Only people write notes: the AI never fills in this field."}
         </p>
       </div>
 

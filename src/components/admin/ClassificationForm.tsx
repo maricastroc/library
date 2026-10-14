@@ -183,7 +183,7 @@ export function ClassificationForm({ book }: { book: BookDetail }) {
       </div>
 
       <div className="flex flex-col items-center gap-3 lg:w-40">
-        <p className="eyebrow text-ink-soft">on the shelf</p>
+        <p className="eyebrow text-ink-soft">in the collection</p>
         <div className="flex h-[260px] items-end border-b-[3px] border-ink px-6">
           <div style={{ width: preview.width, height: preview.height }} className="transition-[width,height] duration-300">
             <SpineFace identity={preview} className="relative block h-full w-full overflow-hidden" />

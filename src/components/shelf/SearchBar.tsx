@@ -39,7 +39,7 @@ function Reading({ interpretation, declined }: { interpretation: Interpretation;
   if (reference?.inCatalog && reference.similar) {
     entries.push(
       <Entry key="ref" label="starting point">
-        {reference.kind === "author" ? `the books by ${reference.label} on the shelf` : reference.label}
+        {reference.kind === "author" ? `the books by ${reference.label} in the collection` : reference.label}
       </Entry>,
     );
   } else if (reference?.inCatalog) {
@@ -177,7 +177,7 @@ export function SearchBar({
       <div className="min-w-0">
         <form role="search" onSubmit={submit}>
           <label htmlFor={inputId} className="block">
-            <span className="eyebrow text-ink-soft">Ask the shelf, in your own words</span>
+            <span className="eyebrow text-ink-soft">Ask the bookshop, in your own words</span>
             <span className="hero-lead mt-3 block">I’m looking for</span>
           </label>
           <div className="hero-field">
@@ -230,7 +230,7 @@ export function SearchBar({
         </form>
 
         <div id={statusId} aria-live="polite" className="hero-status">
-          {state.status === "loading" && slow ? <p className="italic text-ink-soft">Reading the shelf…</p> : null}
+          {state.status === "loading" && slow ? <p className="italic text-ink-soft">Reading the collection…</p> : null}
 
           {state.status === "error" ? (
             <p className="text-vermilion">
