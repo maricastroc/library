@@ -484,9 +484,13 @@ async function main() {
     return;
   }
   mkdirSync(CACHE_DIR, { recursive: true });
-  const entries: SeedCatalogEntry[] = [];
+  const onlyNew = process.argv.includes("--new");
+  const kept: SeedCatalogEntry[] = onlyNew && existsSync(OUT_FILE) ? (JSON.parse(readFileSync(OUT_FILE, "utf8")) as SeedCatalogEntry[]) : [];
+  const keptSlugs = new Set(kept.map((entry) => entry.slug));
+  const entrySlug = (seed: SeedTitle) => slugify(`${seed.englishTitle ?? seed.title} ${seed.author.split(" ").slice(-1)[0]}`);
+  const entries: SeedCatalogEntry[] = [...kept];
   const report: { title: string; author: string; openLibrary: boolean; isbn: boolean; synopsis: boolean }[] = [];
-  const queue = seedTitles.map((seed, index) => ({ seed, index }));
+  const queue = seedTitles.map((seed, index) => ({ seed, index })).filter(({ seed }) => !keptSlugs.has(entrySlug(seed)));
   const results = new Array<SeedCatalogEntry | null>(seedTitles.length).fill(null);
   let done = 0;
   const unavailable: string[] = [];
@@ -513,7 +517,7 @@ async function main() {
         synopsis: Boolean(wiki),
       };
       results[index] = {
-        slug: slugify(`${title} ${surname}`),
+        slug: entrySlug(seed),
         title,
         editionTitle: seed.englishTitle ? seed.title : null,
         author: seed.author,
@@ -533,8 +537,8 @@ async function main() {
       };
       done += 1;
       if (done % 20 === 0) {
-        console.log(`${done}/${seedTitles.length}`);
-        writeFileSync(OUT_FILE, JSON.stringify(results.filter(Boolean), null, 2));
+        console.log(`${done}/${seedTitles.length - kept.length}`);
+        writeFileSync(OUT_FILE, JSON.stringify([...kept, ...results.filter(Boolean)], null, 2));
       }
     }
   };
@@ -544,7 +548,8 @@ async function main() {
   if (unavailable.length > 0) console.log(`sources unavailable for ${unavailable.length} titles: ${unavailable.join("; ")}`);
 
   writeFileSync(OUT_FILE, JSON.stringify(entries, null, 2));
-  writeFileSync(REPORT_FILE, JSON.stringify(report.filter(Boolean), null, 2));
+  const previousReport = onlyNew && existsSync(REPORT_FILE) ? (JSON.parse(readFileSync(REPORT_FILE, "utf8")) as typeof report) : [];
+  writeFileSync(REPORT_FILE, JSON.stringify([...previousReport, ...report.filter(Boolean)], null, 2));
   const withSynopsis = entries.filter((entry) => entry.synopsis).length;
   const withIsbn = entries.filter((entry) => entry.isbn).length;
   const withCover = entries.filter((entry) => entry.coverUrl).length;

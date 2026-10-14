@@ -2280,5 +2280,96 @@
     "openLibrary": true,
     "isbn": true,
     "synopsis": true
+  },
+  {
+    "title": "Harry Potter and the Philosopher's Stone",
+    "author": "J. K. Rowling",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "A Game of Thrones",
+    "author": "George R. R. Martin",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "The Hunger Games",
+    "author": "Suzanne Collins",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "The Fault in Our Stars",
+    "author": "John Green",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "The Shadow of the Wind",
+    "author": "Carlos Ruiz Zafón",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Life of Pi",
+    "author": "Yann Martel",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Gone Girl",
+    "author": "Gillian Flynn",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "The Da Vinci Code",
+    "author": "Dan Brown",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "The Martian",
+    "author": "Andy Weir",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Klara and the Sun",
+    "author": "Kazuo Ishiguro",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "The Midnight Library",
+    "author": "Matt Haig",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Where the Crawdads Sing",
+    "author": "Delia Owens",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": false
+  },
+  {
+    "title": "The Seven Husbands of Evelyn Hugo",
+    "author": "Taylor Jenkins Reid",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
   }
 ]

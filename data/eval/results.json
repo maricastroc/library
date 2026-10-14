@@ -1,6 +1,6 @@
 {
   "summary": {
-    "generatedAt": "2026-10-13T18:40:35.739Z",
+    "generatedAt": "2026-10-14T11:37:44.616Z",
     "models": {
       "embeddings": "embeddinggemma",
       "classifier": "gemma4:e4b",
@@ -8,51 +8,51 @@
     },
     "overall": {
       "lexical": {
-        "p5": 0.4166666666666666,
-        "ndcg5": 0.3562417223419123,
+        "p5": 0.39166666666666666,
+        "ndcg5": 0.34022981846345357,
         "emptyQueries": 1
       },
       "embedding": {
-        "p5": 0.65,
-        "ndcg5": 0.6447917606198253,
+        "p5": 0.7000000000000001,
+        "ndcg5": 0.6601407192903882,
         "emptyQueries": 0
       },
       "full": {
-        "p5": 0.7500000000000001,
-        "ndcg5": 0.7142126905405775,
+        "p5": 0.725,
+        "ndcg5": 0.6768383954524525,
         "emptyQueries": 1
       }
     },
     "byType": {
       "emotional": {
-        "lexical": 0.13958344160649722,
-        "embedding": 0.49281191417144016,
-        "full": 0.8593173049792652
+        "lexical": 0.12477005501022269,
+        "embedding": 0.5898873631607737,
+        "full": 0.8124067984268392
       },
       "abstract": {
-        "lexical": 0.38165744748911273,
-        "embedding": 0.5789649513987359,
-        "full": 0.7185105498889784
+        "lexical": 0.4037218957941243,
+        "embedding": 0.6234518445434932,
+        "full": 0.7131885967137301
       },
       "author": {
         "lexical": 0.5825059896650211,
-        "embedding": 0.8049832117833795,
-        "full": 0.5772171197953506
+        "embedding": 0.7300500097592078,
+        "full": 0.5652418552751841
       },
       "negative": {
-        "lexical": 0.4052800298881471,
-        "embedding": 0.6932936710228286,
-        "full": 0.7401701664288254
+        "lexical": 0.3369082472205366,
+        "embedding": 0.685241862297029,
+        "full": 0.6495336924719446
       },
       "ambiguous": {
-        "lexical": 0.25116669824050114,
-        "embedding": 0.6561833782484714,
-        "full": 0.6662572168779394
+        "lexical": 0.23149617616834056,
+        "embedding": 0.6750554660416987,
+        "full": 0.6355666941050918
       }
     },
     "abstention": {
-      "outOfScopeDeclined": 4,
-      "outOfScopeTotal": 4,
+      "outOfScopeDeclined": 7,
+      "outOfScopeTotal": 7,
       "inScopeAnswered": 23,
       "inScopeTotal": 23
     }
@@ -80,7 +80,7 @@
         "genres": [],
         "reference": null
       },
-      "topSyn": 0.3252,
+      "topSyn": 0.3305,
       "topFeel": 0.4983,
       "systems": {
         "lexical": [
@@ -91,6 +91,11 @@
           }
         ],
         "embedding": [
+          {
+            "id": 215,
+            "title": "Norwegian Wood",
+            "author": "Haruki Murakami"
+          },
           {
             "id": 123,
             "title": "Atonement",
@@ -110,11 +115,6 @@
             "id": 196,
             "title": "Kitchen",
             "author": "Banana Yoshimoto"
-          },
-          {
-            "id": 70,
-            "title": "Counselor Ayres' Memorial",
-            "author": "Machado de Assis"
           }
         ],
         "full": [
@@ -124,24 +124,24 @@
             "author": "Banana Yoshimoto"
           },
           {
-            "id": 123,
-            "title": "Atonement",
-            "author": "Ian McEwan"
-          },
-          {
             "id": 70,
             "title": "Counselor Ayres' Memorial",
             "author": "Machado de Assis"
           },
           {
+            "id": 123,
+            "title": "Atonement",
+            "author": "Ian McEwan"
+          },
+          {
+            "id": 215,
+            "title": "Norwegian Wood",
+            "author": "Haruki Murakami"
+          },
+          {
             "id": 37,
             "title": "Dona Flor and Her Two Husbands",
             "author": "Jorge Amado"
-          },
-          {
-            "id": 23,
-            "title": "Covert Joy",
-            "author": "Clarice Lispector"
           }
         ]
       },
@@ -151,22 +151,23 @@
         "70": 1,
         "123": 0,
         "142": 0,
-        "196": 2
+        "196": 2,
+        "215": 2
       },
       "metrics": {
         "lexical": {
           "p5": 0.2,
-          "ndcg5": 0.17171904689021833,
+          "ndcg5": 0.13869012617430843,
           "results": 1
         },
         "embedding": {
           "p5": 0.6,
-          "ndcg5": 0.6133240673700024,
+          "ndcg5": 0.78506356172312,
           "results": 5
         },
         "full": {
           "p5": 0.8,
-          "ndcg5": 0.8742620182214496,
+          "ndcg5": 0.7364185288376675,
           "results": 5
         }
       },
@@ -220,14 +221,14 @@
             "author": "Machado de Assis"
           },
           {
+            "id": 229,
+            "title": "The Midnight Library",
+            "author": "Matt Haig"
+          },
+          {
             "id": 77,
             "title": "An Apprenticeship or The Book of Pleasures",
             "author": "Clarice Lispector"
-          },
-          {
-            "id": 146,
-            "title": "The Book Thief",
-            "author": "Markus Zusak"
           }
         ],
         "full": [
@@ -266,7 +267,7 @@
         "77": 0,
         "112": 2,
         "132": 2,
-        "146": 0
+        "229": 0
       },
       "metrics": {
         "lexical": {
@@ -329,14 +330,14 @@
             "author": "Arthur Conan Doyle"
           },
           {
-            "id": 71,
-            "title": "Ancient Tillage",
-            "author": "Raduan Nassar"
-          },
-          {
             "id": 21,
             "title": "Iracema",
             "author": "José de Alencar"
+          },
+          {
+            "id": 71,
+            "title": "Ancient Tillage",
+            "author": "Raduan Nassar"
           }
         ],
         "embedding": [
@@ -351,19 +352,19 @@
             "author": "Elena Ferrante"
           },
           {
+            "id": 224,
+            "title": "The Fault in Our Stars",
+            "author": "John Green"
+          },
+          {
             "id": 123,
             "title": "Atonement",
             "author": "Ian McEwan"
           },
           {
-            "id": 26,
-            "title": "The Hour of the Star",
-            "author": "Clarice Lispector"
-          },
-          {
-            "id": 75,
-            "title": "Death and Life of Severino",
-            "author": "João Cabral de Melo Neto"
+            "id": 215,
+            "title": "Norwegian Wood",
+            "author": "Haruki Murakami"
           }
         ],
         "full": [
@@ -378,45 +379,44 @@
             "author": "Elena Ferrante"
           },
           {
+            "id": 215,
+            "title": "Norwegian Wood",
+            "author": "Haruki Murakami"
+          },
+          {
+            "id": 224,
+            "title": "The Fault in Our Stars",
+            "author": "John Green"
+          },
+          {
             "id": 207,
             "title": "The Sorrows of Young Werther",
             "author": "Johann Wolfgang von Goethe"
-          },
-          {
-            "id": 123,
-            "title": "Atonement",
-            "author": "Ian McEwan"
-          },
-          {
-            "id": 146,
-            "title": "The Book Thief",
-            "author": "Markus Zusak"
           }
         ]
       },
       "grades": {
         "21": 0,
-        "26": 1,
         "71": 0,
-        "75": 0,
         "81": 1,
         "113": 0,
         "120": 2,
         "123": 1,
-        "146": 1,
         "152": 0,
         "196": 2,
-        "207": 2
+        "207": 2,
+        "215": 2,
+        "224": 2
       },
       "metrics": {
         "lexical": {
           "p5": 0.2,
-          "ndcg5": 0.13869012617430843,
+          "ndcg5": 0.11305340175787203,
           "results": 5
         },
         "embedding": {
-          "p5": 0.8,
-          "ndcg5": 0.8076572091794476,
+          "p5": 1,
+          "ndcg5": 0.9026211001048622,
           "results": 5
         },
         "full": {
@@ -449,7 +449,7 @@
         "reference": null
       },
       "topSyn": 0.302,
-      "topFeel": 0.2596,
+      "topFeel": 0.2913,
       "systems": {
         "lexical": [
           {
@@ -485,14 +485,14 @@
             "author": "Clarice Lispector"
           },
           {
-            "id": 172,
-            "title": "Hopscotch",
-            "author": "Julio Cortázar"
+            "id": 228,
+            "title": "Klara and the Sun",
+            "author": "Kazuo Ishiguro"
           },
           {
-            "id": 44,
-            "title": "Feliz Ano Novo",
-            "author": "Rubem Fonseca"
+            "id": 224,
+            "title": "The Fault in Our Stars",
+            "author": "John Green"
           }
         ],
         "full": [
@@ -500,6 +500,11 @@
             "id": 158,
             "title": "The Alchemist",
             "author": "Paulo Coelho"
+          },
+          {
+            "id": 221,
+            "title": "Harry Potter and the Philosopher's Stone",
+            "author": "J. K. Rowling"
           },
           {
             "id": 38,
@@ -515,11 +520,6 @@
             "id": 14,
             "title": "Gabriela, Clove and Cinnamon",
             "author": "Jorge Amado"
-          },
-          {
-            "id": 145,
-            "title": "The Hobbit",
-            "author": "J. R. R. Tolkien"
           }
         ]
       },
@@ -528,30 +528,30 @@
         "14": 0,
         "26": 0,
         "38": 0,
-        "44": 0,
         "135": 0,
         "141": 0,
-        "145": 2,
         "158": 2,
         "162": 0,
-        "172": 0,
         "192": 1,
-        "208": 0
+        "208": 0,
+        "221": 2,
+        "224": 1,
+        "228": 1
       },
       "metrics": {
         "lexical": {
           "p5": 0.2,
-          "ndcg5": 0.11699506935449569,
+          "ndcg5": 0.10159378150546945,
           "results": 5
         },
         "embedding": {
-          "p5": 0,
-          "ndcg5": 0,
+          "p5": 0.4,
+          "ndcg5": 0.18210494850178324,
           "results": 3
         },
         "full": {
           "p5": 0.4,
-          "ndcg5": 0.7715039881147672,
+          "ndcg5": 0.7878483464942911,
           "results": 5
         }
       },
@@ -578,8 +578,8 @@
         "genres": [],
         "reference": null
       },
-      "topSyn": 0.3382,
-      "topFeel": 0.4501,
+      "topSyn": 0.3776,
+      "topFeel": 0.4754,
       "systems": {
         "lexical": [
           {
@@ -610,6 +610,11 @@
         ],
         "embedding": [
           {
+            "id": 229,
+            "title": "The Midnight Library",
+            "author": "Matt Haig"
+          },
+          {
             "id": 136,
             "title": "The Maltese Falcon",
             "author": "Dashiell Hammett"
@@ -620,26 +625,31 @@
             "author": "Markus Zusak"
           },
           {
+            "id": 225,
+            "title": "The Shadow of the Wind",
+            "author": "Carlos Ruiz Zafón"
+          },
+          {
             "id": 95,
             "title": "Death with Interruptions",
             "author": "José Saramago"
-          },
-          {
-            "id": 181,
-            "title": "My Brilliant Friend",
-            "author": "Elena Ferrante"
-          },
-          {
-            "id": 142,
-            "title": "The Red and the Black",
-            "author": "Stendhal"
           }
         ],
         "full": [
           {
+            "id": 226,
+            "title": "The Da Vinci Code",
+            "author": "Dan Brown"
+          },
+          {
             "id": 171,
             "title": "Murder on the Orient Express",
             "author": "Agatha Christie"
+          },
+          {
+            "id": 222,
+            "title": "A Game of Thrones",
+            "author": "George R. R. Martin"
           },
           {
             "id": 73,
@@ -650,16 +660,6 @@
             "id": 136,
             "title": "The Maltese Falcon",
             "author": "Dashiell Hammett"
-          },
-          {
-            "id": 155,
-            "title": "The Count of Monte Cristo",
-            "author": "Alexandre Dumas"
-          },
-          {
-            "id": 152,
-            "title": "The Hound of the Baskervilles",
-            "author": "Arthur Conan Doyle"
           }
         ]
       },
@@ -670,14 +670,14 @@
         "95": 0,
         "122": 1,
         "136": 2,
-        "142": 0,
         "146": 0,
         "151": 0,
-        "152": 2,
-        "155": 2,
         "171": 2,
-        "181": 0,
-        "196": 0
+        "196": 0,
+        "222": 1,
+        "225": 1,
+        "226": 2,
+        "229": 1
       },
       "metrics": {
         "lexical": {
@@ -686,13 +686,13 @@
           "results": 5
         },
         "embedding": {
-          "p5": 0.2,
-          "ndcg5": 0.33916020527361607,
+          "p5": 0.6,
+          "ndcg5": 0.37572911643996837,
           "results": 5
         },
         "full": {
           "p5": 1,
-          "ndcg5": 1,
+          "ndcg5": 0.8869465982421278,
           "results": 5
         }
       },
@@ -752,19 +752,19 @@
             "author": "José Saramago"
           },
           {
+            "id": 225,
+            "title": "The Shadow of the Wind",
+            "author": "Carlos Ruiz Zafón"
+          },
+          {
             "id": 76,
             "title": "A Time to Meet",
             "author": "Fernando Sabino"
           },
           {
-            "id": 13,
-            "title": "There Were Many Horses",
-            "author": "Luiz Ruffato"
-          },
-          {
-            "id": 62,
-            "title": "The Passion According to G.H.",
-            "author": "Clarice Lispector"
+            "id": 215,
+            "title": "Norwegian Wood",
+            "author": "Haruki Murakami"
           }
         ],
         "full": [
@@ -797,7 +797,6 @@
       },
       "grades": {
         "6": 0,
-        "13": 0,
         "62": 0,
         "63": 0,
         "76": 0,
@@ -805,22 +804,24 @@
         "154": 1,
         "174": 2,
         "179": 1,
-        "190": 2
+        "190": 2,
+        "215": 2,
+        "225": 2
       },
       "metrics": {
         "lexical": {
           "p5": 0.2,
-          "ndcg5": 0.13869012617430843,
+          "ndcg5": 0.11305340175787203,
           "results": 3
         },
         "embedding": {
-          "p5": 0.4,
-          "ndcg5": 0.5035741056528761,
+          "p5": 0.8,
+          "ndcg5": 0.7112741403342752,
           "results": 5
         },
         "full": {
           "p5": 0.8,
-          "ndcg5": 0.9271183815384791,
+          "ndcg5": 0.7557415207297861,
           "results": 5
         }
       },
@@ -899,21 +900,21 @@
             "author": "Banana Yoshimoto"
           },
           {
-            "id": 56,
-            "title": "Ponciá Vicêncio",
-            "author": "Conceição Evaristo"
+            "id": 230,
+            "title": "The Seven Husbands of Evelyn Hugo",
+            "author": "Taylor Jenkins Reid"
           }
         ],
         "full": [
           {
-            "id": 183,
-            "title": "The House of the Spirits",
-            "author": "Isabel Allende"
-          },
-          {
             "id": 56,
             "title": "Ponciá Vicêncio",
             "author": "Conceição Evaristo"
+          },
+          {
+            "id": 183,
+            "title": "The House of the Spirits",
+            "author": "Isabel Allende"
           },
           {
             "id": 204,
@@ -921,14 +922,14 @@
             "author": "Patrick Süskind"
           },
           {
+            "id": 230,
+            "title": "The Seven Husbands of Evelyn Hugo",
+            "author": "Taylor Jenkins Reid"
+          },
+          {
             "id": 37,
             "title": "Dona Flor and Her Two Husbands",
             "author": "Jorge Amado"
-          },
-          {
-            "id": 168,
-            "title": "The Maias",
-            "author": "Eça de Queirós"
           }
         ]
       },
@@ -937,26 +938,26 @@
         "37": 1,
         "50": 0,
         "56": 0,
-        "168": 1,
         "182": 0,
         "183": 0,
         "196": 0,
-        "204": 1
+        "204": 1,
+        "230": 0
       },
       "metrics": {
         "lexical": {
           "p5": 0.2,
-          "ndcg5": 0.46927872602275644,
+          "ndcg5": 0.6131471927654584,
           "results": 5
         },
         "embedding": {
           "p5": 0.2,
-          "ndcg5": 0.46927872602275644,
+          "ndcg5": 0.6131471927654584,
           "results": 5
         },
         "full": {
-          "p5": 0.6,
-          "ndcg5": 0.6182885020492784,
+          "p5": 0.4,
+          "ndcg5": 0.5437713091520254,
           "results": 5
         }
       },
@@ -1006,9 +1007,9 @@
             "author": "Lygia Fagundes Telles"
           },
           {
-            "id": 49,
-            "title": "O Quinze",
-            "author": "Rachel de Queiroz"
+            "id": 224,
+            "title": "The Fault in Our Stars",
+            "author": "John Green"
           },
           {
             "id": 34,
@@ -1075,7 +1076,6 @@
         "23": 2,
         "34": 2,
         "41": 2,
-        "49": 0,
         "58": 0,
         "67": 1,
         "82": 2,
@@ -1083,7 +1083,8 @@
         "109": 0,
         "116": 0,
         "141": 2,
-        "187": 1
+        "187": 1,
+        "224": 0
       },
       "metrics": {
         "lexical": {
@@ -1140,11 +1141,6 @@
             "author": "Clarice Lispector"
           },
           {
-            "id": 207,
-            "title": "The Sorrows of Young Werther",
-            "author": "Johann Wolfgang von Goethe"
-          },
-          {
             "id": 88,
             "title": "A Cup of Rage",
             "author": "Raduan Nassar"
@@ -1153,6 +1149,11 @@
             "id": 71,
             "title": "Ancient Tillage",
             "author": "Raduan Nassar"
+          },
+          {
+            "id": 207,
+            "title": "The Sorrows of Young Werther",
+            "author": "Johann Wolfgang von Goethe"
           }
         ],
         "embedding": [
@@ -1228,7 +1229,7 @@
       "metrics": {
         "lexical": {
           "p5": 1,
-          "ndcg5": 0.8151510484299677,
+          "ndcg5": 0.7895676983469901,
           "results": 5
         },
         "embedding": {
@@ -1266,8 +1267,8 @@
         "genres": [],
         "reference": null
       },
-      "topSyn": 0.3697,
-      "topFeel": 0.4869,
+      "topSyn": 0.3901,
+      "topFeel": 0.5091,
       "systems": {
         "lexical": [
           {
@@ -1298,6 +1299,16 @@
         ],
         "embedding": [
           {
+            "id": 228,
+            "title": "Klara and the Sun",
+            "author": "Kazuo Ishiguro"
+          },
+          {
+            "id": 229,
+            "title": "The Midnight Library",
+            "author": "Matt Haig"
+          },
+          {
             "id": 160,
             "title": "The Book of Chameleons",
             "author": "José Eduardo Agualusa"
@@ -1311,19 +1322,14 @@
             "id": 178,
             "title": "The Land at the End of the World",
             "author": "António Lobo Antunes"
-          },
-          {
-            "id": 59,
-            "title": "Incidente em Antares",
-            "author": "Erico Verissimo"
-          },
-          {
-            "id": 85,
-            "title": "Turbulence",
-            "author": "Chico Buarque"
           }
         ],
         "full": [
+          {
+            "id": 216,
+            "title": "Kafka on the Shore",
+            "author": "Haruki Murakami"
+          },
           {
             "id": 84,
             "title": "The Voices of the Dead",
@@ -1343,11 +1349,6 @@
             "id": 59,
             "title": "Incidente em Antares",
             "author": "Erico Verissimo"
-          },
-          {
-            "id": 87,
-            "title": "The Wedding Dress",
-            "author": "Nelson Rodrigues"
           }
         ]
       },
@@ -1356,8 +1357,6 @@
         "59": 2,
         "67": 1,
         "84": 0,
-        "85": 2,
-        "87": 2,
         "97": 2,
         "115": 0,
         "135": 1,
@@ -1365,22 +1364,25 @@
         "160": 0,
         "162": 2,
         "178": 0,
-        "187": 0
+        "187": 0,
+        "216": 2,
+        "228": 1,
+        "229": 1
       },
       "metrics": {
         "lexical": {
           "p5": 0.4,
-          "ndcg5": 0.1843821566693812,
+          "ndcg5": 0.2020560059511512,
           "results": 5
         },
         "embedding": {
           "p5": 0.6,
-          "ndcg5": 0.49125969208957576,
+          "ndcg5": 0.3621256563892615,
           "results": 5
         },
         "full": {
           "p5": 0.8,
-          "ndcg5": 0.5181822849033655,
+          "ndcg5": 0.7374665727330693,
           "results": 5
         }
       },
@@ -1591,17 +1593,22 @@
             "author": "Gabriel García Márquez"
           },
           {
-            "id": 26,
-            "title": "The Hour of the Star",
-            "author": "Clarice Lispector"
+            "id": 214,
+            "title": "The Savage Detectives",
+            "author": "Roberto Bolaño"
           },
           {
-            "id": 62,
-            "title": "The Passion According to G.H.",
+            "id": 26,
+            "title": "The Hour of the Star",
             "author": "Clarice Lispector"
           }
         ],
         "full": [
+          {
+            "id": 225,
+            "title": "The Shadow of the Wind",
+            "author": "Carlos Ruiz Zafón"
+          },
           {
             "id": 172,
             "title": "Hopscotch",
@@ -1613,26 +1620,20 @@
             "author": "Ernest Hemingway"
           },
           {
-            "id": 85,
-            "title": "Turbulence",
-            "author": "Chico Buarque"
-          },
-          {
             "id": 183,
             "title": "The House of the Spirits",
             "author": "Isabel Allende"
           },
           {
-            "id": 99,
-            "title": "Pedro Páramo",
-            "author": "Juan Rulfo"
+            "id": 85,
+            "title": "Turbulence",
+            "author": "Chico Buarque"
           }
         ]
       },
       "grades": {
         "14": 1,
         "26": 0,
-        "62": 0,
         "85": 0,
         "99": 2,
         "110": 0,
@@ -1640,7 +1641,9 @@
         "141": 2,
         "172": 1,
         "182": 2,
-        "183": 2
+        "183": 2,
+        "214": 1,
+        "225": 1
       },
       "metrics": {
         "lexical": {
@@ -1649,13 +1652,13 @@
           "results": 5
         },
         "embedding": {
-          "p5": 0.6,
-          "ndcg5": 0.7227265726449517,
+          "p5": 0.8,
+          "ndcg5": 0.7714160225925204,
           "results": 5
         },
         "full": {
           "p5": 0.6,
-          "ndcg5": 0.39032682911292027,
+          "ndcg5": 0.3304505065120877,
           "results": 5
         }
       },
@@ -1697,6 +1700,11 @@
             "author": "Itamar Vieira Junior"
           },
           {
+            "id": 219,
+            "title": "The Road",
+            "author": "Cormac McCarthy"
+          },
+          {
             "id": 172,
             "title": "Hopscotch",
             "author": "Julio Cortázar"
@@ -1710,11 +1718,6 @@
             "id": 71,
             "title": "Ancient Tillage",
             "author": "Raduan Nassar"
-          },
-          {
-            "id": 24,
-            "title": "Chronicle of the Murdered House",
-            "author": "Lúcio Cardoso"
           }
         ],
         "full": [
@@ -1747,14 +1750,14 @@
       },
       "grades": {
         "15": 2,
-        "24": 1,
         "25": 0,
         "33": 2,
         "71": 2,
         "94": 1,
         "97": 1,
         "163": 1,
-        "172": 0
+        "172": 0,
+        "219": 1
       },
       "metrics": {
         "lexical": {
@@ -1764,7 +1767,7 @@
         },
         "embedding": {
           "p5": 0.6,
-          "ndcg5": 0.30218948627194553,
+          "ndcg5": 0.3081923072481985,
           "results": 5
         },
         "full": {
@@ -1927,11 +1930,21 @@
         "genres": [],
         "reference": "Rupi Kaur"
       },
-      "topSyn": 0.2893,
+      "topSyn": 0.343,
       "topFeel": 0.3574,
       "systems": {
         "lexical": [],
         "embedding": [
+          {
+            "id": 220,
+            "title": "The God of Small Things",
+            "author": "Arundhati Roy"
+          },
+          {
+            "id": 216,
+            "title": "Kafka on the Shore",
+            "author": "Haruki Murakami"
+          },
           {
             "id": 124,
             "title": "The Kite Runner",
@@ -1943,29 +1956,19 @@
             "author": "Clarice Lispector"
           },
           {
-            "id": 166,
-            "title": "Normal People",
-            "author": "Sally Rooney"
-          },
-          {
-            "id": 125,
-            "title": "Persepolis",
-            "author": "Marjane Satrapi"
-          },
-          {
-            "id": 26,
-            "title": "The Hour of the Star",
-            "author": "Clarice Lispector"
+            "id": 215,
+            "title": "Norwegian Wood",
+            "author": "Haruki Murakami"
           }
         ],
         "full": []
       },
       "grades": {
-        "26": 1,
         "77": 1,
         "124": 1,
-        "125": 1,
-        "166": 1
+        "215": 0,
+        "216": 0,
+        "220": 0
       },
       "metrics": {
         "lexical": {
@@ -1974,8 +1977,8 @@
           "results": 0
         },
         "embedding": {
-          "p5": 1,
-          "ndcg5": 1,
+          "p5": 0.4,
+          "ndcg5": 0.5706417189553201,
           "results": 5
         },
         "full": {
@@ -2043,6 +2046,16 @@
             "author": "Gabriel García Márquez"
           },
           {
+            "id": 228,
+            "title": "Klara and the Sun",
+            "author": "Kazuo Ishiguro"
+          },
+          {
+            "id": 215,
+            "title": "Norwegian Wood",
+            "author": "Haruki Murakami"
+          },
+          {
             "id": 120,
             "title": "The Days of Abandonment",
             "author": "Elena Ferrante"
@@ -2051,19 +2064,14 @@
             "id": 196,
             "title": "Kitchen",
             "author": "Banana Yoshimoto"
-          },
-          {
-            "id": 123,
-            "title": "Atonement",
-            "author": "Ian McEwan"
-          },
-          {
-            "id": 166,
-            "title": "Normal People",
-            "author": "Sally Rooney"
           }
         ],
         "full": [
+          {
+            "id": 228,
+            "title": "Klara and the Sun",
+            "author": "Kazuo Ishiguro"
+          },
           {
             "id": 182,
             "title": "One Hundred Years of Solitude",
@@ -2075,49 +2083,44 @@
             "author": "J. D. Salinger"
           },
           {
+            "id": 215,
+            "title": "Norwegian Wood",
+            "author": "Haruki Murakami"
+          },
+          {
             "id": 123,
             "title": "Atonement",
             "author": "Ian McEwan"
-          },
-          {
-            "id": 98,
-            "title": "A General Theory of Oblivion",
-            "author": "José Eduardo Agualusa"
-          },
-          {
-            "id": 196,
-            "title": "Kitchen",
-            "author": "Banana Yoshimoto"
           }
         ]
       },
       "grades": {
         "22": 1,
         "39": 0,
-        "98": 2,
         "102": 2,
         "111": 1,
         "120": 0,
         "123": 0,
-        "166": 1,
         "182": 1,
         "196": 2,
-        "210": 0
+        "210": 0,
+        "215": 0,
+        "228": 1
       },
       "metrics": {
         "lexical": {
           "p5": 0.4,
-          "ndcg5": 0.2485368216257015,
+          "ndcg5": 0.2885568007269813,
           "results": 4
         },
         "embedding": {
           "p5": 0.6,
-          "ndcg5": 0.4003779800820151,
+          "ndcg5": 0.4494919412956149,
           "results": 5
         },
         "full": {
-          "p5": 0.8,
-          "ndcg5": 0.5663436057815385,
+          "p5": 0.6,
+          "ndcg5": 0.3431272824944109,
           "results": 5
         }
       },
@@ -2177,9 +2180,9 @@
             "author": "Milton Hatoum"
           },
           {
-            "id": 184,
-            "title": "Crime and Punishment",
-            "author": "Fiódor Dostoiévski"
+            "id": 52,
+            "title": "Tale of a Certain Orient",
+            "author": "Milton Hatoum"
           }
         ],
         "embedding": [
@@ -2241,6 +2244,7 @@
         "26": 2,
         "27": 0,
         "39": 1,
+        "52": 0,
         "53": 0,
         "57": 0,
         "81": 2,
@@ -2248,13 +2252,12 @@
         "149": 1,
         "179": 2,
         "181": 1,
-        "184": 1,
         "196": 2
       },
       "metrics": {
         "lexical": {
-          "p5": 0.6,
-          "ndcg5": 0.43942193198999935,
+          "p5": 0.4,
+          "ndcg5": 0.3956869061525521,
           "results": 5
         },
         "embedding": {
@@ -2295,7 +2298,7 @@
         ],
         "reference": null
       },
-      "topSyn": 0.3688,
+      "topSyn": 0.3789,
       "topFeel": 0.3527,
       "systems": {
         "lexical": [
@@ -2303,6 +2306,11 @@
             "id": 147,
             "title": "Solaris",
             "author": "Stanisław Lem"
+          },
+          {
+            "id": 42,
+            "title": "Captains of the Sands",
+            "author": "Jorge Amado"
           },
           {
             "id": 128,
@@ -2315,11 +2323,6 @@
             "author": "Ray Bradbury"
           },
           {
-            "id": 42,
-            "title": "Captains of the Sands",
-            "author": "Jorge Amado"
-          },
-          {
             "id": 67,
             "title": "And Still the Earth",
             "author": "Ignácio de Loyola Brandão"
@@ -2330,6 +2333,11 @@
             "id": 131,
             "title": "The Dispossessed",
             "author": "Ursula K. Le Guin"
+          },
+          {
+            "id": 228,
+            "title": "Klara and the Sun",
+            "author": "Kazuo Ishiguro"
           },
           {
             "id": 130,
@@ -2345,18 +2353,23 @@
             "id": 147,
             "title": "Solaris",
             "author": "Stanisław Lem"
-          },
-          {
-            "id": 129,
-            "title": "Neuromancer",
-            "author": "William Gibson"
           }
         ],
         "full": [
           {
+            "id": 228,
+            "title": "Klara and the Sun",
+            "author": "Kazuo Ishiguro"
+          },
+          {
             "id": 132,
             "title": "The Hitchhiker's Guide to the Galaxy",
             "author": "Douglas Adams"
+          },
+          {
+            "id": 227,
+            "title": "The Martian",
+            "author": "Andy Weir"
           },
           {
             "id": 129,
@@ -2367,16 +2380,6 @@
             "id": 135,
             "title": "Do Androids Dream of Electric Sheep?",
             "author": "Philip K. Dick"
-          },
-          {
-            "id": 147,
-            "title": "Solaris",
-            "author": "Stanisław Lem"
-          },
-          {
-            "id": 131,
-            "title": "The Dispossessed",
-            "author": "Ursula K. Le Guin"
           }
         ]
       },
@@ -2390,22 +2393,24 @@
         "131": 1,
         "132": 2,
         "135": 0,
-        "147": 1
+        "147": 1,
+        "227": 2,
+        "228": 1
       },
       "metrics": {
         "lexical": {
           "p5": 0.6,
-          "ndcg5": 0.40775977174545963,
+          "ndcg5": 0.3038254429214473,
           "results": 5
         },
         "embedding": {
           "p5": 0.8,
-          "ndcg5": 0.49479222926951455,
+          "ndcg5": 0.4054192244269168,
           "results": 5
         },
         "full": {
           "p5": 0.8,
-          "ndcg5": 0.8989584458539029,
+          "ndcg5": 0.7766857240748665,
           "results": 5
         }
       },
@@ -2452,14 +2457,14 @@
             "author": "Charles Dickens"
           },
           {
+            "id": 214,
+            "title": "The Savage Detectives",
+            "author": "Roberto Bolaño"
+          },
+          {
             "id": 168,
             "title": "The Maias",
             "author": "Eça de Queirós"
-          },
-          {
-            "id": 143,
-            "title": "The Odyssey",
-            "author": "Homero"
           }
         ],
         "embedding": [
@@ -2526,17 +2531,17 @@
         "88": 2,
         "109": 2,
         "110": 2,
-        "143": 1,
         "168": 0,
         "179": 2,
         "192": 2,
         "205": 1,
-        "210": 2
+        "210": 2,
+        "214": 0
       },
       "metrics": {
         "lexical": {
-          "p5": 0.6,
-          "ndcg5": 0.43942193198999935,
+          "p5": 0.4,
+          "ndcg5": 0.3956869061525521,
           "results": 5
         },
         "embedding": {
@@ -2585,6 +2590,11 @@
             "author": "Lima Barreto"
           },
           {
+            "id": 225,
+            "title": "The Shadow of the Wind",
+            "author": "Carlos Ruiz Zafón"
+          },
+          {
             "id": 41,
             "title": "Family Ties",
             "author": "Clarice Lispector"
@@ -2598,11 +2608,6 @@
             "id": 183,
             "title": "The House of the Spirits",
             "author": "Isabel Allende"
-          },
-          {
-            "id": 69,
-            "title": "Resistance",
-            "author": "Julián Fuks"
           }
         ],
         "embedding": [
@@ -2644,19 +2649,19 @@
             "author": "Julián Fuks"
           },
           {
-            "id": 31,
-            "title": "The Brothers",
-            "author": "Milton Hatoum"
-          },
-          {
             "id": 176,
             "title": "The First Wife: A Tale of Polygamy",
             "author": "Paulina Chiziane"
           },
           {
-            "id": 183,
-            "title": "The House of the Spirits",
-            "author": "Isabel Allende"
+            "id": 230,
+            "title": "The Seven Husbands of Evelyn Hugo",
+            "author": "Taylor Jenkins Reid"
+          },
+          {
+            "id": 31,
+            "title": "The Brothers",
+            "author": "Milton Hatoum"
           }
         ]
       },
@@ -2669,12 +2674,14 @@
         "103": 0,
         "176": 1,
         "182": 1,
-        "183": 1
+        "183": 1,
+        "225": 0,
+        "230": 0
       },
       "metrics": {
         "lexical": {
-          "p5": 0.6,
-          "ndcg5": 0.4912596920895758,
+          "p5": 0.4,
+          "ndcg5": 0.30078518014914984,
           "results": 5
         },
         "embedding": {
@@ -2683,8 +2690,8 @@
           "results": 5
         },
         "full": {
-          "p5": 0.8,
-          "ndcg5": 0.830419897363192,
+          "p5": 0.6,
+          "ndcg5": 0.7227265726449519,
           "results": 5
         }
       },
@@ -2832,7 +2839,7 @@
       "type": "ambiguous",
       "query": "something light",
       "expects": null,
-      "confidence": "medium",
+      "confidence": "high",
       "message": null,
       "interpretation": {
         "atmospheres": [
@@ -2848,10 +2855,15 @@
         "genres": [],
         "reference": null
       },
-      "topSyn": 0.246,
+      "topSyn": 0.3068,
       "topFeel": 0.2906,
       "systems": {
         "lexical": [
+          {
+            "id": 211,
+            "title": "Phenotypes",
+            "author": "Paulo Scott"
+          },
           {
             "id": 154,
             "title": "Seeing",
@@ -2871,14 +2883,14 @@
             "id": 139,
             "title": "Blindness",
             "author": "José Saramago"
-          },
-          {
-            "id": 197,
-            "title": "The Second Sex",
-            "author": "Simone de Beauvoir"
           }
         ],
         "embedding": [
+          {
+            "id": 220,
+            "title": "The God of Small Things",
+            "author": "Arundhati Roy"
+          },
           {
             "id": 154,
             "title": "Seeing",
@@ -2888,11 +2900,6 @@
             "id": 26,
             "title": "The Hour of the Star",
             "author": "Clarice Lispector"
-          },
-          {
-            "id": 61,
-            "title": "Whatever Happened to Dulce Veiga?",
-            "author": "Caio Fernando Abreu"
           }
         ],
         "full": [
@@ -2907,9 +2914,9 @@
             "author": "Paulo Coelho"
           },
           {
-            "id": 167,
-            "title": "The Divine Comedy",
-            "author": "Dante Alighieri"
+            "id": 221,
+            "title": "Harry Potter and the Philosopher's Stone",
+            "author": "J. K. Rowling"
           },
           {
             "id": 14,
@@ -2917,9 +2924,9 @@
             "author": "Jorge Amado"
           },
           {
-            "id": 208,
-            "title": "The City and the Mountains",
-            "author": "Eça de Queirós"
+            "id": 167,
+            "title": "The Divine Comedy",
+            "author": "Dante Alighieri"
           }
         ]
       },
@@ -2928,29 +2935,29 @@
         "24": 1,
         "26": 1,
         "51": 1,
-        "61": 1,
         "139": 0,
         "154": 0,
         "158": 2,
         "167": 0,
         "169": 1,
-        "197": 0,
-        "208": 1
+        "211": 0,
+        "220": 1,
+        "221": 2
       },
       "metrics": {
         "lexical": {
           "p5": 0.4,
-          "ndcg5": 0.22854179986184534,
+          "ndcg5": 0.14985971157320296,
           "results": 5
         },
         "embedding": {
           "p5": 0.4,
-          "ndcg5": 0.22854179986184534,
+          "ndcg5": 0.24153350098894139,
           "results": 3
         },
         "full": {
           "p5": 0.8,
-          "ndcg5": 0.749792720701011,
+          "ndcg5": 0.7766857240748665,
           "results": 5
         }
       },
@@ -3132,6 +3139,11 @@
             "author": "Clarice Lispector"
           },
           {
+            "id": 228,
+            "title": "Klara and the Sun",
+            "author": "Kazuo Ishiguro"
+          },
+          {
             "id": 28,
             "title": "The Girl in the Photograph",
             "author": "Lygia Fagundes Telles"
@@ -3140,11 +3152,6 @@
             "id": 168,
             "title": "The Maias",
             "author": "Eça de Queirós"
-          },
-          {
-            "id": 31,
-            "title": "The Brothers",
-            "author": "Milton Hatoum"
           }
         ],
         "full": [
@@ -3183,7 +3190,8 @@
         "100": 0,
         "168": 0,
         "181": 0,
-        "183": 0
+        "183": 0,
+        "228": 1
       },
       "metrics": {
         "lexical": {
@@ -3192,13 +3200,13 @@
           "results": 5
         },
         "embedding": {
-          "p5": 0.2,
-          "ndcg5": 0.6309297535714575,
+          "p5": 0.4,
+          "ndcg5": 0.6934264036172708,
           "results": 5
         },
         "full": {
           "p5": 0.2,
-          "ndcg5": 0.38685280723454163,
+          "ndcg5": 0.23719771276929622,
           "results": 5
         }
       },
@@ -3210,7 +3218,7 @@
       "query": "Rust programming manual",
       "expects": "abstain",
       "confidence": "none",
-      "message": "I found nothing on this shelf that answers this request well. The catalog may not have this kind of book.",
+      "message": "Nothing on this shelf answers “Rust programming manual”: no title or author goes by that name, and no synopsis comes close to it. The catalog may not have this kind of book.",
       "interpretation": {
         "atmospheres": [],
         "inferredAtmospheres": [],
@@ -3227,6 +3235,11 @@
       "topFeel": 0.2583,
       "systems": {
         "lexical": [
+          {
+            "id": 228,
+            "title": "Klara and the Sun",
+            "author": "Kazuo Ishiguro"
+          },
           {
             "id": 51,
             "title": "Libertinagem",
@@ -3246,11 +3259,6 @@
             "id": 172,
             "title": "Hopscotch",
             "author": "Julio Cortázar"
-          },
-          {
-            "id": 33,
-            "title": "Um Defeito de Cor",
-            "author": "Ana Maria Gonçalves"
           }
         ],
         "embedding": [],
@@ -3282,7 +3290,7 @@
       "query": "everyday vegan recipes",
       "expects": "abstain",
       "confidence": "none",
-      "message": "I found nothing on this shelf that answers this request well. The catalog may not have this kind of book.",
+      "message": "Nothing on this shelf answers “everyday vegan recipes”: no title or author goes by that name, and no synopsis comes close to it. The catalog may not have this kind of book.",
       "interpretation": {
         "atmospheres": [],
         "inferredAtmospheres": [],
@@ -3354,7 +3362,7 @@
       "query": "travel guide to Japan",
       "expects": "abstain",
       "confidence": "none",
-      "message": "I found nothing on this shelf that answers this request well. The catalog may not have this kind of book.",
+      "message": "Nothing on this shelf answers “travel guide to Japan”: no title or author goes by that name, and no synopsis comes close to it. The catalog may not have this kind of book.",
       "interpretation": {
         "atmospheres": [],
         "inferredAtmospheres": [],
@@ -3426,7 +3434,7 @@
       "query": "how to invest in the stock market",
       "expects": "abstain",
       "confidence": "none",
-      "message": "I found nothing on this shelf that answers this request well. The catalog may not have this kind of book.",
+      "message": "Nothing on this shelf answers “how to invest in the stock market”: no title or author goes by that name, and no synopsis comes close to it. The catalog may not have this kind of book.",
       "interpretation": {
         "atmospheres": [],
         "inferredAtmospheres": [],
@@ -3483,6 +3491,254 @@
           "p5": null,
           "ndcg5": null,
           "results": 0
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 0
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "una-1",
+      "type": "unanswerable",
+      "query": "an underrated book",
+      "expects": "abstain",
+      "confidence": "none",
+      "message": "I cannot tell which books are \"underrated\": the catalog knows what each book is about and how it reads, not how it was received. Tell me a feeling, a theme or a pace and I will look for that.",
+      "interpretation": {
+        "atmospheres": [],
+        "inferredAtmospheres": [],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [
+          "underrated"
+        ],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": null
+      },
+      "topSyn": 0,
+      "topFeel": 0,
+      "systems": {
+        "lexical": [],
+        "embedding": [
+          {
+            "id": 220,
+            "title": "The God of Small Things",
+            "author": "Arundhati Roy"
+          },
+          {
+            "id": 84,
+            "title": "The Voices of the Dead",
+            "author": "Autran Dourado"
+          },
+          {
+            "id": 228,
+            "title": "Klara and the Sun",
+            "author": "Kazuo Ishiguro"
+          },
+          {
+            "id": 225,
+            "title": "The Shadow of the Wind",
+            "author": "Carlos Ruiz Zafón"
+          },
+          {
+            "id": 178,
+            "title": "The Land at the End of the World",
+            "author": "António Lobo Antunes"
+          }
+        ],
+        "full": []
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 0
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 0
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "una-2",
+      "type": "unanswerable",
+      "query": "an overrated book",
+      "expects": "abstain",
+      "confidence": "none",
+      "message": "I cannot tell which books are \"overrated\": the catalog knows what each book is about and how it reads, not how it was received. Tell me a feeling, a theme or a pace and I will look for that.",
+      "interpretation": {
+        "atmospheres": [],
+        "inferredAtmospheres": [],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [
+          "overrated"
+        ],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": null
+      },
+      "topSyn": 0,
+      "topFeel": 0,
+      "systems": {
+        "lexical": [],
+        "embedding": [
+          {
+            "id": 146,
+            "title": "The Book Thief",
+            "author": "Markus Zusak"
+          },
+          {
+            "id": 220,
+            "title": "The God of Small Things",
+            "author": "Arundhati Roy"
+          },
+          {
+            "id": 218,
+            "title": "Disgrace",
+            "author": "J. M. Coetzee"
+          },
+          {
+            "id": 84,
+            "title": "The Voices of the Dead",
+            "author": "Autran Dourado"
+          },
+          {
+            "id": 228,
+            "title": "Klara and the Sun",
+            "author": "Kazuo Ishiguro"
+          }
+        ],
+        "full": []
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 0
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "full": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 0
+        }
+      },
+      "abstentionCorrect": true
+    },
+    {
+      "id": "una-3",
+      "type": "unanswerable",
+      "query": "the best book you have",
+      "expects": "abstain",
+      "confidence": "none",
+      "message": "I cannot tell which books are \"best\": the catalog knows what each book is about and how it reads, not how it was received. Tell me a feeling, a theme or a pace and I will look for that.",
+      "interpretation": {
+        "atmospheres": [],
+        "inferredAtmospheres": [],
+        "avoid": [],
+        "avoidAtmospheres": [],
+        "unassessable": [
+          "best"
+        ],
+        "pace": null,
+        "length": null,
+        "era": null,
+        "genres": [],
+        "reference": null
+      },
+      "topSyn": 0,
+      "topFeel": 0,
+      "systems": {
+        "lexical": [
+          {
+            "id": 112,
+            "title": "Don Quixote",
+            "author": "Miguel de Cervantes"
+          },
+          {
+            "id": 81,
+            "title": "Near to the Wild Heart",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 117,
+            "title": "Lord of the Flies",
+            "author": "William Golding"
+          },
+          {
+            "id": 84,
+            "title": "The Voices of the Dead",
+            "author": "Autran Dourado"
+          },
+          {
+            "id": 115,
+            "title": "Animal Farm",
+            "author": "George Orwell"
+          }
+        ],
+        "embedding": [
+          {
+            "id": 77,
+            "title": "An Apprenticeship or The Book of Pleasures",
+            "author": "Clarice Lispector"
+          },
+          {
+            "id": 146,
+            "title": "The Book Thief",
+            "author": "Markus Zusak"
+          },
+          {
+            "id": 112,
+            "title": "Don Quixote",
+            "author": "Miguel de Cervantes"
+          },
+          {
+            "id": 229,
+            "title": "The Midnight Library",
+            "author": "Matt Haig"
+          },
+          {
+            "id": 181,
+            "title": "My Brilliant Friend",
+            "author": "Elena Ferrante"
+          }
+        ],
+        "full": []
+      },
+      "grades": {},
+      "metrics": {
+        "lexical": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
+        },
+        "embedding": {
+          "p5": null,
+          "ndcg5": null,
+          "results": 5
         },
         "full": {
           "p5": null,

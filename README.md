@@ -17,7 +17,7 @@ npm run dev
 
 Edit `.env.local` before starting: `ADMIN_PASSWORD` (8+ characters) and `SESSION_SECRET` (24+ characters) protect the counter at `/admin`.
 
-The initial catalog is already in `data/seed/catalog.json`. To fetch it again from Open Library and Wikipedia: `npm run catalog:fetch` (`-- --covers` only refreshes the cover images). The fetch brings synopses in Portuguese; the ones in the repository were translated into English afterwards.
+The initial catalog is already in `data/seed/catalog.json`. To fetch it again from Open Library and Wikipedia: `npm run catalog:fetch` (`-- --covers` only refreshes the cover images; `-- --new` only fetches titles added to `data/seed/titles.ts`, keeping the entries already there). The fetch brings synopses in Portuguese; the ones in the repository were translated into English afterwards.
 
 ## Commands
 
@@ -27,7 +27,7 @@ The initial catalog is already in `data/seed/catalog.json`. To fetch it again fr
 | `npm run build && npm start` | production build |
 | `npm test` | automated tests |
 | `npm run lint` · `npm run typecheck` | static checks |
-| `npm run db:seed` | loads the initial catalog (`--complete` includes books without a synopsis; `--notes` applies the sample notes; `--refresh-meta` updates bibliographic data; `--refresh-titles` and `--refresh-synopsis` update titles and synopses) |
+| `npm run db:seed` | loads the initial catalog (`--complete` includes books without a synopsis; `--notes` applies the sample notes; `--refresh-meta` updates bibliographic data; `--refresh-titles` and `--refresh-synopsis` update titles and synopses; `--add=slug,slug` inserts those entries of the seed catalog) |
 | `npm run ai:enrich` | embeddings and classification of pending books (`--all` redoes everything; `--retry` redoes the ones that failed) |
 | `npm run ai:eval -- --judge` | compares keyword search and semantic search; writes `data/eval/REPORT.md` and `data/eval/results.json` |
 

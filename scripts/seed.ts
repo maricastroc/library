@@ -7,6 +7,7 @@ import type { SeedCatalogEntry } from "./catalog-fetch";
 
 const CATALOG_FILE = join(process.cwd(), "data", "seed", process.env.SEED_CATALOG ?? "catalog.json");
 const NOTES_FILE = join(process.cwd(), "data", "seed", "example-notes.json");
+const ADDITIONS_FILE = join(process.cwd(), "data", "seed", "additions.json");
 const MAX_WITHOUT_SYNOPSIS = 4;
 const TARGET_SIZE = 200;
 
@@ -43,10 +44,27 @@ function main() {
   const complete = process.argv.includes("--complete");
   const currentTotal = () => (db().prepare("SELECT COUNT(*) AS total FROM books").get() as { total: number }).total;
   const room = Math.max(0, TARGET_SIZE - MAX_WITHOUT_SYNOPSIS - currentTotal());
+  const additions = new Set(existsSync(ADDITIONS_FILE) ? (JSON.parse(readFileSync(ADDITIONS_FILE, "utf8")) as string[]) : []);
   const fresh = withSynopsis.filter(
-    (entry) => !findExistingBook({ isbn: entry.isbn, title: entry.title, author: entry.author }),
+    (entry) => !additions.has(entry.slug) && !findExistingBook({ isbn: entry.isbn, title: entry.title, author: entry.author }),
   );
-  const selected = [...fresh.slice(0, room), ...(complete ? withoutSynopsis.slice(0, MAX_WITHOUT_SYNOPSIS) : [])];
+  const addArgument = process.argv.find((argument) => argument.startsWith("--add="));
+  const requested = addArgument ? new Set(addArgument.slice("--add=".length).split(",").filter(Boolean)) : null;
+  if (requested) {
+    const known = new Set(entries.map((entry) => entry.slug));
+    const unknown = [...requested].filter((slug) => !known.has(slug));
+    if (unknown.length > 0) {
+      console.error(`Not in the seed catalog: ${unknown.join(", ")}`);
+      process.exit(1);
+    }
+  }
+  const selected = requested
+    ? entries.filter((entry) => requested.has(entry.slug))
+    : [
+        ...fresh.slice(0, room),
+        ...(complete ? withoutSynopsis.slice(0, MAX_WITHOUT_SYNOPSIS) : []),
+        ...entries.filter((entry) => additions.has(entry.slug)),
+      ];
 
   let inserted = 0;
   let skipped = 0;

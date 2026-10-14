@@ -10,7 +10,7 @@
 
 - **Next.js 16 (App Router) + SQLite (`better-sqlite3`)**. The catalog is read in Server Components; writes go through Server Actions and `/api/admin/*` routes. No paid services.
 - **SQLite in `TRUNCATE` journal mode, not WAL.** In WAL, command-line scripts closing their connection deleted the `-wal` file while the development server still held it open; the server's writes ended up in an orphaned file. With a plain journal, every transaction ends in the main file.
-- **Vectors in BLOBs and brute-force search in memory.** With 200 books (≈2,100 vectors of 768 dimensions, between books and synopsis sentences) the comparison takes milliseconds; a vector index would only add a dependency. The in-memory index is invalidated by a revision counter stored in the database.
+- **Vectors in BLOBs and brute-force search in memory.** With 220 books (≈2,400 vectors of 768 dimensions, between books and synopsis sentences) the comparison takes milliseconds; a vector index would only add a dependency. The in-memory index is invalidated by a revision counter stored in the database.
 - **Server modules are never imported by client components.** Shared constants live in pure modules (`import-types.ts`, `palettes.ts`, `taxonomy.ts`).
 
 ## AI
@@ -22,6 +22,8 @@
 - **A synopsis shorter than 140 characters is not classified.** The book stays in kraft paper and can only be found by keywords.
 - **Search**: the query is split into a request and a restriction ("but without being…", "that isn't…", "nothing too…"); the request becomes a vector and is compared with each book's synopsis vector and reading vector; the final order adds requested attributes, penalizes avoided attributes and takes length, pace, genre and matching words into account. "For those who liked X" uses the centroid of the books by X that are in the catalog and excludes those books themselves.
 - **When not to answer.** Below a similarity floor the shelf shows nothing; in an intermediate band it shows at most three books and warns that the match is weak. A reference to an author or book missing from the catalog is stated as such, without inventing a resemblance. The thresholds were calibrated with `data/eval/queries.json`.
+- **What the catalog cannot know.** A request that only asks for a judgment about reception ("an underrated book", "a bestseller", "the best book you have") is declined with an explanation: the catalog records what a book is about and how it reads, not how it was received. When the judgment comes with something searchable ("an underrated book about grief"), it is set aside, named in the answer, and the rest is searched. A request with no content at all ("a book") asks the reader for more. Before this rule the generic word "book" was enough to match every synopsis, and opposite requests returned nearly the same list.
+- **Looking up a title or an author.** The same field takes a name: "woolf", "machado", "magic mountain" bring that author's books, or that book, first, followed by up to three that read like them. A single word only looks up authors; as a title it would hijack requests like "a romance". A name typed with capitals that is not on the shelf ("Stephen King", "Harry Potter") is answered as such, without a resemblance invented from the synopses.
 - **If Ollama goes down**, the search route returns keyword results and says so in the interface.
 
 ## Data
@@ -53,7 +55,8 @@
 ## Open items
 
 - The evaluation uses a local model as the relevance judge. Human judgment of the same lists is still missing.
-- 58 of the 326 titles researched had no usable article on Portuguese Wikipedia (or only had the author's page, which is refused). In the 200-book catalog, 163 have the ISBN of a Portuguese-language edition and 178 have a cover.
+- 60 of the 339 titles researched had no usable article on Portuguese Wikipedia (or only had the author's page, which is refused). In the 220-book catalog, 176 have the ISBN of a Portuguese-language edition and 189 have a cover.
+- The first 200 books were chosen by the quality of their records, which favored classics. A batch of 20 contemporary books (1987–2021: Harry Potter, A Game of Thrones, The Hunger Games, Klara and the Sun, Norwegian Wood, The Road, among others) was added later; their slugs are listed in `data/seed/additions.json`, which the seed always includes. Gone Girl and Where the Crawdads Sing have no article on Portuguese Wikipedia, and Life of Pi only has one about its publication, so they stayed out.
 - No per-user authentication, no payment, no e-mail sending: a reservation only records the request for the bookshop to answer.
 - Rule-based query interpretation covers the most common English negations; unusual constructions pass through as free text. Queries written in Portuguese are no longer interpreted.
 - Rate limiting is in memory, per process.
