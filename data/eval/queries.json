@@ -26,5 +26,8 @@
   {"id": "sem-1", "type": "no-match", "query": "Rust programming manual", "expects": "abstain"},
   {"id": "sem-2", "type": "no-match", "query": "everyday vegan recipes", "expects": "abstain"},
   {"id": "sem-3", "type": "no-match", "query": "travel guide to Japan", "expects": "abstain"},
-  {"id": "sem-4", "type": "no-match", "query": "how to invest in the stock market", "expects": "abstain"}
+  {"id": "sem-4", "type": "no-match", "query": "how to invest in the stock market", "expects": "abstain"},
+  {"id": "una-1", "type": "unanswerable", "query": "an underrated book", "expects": "abstain"},
+  {"id": "una-2", "type": "unanswerable", "query": "an overrated book", "expects": "abstain"},
+  {"id": "una-3", "type": "unanswerable", "query": "the best book you have", "expects": "abstain"}
 ]

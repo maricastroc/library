@@ -41,6 +41,7 @@ const TYPE_LABELS: Record<string, string> = {
   negative: "negative",
   ambiguous: "ambiguous",
   "no-match": "no match",
+  unanswerable: "unanswerable",
 };
 
 const formatScore = (value: number | null) => (value === null ? "—" : value.toFixed(2));

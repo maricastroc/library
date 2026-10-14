@@ -33,7 +33,7 @@ function Entry({ label, children }: { label: string; children: ReactNode }) {
   );
 }
 
-function Reading({ interpretation }: { interpretation: Interpretation }) {
+function Reading({ interpretation, declined }: { interpretation: Interpretation; declined: boolean }) {
   const entries: ReactNode[] = [];
   const { reference } = interpretation;
   if (reference?.inCatalog && reference.similar) {
@@ -98,6 +98,14 @@ function Reading({ interpretation }: { interpretation: Interpretation }) {
       </Entry>,
     );
   }
+  if (interpretation.unassessable.length > 0) {
+    entries.push(
+      <Entry key="unknown" label="I could not judge">
+        {join(interpretation.unassessable)}
+      </Entry>,
+    );
+  }
+  if (entries.length === 0 && declined) return null;
   return (
     <div className="hero-margin-note">
       <p className="handwriting text-[1.45rem] text-ink-soft">how I read your request —</p>
@@ -254,7 +262,7 @@ export function SearchBar({
 
       <aside className="hero-margin" aria-live="polite">
         {state.status === "done" ? (
-          <Reading interpretation={state.response.interpretation} />
+          <Reading interpretation={state.response.interpretation} declined={state.response.confidence === "none"} />
         ) : state.status === "idle" ? (
           <div className="hero-margin-note">
             <p className="handwriting text-[1.45rem] text-ink-soft">or borrow a request —</p>

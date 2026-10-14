@@ -1,6 +1,8 @@
 import { normalizeText } from "@/lib/catalog/text";
 import type { AtmosphereId, ExperienceId } from "@/lib/semantic/taxonomy";
-import { contentTokens } from "./lexical";
+import { STOPWORDS, contentTokens } from "./lexical";
+
+const TOPICAL_STOPWORDS = new Set(["love", "loved", "days"]);
 
 export type CatalogNames = {
   authors: { name: string; folded: string; aliases: string[]; bookIds: number[] }[];
@@ -29,6 +31,9 @@ export type ParsedQuery = {
   genres: string[];
   reference: ParsedReference | null;
   hasFreeText: boolean;
+  unknowable: string[];
+  asksPrice: boolean;
+  hasSubstance: boolean;
 };
 
 const ATMOSPHERE_CUES: [RegExp, AtmosphereId][] = [
@@ -95,6 +100,11 @@ const AUTHOR_MENTION = new RegExp(
 );
 const NOT_A_NAME = /^(Want|Looking|Book|Books|Something|Anything|Give|Find|Show|Please|Recommend|What|Which|Novel|Novels)$/i;
 
+const RECEPTION_CUE =
+  /\b(under[\s-]?rated|over[\s-]?rated|underappreciated|overlooked|overhyped|hidden gems?|best[\s-]?sell(?:ers?|ing)|popular|famous|well[\s-]known|renowned|(?:critically )?acclaimed|award[\s-]winning|prize[\s-]winning|trending|viral|booktok|everyone is (?:talking about|reading)|cult (?:classics?|favou?rites?)|top[\s-]rated|highly rated|five[\s-]star)\b/gi;
+const PRICE_CUE = /\b(cheap|cheapest|cheaper|affordable|inexpensive|expensive|bargains?|on sale|low[\s-]priced?)\b/gi;
+const PRAISE_CUE = /\b(good|great|greatest|best|nice|amazing|awesome|excellent|wonderful|brilliant|masterpieces?|must[\s-]reads?|worth reading)\b/gi;
+
 const NEGATION_PATTERNS: RegExp[] = [
   /(?:^|[\s,;])(?:but|yet|though)\s+(?:(?:that|which|it|it[’']?s)\s+)?(?:(?:(?:is|are)\s+)?not|isn[’']?t|aren[’']?t|(?:doesn[’']?t|does\s+not|don[’']?t|do\s+not)\s+(?:get|feel|seem|become|have|turn))\s+(?:(?:be|being|too|so|very|overly|a|an)\s+)*([^,.;!?]+)/gi,
   /(?:^|[\s,;])(?:(?:but|yet)\s+)?without\s+(?:(?:being|getting|becoming|feeling|seeming|falling\s+into|having|too\s+much|so\s+much|too\s+many|so\s+many|too|any|a|an)\s+)*([^,.;!?]+)/gi,
@@ -125,6 +135,43 @@ function containsPhrase(folded: string, phrase: string): boolean {
   return new RegExp(`(?:^| )${phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?: |$)`).test(folded);
 }
 
+const NAME_ONLY =
+  /^[A-ZÀ-Ý][\p{L}.'’-]*(?:\s+(?:(?:de|da|do|dos|das|of|the|and|in|von|van|e|y)\s+)*[A-ZÀ-Ý][\p{L}.'’-]*){1,4}$/u;
+
+function hasReadingCue(folded: string): boolean {
+  const patterns = [
+    ...ATMOSPHERE_CUES.map(([pattern]) => pattern),
+    ...EXPERIENCE_CUES.map(([pattern]) => pattern),
+    ...GENRE_CUES.map(([pattern]) => pattern),
+    SHORT_CUE,
+    LONG_CUE,
+    SLOW_CUE,
+    FAST_CUE,
+    CLASSIC_CUE,
+    CONTEMPORARY_CUE,
+  ];
+  return patterns.some((pattern) => pattern.test(folded));
+}
+
+function lookupByName(folded: string, catalog: CatalogNames): ParsedReference | null {
+  const tokens = contentTokens(folded);
+  if (tokens.length === 0 || tokens.length > 4) return null;
+  if (tokens.length === 1 && (tokens[0].length < 5 || hasReadingCue(folded))) return null;
+  const covers = (name: string) => {
+    const words = name.split(" ");
+    return tokens.every((token) => words.includes(token));
+  };
+  const authors = catalog.authors.filter((author) => covers(author.folded));
+  const titles = tokens.length >= 2 ? catalog.titles.filter((entry) => covers(entry.folded)) : [];
+  if (authors.length === 1 && titles.length === 0) {
+    return { kind: "author", label: authors[0].name, bookIds: authors[0].bookIds, inCatalog: true, similar: false };
+  }
+  if (titles.length === 1 && authors.length === 0) {
+    return { kind: "title", label: titles[0].folded, bookIds: [titles[0].id], inCatalog: true, similar: false };
+  }
+  return null;
+}
+
 function findReference(query: string, folded: string, catalog: CatalogNames): ParsedReference | null {
   const cueMatch = REFERENCE_CUE.exec(folded);
   const similar = Boolean(cueMatch);
@@ -146,10 +193,20 @@ function findReference(query: string, folded: string, catalog: CatalogNames): Pa
     return { kind: "author", label: authorHit.name, bookIds: authorHit.bookIds, inCatalog: true, similar };
   }
 
+  if (!similar) {
+    const looked = lookupByName(folded, catalog);
+    if (looked) return looked;
+  }
+
   const mention = AUTHOR_MENTION.exec(query);
   const mentioned = mention?.[1] ?? mention?.[2];
   if (!cueMatch && mentioned && mentioned.length >= 4) {
     return { kind: "author", label: mentioned.trim(), bookIds: [], inCatalog: false, similar: false };
+  }
+
+  const firstWord = query.split(" ")[0] ?? "";
+  if (!cueMatch && NAME_ONLY.test(query) && !NOT_A_NAME.test(firstWord) && !hasReadingCue(folded)) {
+    return { kind: "author", label: query, bookIds: [], inCatalog: false, similar: false };
   }
 
   if (cueMatch) {
@@ -184,6 +241,17 @@ export function parseQuery(query: string, catalog: CatalogNames): ParsedQuery {
   }
   let positive = working.replace(/\s+/g, " ").replace(/[,;]\s*$/, "").trim();
   if (positive.length < 3) positive = original;
+
+  const judged = reference?.kind === "title" ? [] : (positive.match(RECEPTION_CUE) ?? []);
+  const praised = reference?.kind === "title" ? [] : (positive.match(PRAISE_CUE) ?? []);
+  const unjudged =
+    judged.length > 0
+      ? positive
+          .replace(RECEPTION_CUE, " ")
+          .replace(/\s+/g, " ")
+          .replace(/\ban (?=[b-df-hj-np-tv-z])/gi, "a ")
+          .trim()
+      : positive;
 
   const positiveFolded = normalizeText(positive);
   const avoidFolded = normalizeText(avoid.join(" , "));
@@ -225,6 +293,16 @@ export function parseQuery(query: string, catalog: CatalogNames): ParsedQuery {
   }
   const hasFreeText = contentTokens(freeText).length >= 1;
 
+  const experiences = cuesIn(positiveFolded, EXPERIENCE_CUES);
+  const structured = atmospheres.length + experiences.length + genres.length > 0 || Boolean(pace ?? length ?? era);
+  const asksPrice = reference?.kind !== "title" && positive.search(PRICE_CUE) >= 0;
+  const plainWords = normalizeText(unjudged.replace(PRAISE_CUE, " ").replace(PRICE_CUE, " "))
+    .split(" ")
+    .filter((token) => token.length > 1 && (!STOPWORDS.has(token) || TOPICAL_STOPWORDS.has(token)));
+  const hasSubstance = structured || reference !== null || plainWords.length > 0;
+  const unknowable = [...new Set((hasSubstance ? judged : [...judged, ...praised]).map((word) => word.toLowerCase()))];
+  if (hasSubstance && judged.length > 0 && unjudged.length >= 3) positive = unjudged;
+
   return {
     original,
     positive,
@@ -232,12 +310,15 @@ export function parseQuery(query: string, catalog: CatalogNames): ParsedQuery {
     atmospheres,
     emphasis,
     avoidAtmospheres,
-    experiences: cuesIn(positiveFolded, EXPERIENCE_CUES),
+    experiences,
     pace,
     length,
     era,
     genres,
     reference,
     hasFreeText,
+    unknowable,
+    asksPrice,
+    hasSubstance,
   };
 }

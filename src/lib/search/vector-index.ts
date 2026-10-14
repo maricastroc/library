@@ -36,7 +36,7 @@ type GlobalWithIndex = typeof globalThis & {
 };
 
 const AMBIGUOUS_NAME_TOKENS = new Set(
-  "rosa amado ramos campos prado paz lins mann king lee han eco walker levi grass lobo maria jose joao paulo pedro mario carlos luis ana julio jorge machado ferreira lima reis neto junior williams roy lem dick adams frank austen conrad woolf".split(
+  "rosa paz lins mann king lee han eco walker levi grass lobo maria jose joao paulo pedro mario carlos luis ana julio jorge lima reis neto junior roy lem dick frank".split(
     " ",
   ),
 );

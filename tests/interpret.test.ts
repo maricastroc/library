@@ -14,6 +14,33 @@ const catalog: CatalogNames = {
   ],
 };
 
+describe("looking a book up by title or author", () => {
+  it("finds an author from a single name", () => {
+    const parsed = parseQuery("saramago", catalog);
+    expect(parsed.reference).toMatchObject({ kind: "author", label: "José Saramago", inCatalog: true, similar: false });
+  });
+
+  it("finds a title from some of its words", () => {
+    const parsed = parseQuery("writes to the colonel", catalog);
+    expect(parsed.reference).toMatchObject({ kind: "title", bookIds: [10], inCatalog: true });
+  });
+
+  it("does not turn a single word into a title", () => {
+    const parsed = parseQuery("romance", { ...catalog, titles: [...catalog.titles, { folded: "romance of the kingdom", id: 11 }] });
+    expect(parsed.reference).toBeNull();
+  });
+
+  it("treats a capitalised name that is not on the shelf as missing", () => {
+    const parsed = parseQuery("Stephen King", catalog);
+    expect(parsed.reference).toMatchObject({ label: "Stephen King", inCatalog: false, similar: false });
+  });
+
+  it("does not read a capitalised request as a name", () => {
+    expect(parseQuery("Something Strange", catalog).reference).toBeNull();
+    expect(parseQuery("Rainy Afternoon", catalog).reference).toBeNull();
+  });
+});
+
 describe("parseQuery", () => {
   it("separates what the reader wants from what they want to avoid", () => {
     const parsed = parseQuery("I want a book about loneliness, but without being depressing", catalog);
@@ -96,6 +123,43 @@ describe("parseQuery", () => {
     expect(parseQuery("a fast-paced crime novel for the holidays", catalog)).toMatchObject({ pace: "fast", genres: ["Crime", "Novel"] });
     expect(parseQuery("poetry to read slowly", catalog)).toMatchObject({ pace: "slow", genres: ["Poetry"] });
     expect(parseQuery("a graphic novel about memory", catalog).genres).toEqual(["Comics"]);
+  });
+});
+
+describe("requests the catalog cannot answer", () => {
+  it("recognises a judgment about reception with nothing else to go on", () => {
+    for (const query of ["an underrated book", "an overrated book", "a bestseller", "something award-winning", "the best book you have"]) {
+      const parsed = parseQuery(query, catalog);
+      expect(parsed.hasSubstance, query).toBe(false);
+      expect(parsed.unknowable.length, query).toBeGreaterThan(0);
+    }
+    expect(parseQuery("an underrated book", catalog).unknowable).toEqual(["underrated"]);
+  });
+
+  it("sets the judgment aside and keeps the rest of the request", () => {
+    const parsed = parseQuery("an underrated book about grief", catalog);
+    expect(parsed.hasSubstance).toBe(true);
+    expect(parsed.unknowable).toEqual(["underrated"]);
+    expect(parsed.positive).toBe("a book about grief");
+  });
+
+  it("does not report praise when the request has something to search for", () => {
+    const parsed = parseQuery("a good book for a rainy afternoon", catalog);
+    expect(parsed.hasSubstance).toBe(true);
+    expect(parsed.unknowable).toEqual([]);
+  });
+
+  it("treats a request with no content as empty", () => {
+    expect(parseQuery("a book", catalog)).toMatchObject({ hasSubstance: false, unknowable: [], asksPrice: false });
+    expect(parseQuery("a cheap book", catalog)).toMatchObject({ hasSubstance: false, asksPrice: true });
+  });
+
+  it("keeps a catalog title that happens to contain a judgment word", () => {
+    const withTitle: CatalogNames = { ...catalog, titles: [...catalog.titles, { folded: "the great gatsby", id: 11 }] };
+    const parsed = parseQuery("The Great Gatsby", withTitle);
+    expect(parsed.reference).toMatchObject({ kind: "title", bookIds: [11] });
+    expect(parsed.hasSubstance).toBe(true);
+    expect(parsed.unknowable).toEqual([]);
   });
 });
 

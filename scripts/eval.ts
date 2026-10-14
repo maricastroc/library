@@ -41,6 +41,7 @@ const TYPE_LABELS: Record<string, string> = {
   negative: "negative",
   ambiguous: "ambiguous",
   "no-match": "no match",
+  unanswerable: "unanswerable",
 };
 
 const SYSTEM_LABELS: Record<SystemName, string> = { lexical: "keywords", embedding: "embeddings only", full: "shelf" };

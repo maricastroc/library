@@ -268,6 +268,22 @@ export async function semanticSearch(
   }
 
   const useFull = variant === "full";
+  if (useFull && !parsed.hasSubstance) {
+    const judged = parsed.unknowable.map((word) => `"${word}"`).join(", ");
+    return {
+      query: parsed.original,
+      interpretation: toInterpretation(emptyContext, parsed.unknowable, index),
+      confidence: "none",
+      message:
+        parsed.unknowable.length > 0
+          ? `I cannot tell which books are ${judged}: the catalog knows what each book is about and how it reads, not how it was received. Tell me a feeling, a theme or a pace and I will look for that.`
+          : parsed.asksPrice
+            ? "I do not search by price. Arrange the shelf by price to see the least expensive books first, or tell me what you would like to read."
+            : "That is too little for me to go on. Tell me a feeling, a theme, a pace, or an author you liked.",
+      results: [],
+      engine: { ...engine, tookMs: Date.now() - started },
+    };
+  }
   const queryText = useFull ? parsed.positive : parsed.original;
   const prompts = [queryPrompt(queryText), ...(useFull ? parsed.avoid.map((phrase) => queryPrompt(phrase)) : [])];
   const [{ vectors, cached }, anchors] = await Promise.all([embedCached(prompts), atmosphereAnchors()]);
@@ -278,7 +294,7 @@ export async function semanticSearch(
   const avoided = useFull ? parsed.avoidAtmospheres : [];
   const inferred = useFull ? inferAtmospheres(queryVector, anchors, [...wanted, ...avoided]) : [];
   const avoidedInferred: AtmosphereId[] = [];
-  const unassessable: string[] = [];
+  const unassessable: string[] = useFull ? [...parsed.unknowable] : [];
   if (useFull) {
     parsed.avoid.forEach((phrase, position) => {
       const phraseFolded = normalizeText(phrase);
@@ -418,8 +434,14 @@ export async function semanticSearch(
 
   let limit = options.limit ?? SEARCH_TUNING.maxResults;
   let picked: Scored[] = [];
+  const nameWords = contentTokens(parsed.positive).length;
+  const soundsLikeName = useFull && !hasStructure && !parsed.reference && nameWords >= 2 && nameWords <= 3;
   if (confidence === "none") {
-    message = message ?? "I found nothing on this shelf that answers this request well. The catalog may not have this kind of book.";
+    message =
+      message ??
+      (soundsLikeName
+        ? `Nothing on this shelf answers “${parsed.original}”: no title or author goes by that name, and no synopsis comes close to it. The catalog may not have this kind of book.`
+        : "I found nothing on this shelf that answers this request well. The catalog may not have this kind of book.");
   } else {
     if (confidence === "low") {
       limit = Math.min(limit, 3);
