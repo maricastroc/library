@@ -198,7 +198,7 @@ export function Shelf({ ref, books, groups, arrangement, matches, ranks, results
     setRovingId(nextId);
     const element = elements.current.get(nextId);
     element?.focus({ preventScroll: true });
-    element?.scrollIntoView({ block: "nearest", inline: "nearest" });
+    element?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "instant" });
   };
 
   if (books.length === 0) {

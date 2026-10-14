@@ -10,6 +10,7 @@ import type { ShopConfig } from "@/lib/shop/config";
 import { OpenBook, type Box, type OpenBookHandle } from "@/components/book/OpenBook";
 import { SearchBar, type SearchState } from "./SearchBar";
 import { Masthead } from "./Masthead";
+import { RunningHead } from "./RunningHead";
 import { Shelf, type ShelfHandle } from "./Shelf";
 import { SpineFace } from "./SpineFace";
 import { IndexList } from "./IndexList";
@@ -56,6 +57,8 @@ export function ShelfExperience({ books, shop, showcases, initialQuery, initialS
   const shelfRef = useRef<ShelfHandle>(null);
   const openBookRef = useRef<OpenBookHandle>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const shelfTopRef = useRef<HTMLDivElement>(null);
   const byId = useMemo(() => new Map(books.map((book) => [book.id, book])), [books]);
   const bySlug = useMemo(() => new Map(books.map((book) => [book.slug, book])), [books]);
 
@@ -201,6 +204,16 @@ export function ShelfExperience({ books, shop, showcases, initialQuery, initialS
     writeUrl({ sort: key === "atmosphere" ? null : key }, "replace");
   }, []);
 
+  const searchFromHead = useCallback(
+    (query: string) => {
+      void runSearch(query);
+      shelfTopRef.current?.scrollIntoView({ block: "start" });
+    },
+    [runSearch],
+  );
+
+  const backToTop = useCallback(() => window.scrollTo({ top: 0 }), []);
+
   const openBookData = open ? byId.get(open.id) : undefined;
   const openIdentity = useMemo(() => (openBookData ? spineIdentity(openBookData) : null), [openBookData]);
   const activeQuery = search.status === "done" ? search.query : null;
@@ -209,13 +222,14 @@ export function ShelfExperience({ books, shop, showcases, initialQuery, initialS
   return (
     <div className="mx-auto w-full max-w-[1560px] px-4 sm:px-8 lg:px-12">
       <Masthead name={shop.name} tagline={shop.tagline} total={books.length} showcaseCount={showcases.length} />
+      <RunningHead name={shop.name} state={search} watch={heroRef} onSearch={searchFromHead} onClear={clearSearch} onTop={backToTop} />
 
       <main>
-        <div className="pt-12 sm:pt-20">
+        <div ref={heroRef} className="pt-12 sm:pt-20">
           <SearchBar state={search} onSearch={(query) => void runSearch(query)} onClear={clearSearch} />
         </div>
 
-        <div className="mt-12 sm:mt-16">
+        <div ref={shelfTopRef} className="mt-12 sm:mt-16">
           <SortControls
             value={matches ? answerSort : sort}
             onChange={changeSort}

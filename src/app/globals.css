@@ -26,11 +26,58 @@
 :root {
   color-scheme: light;
   scrollbar-gutter: stable;
+  --running-head: 3.75rem;
 }
 
 html {
   background: var(--color-paper);
   -webkit-text-size-adjust: 100%;
+}
+
+html:has(.running-head) {
+  scroll-padding-top: calc(var(--running-head) + 0.75rem);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+html::-webkit-scrollbar {
+  width: 15px;
+  height: 15px;
+}
+
+html::-webkit-scrollbar-track {
+  background-color: var(--color-paper-deep);
+  box-shadow: inset 1px 0 0 rgb(28 26 23 / 0.28), inset 4px 0 0 var(--color-paper-deep), inset 5px 0 0 rgb(28 26 23 / 0.12);
+}
+
+html::-webkit-scrollbar-thumb {
+  min-height: 4.5rem;
+  border: solid transparent;
+  border-width: 3px 4px 3px 6px;
+  background-color: var(--color-ink);
+  background-clip: padding-box;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-ink-soft);
+}
+
+html::-webkit-scrollbar-thumb:active {
+  background-color: var(--color-vermilion);
+}
+
+html::-webkit-scrollbar-corner {
+  background-color: var(--color-paper-deep);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  html {
+    scrollbar-color: var(--color-ink) var(--color-paper-deep);
+  }
 }
 
 body {
@@ -242,6 +289,117 @@ textarea {
 .hero-submit:disabled {
   opacity: 0.55;
   cursor: progress;
+}
+
+.running-head {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 40;
+  height: var(--running-head);
+  background-color: color-mix(in srgb, var(--color-paper) 94%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: inset 0 -1px 0 var(--color-ink), inset 0 -4px 0 color-mix(in srgb, var(--color-paper) 94%, transparent), inset 0 -5px 0 var(--color-ink), 0 10px 24px -18px rgb(28 26 23 / 0.45);
+  translate: 0 calc(-100% - 1.5rem);
+  visibility: hidden;
+  transition: translate 460ms var(--ease-shelf), visibility 0s linear 460ms;
+}
+
+.running-head[data-shown="true"] {
+  translate: 0 0;
+  visibility: visible;
+  transition: translate 460ms var(--ease-shelf), visibility 0s;
+}
+
+.running-head-field {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 0.9rem;
+  min-width: 0;
+  max-width: 48rem;
+  padding-bottom: 5px;
+}
+
+.running-head-line {
+  position: relative;
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  min-width: 0;
+}
+
+.running-head-input {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0.3rem 0 0.35rem;
+  background: transparent;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-variation-settings: "SOFT" 60, "WONK" 1;
+  font-size: 1.3rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.running-head-input::placeholder {
+  color: color-mix(in srgb, var(--color-ink-soft) 82%, var(--color-paper));
+}
+
+.running-head-input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.running-head-input:focus {
+  outline: none;
+}
+
+.running-head-key {
+  flex: none;
+  padding: 0.05rem 0.4rem 0;
+  border: 1px solid rgb(28 26 23 / 0.35);
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  color: var(--color-ink-soft);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+@media (hover: none) {
+  .running-head-key {
+    display: none;
+  }
+}
+
+.running-head-rule {
+  position: absolute;
+  inset: auto 0 -3px;
+  width: 100%;
+  height: 7px;
+  overflow: visible;
+  color: rgb(28 26 23 / 0.55);
+  transition: color 200ms ease;
+}
+
+.running-head-rule path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.running-head-field:focus-within .running-head-rule {
+  color: var(--color-vermilion);
+}
+
+.hero-submit.running-head-submit {
+  flex: none;
+  width: 2.2rem;
+  height: 2.2rem;
+  font-size: 1.05rem;
 }
 
 .hero-status {
@@ -1437,7 +1595,8 @@ textarea {
   .showcase-band-cue span,
   .hero-submit,
   .hero-submit span,
-  .frontispiece-photo {
+  .frontispiece-photo,
+  .running-head {
     transition-duration: 0.01ms !important;
   }
   html {

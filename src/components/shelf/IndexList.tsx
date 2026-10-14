@@ -67,7 +67,7 @@ export function IndexList({
           if (books.length === 0) return null;
           return (
             <section key={group.id} className="mb-8 break-inside-avoid-column">
-              <h2 className="eyebrow sticky top-0 border-b border-ink bg-paper py-1.5 text-ink">
+              <h2 className="eyebrow sticky top-(--running-head) border-b border-ink bg-paper py-1.5 text-ink">
                 {group.label} · {books.length}
               </h2>
               <ol>
