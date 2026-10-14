@@ -145,6 +145,10 @@ export function Jacket({ ref, book, identity, shopName, bookseller, result, quer
       }
       await new Promise((resolve) => window.setTimeout(resolve, FOLD));
       const flight = flightRef.current;
+      if (!flight || finished.current) {
+        finish(fromHistory);
+        return;
+      }
       const target = toBox(slotRef.current?.getBoundingClientRect() ?? slot);
       Object.assign(flight.style, { left: `${target.x}px`, top: `${target.y}px`, width: `${target.w}px`, height: `${target.h}px`, visibility: "visible" });
       await flight.animate([...flightFrames(origin, target)].reverse(), { duration: FLIGHT * 0.85, easing: "cubic-bezier(0.5, 0, 0.75, 0)", fill: "forwards" }).finished.catch(() => undefined);
