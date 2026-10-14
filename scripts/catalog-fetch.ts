@@ -169,6 +169,65 @@ async function searchOpenLibrary(params: Record<string, string>): Promise<OpenLi
   return data?.docs ?? [];
 }
 
+type CoverDoc = { author_name?: string[]; editions?: { docs?: { title?: string; cover_i?: number; language?: string[] }[] } };
+
+const COVER_FIELDS = "key,author_name,editions,editions.title,editions.language,editions.cover_i";
+
+async function coverSearch(q: string, limit: number): Promise<CoverDoc[]> {
+  const query = new URLSearchParams({ q, lang: "en", limit: String(limit), fields: COVER_FIELDS });
+  const data = await fetchJson<{ docs?: CoverDoc[] }>(`https://openlibrary.org/search.json?${query.toString()}`, openLibraryLimiter);
+  return data?.docs ?? [];
+}
+
+function englishCover(doc: CoverDoc | undefined, title: string): number | null {
+  const edition = doc?.editions?.docs?.[0];
+  if (!edition?.cover_i || edition.cover_i <= 0) return null;
+  const languages = edition.language ?? [];
+  const sameTitle = normalizeText(edition.title ?? "").startsWith(normalizeText(title));
+  return languages.includes("eng") || (languages.length === 0 && sameTitle) ? edition.cover_i : null;
+}
+
+async function englishCoverId(workKey: string | null, title: string, author: string): Promise<number | null> {
+  const quoted = `title:"${title.replace(/"/g, "")}"`;
+  if (workKey) {
+    for (const q of [`key:${workKey} ${quoted}`, `key:${workKey}`]) {
+      const found = englishCover((await coverSearch(q, 1))[0], title);
+      if (found) return found;
+    }
+  }
+  const candidates = await coverSearch(quoted, 8);
+  for (const doc of candidates.filter((item) => authorMatches({ title, author, genre: "" }, item.author_name))) {
+    const found = englishCover(doc, title);
+    if (found) return found;
+  }
+  const [first] = candidates;
+  const authorInAnotherScript = normalizeText((first?.author_name ?? []).join(" ")).length === 0;
+  const exactTitle = normalizeText(first?.editions?.docs?.[0]?.title ?? "") === normalizeText(title);
+  return authorInAnotherScript && exactTitle ? englishCover(first, title) : null;
+}
+
+const coverUrlFor = (coverId: number | null) => (coverId ? `https://covers.openlibrary.org/b/id/${coverId}-L.jpg` : null);
+
+async function refreshCovers() {
+  const entries = JSON.parse(readFileSync(OUT_FILE, "utf8")) as SeedCatalogEntry[];
+  const onlyMissing = process.argv.includes("--missing");
+  let done = 0;
+  for (const entry of entries) {
+    if (onlyMissing && entry.coverUrl) continue;
+    const workKey = entry.sourceUrl ? new URL(entry.sourceUrl).pathname : null;
+    const coverId = await englishCoverId(workKey, entry.title, entry.author);
+    entry.coverUrl = coverUrlFor(coverId);
+    entry.coverSource = coverId ? "Open Library" : null;
+    done += 1;
+    if (done % 20 === 0) {
+      console.log(`${done} checked`);
+      writeFileSync(OUT_FILE, JSON.stringify(entries, null, 2));
+    }
+  }
+  writeFileSync(OUT_FILE, JSON.stringify(entries, null, 2));
+  console.log(JSON.stringify({ total: entries.length, withEnglishCover: entries.filter((entry) => entry.coverUrl).length }));
+}
+
 const PRINT_ON_DEMAND =
   /(independently published|createspace|amazon|kindle|lulu|clube de autores|bibliolife|forgotten books|hansebooks|wentworth|legare|nabu press|kessinger|books? on demand|tredition|outlook verlag|sagwan|blurb|scribd|wildside|digireads|e-artnow|good press|bod )/i;
 
@@ -420,6 +479,10 @@ async function resolveSeed(seed: SeedTitle, slug: string): Promise<CachedEntry |
 }
 
 async function main() {
+  if (process.argv.includes("--covers")) {
+    await refreshCovers();
+    return;
+  }
   mkdirSync(CACHE_DIR, { recursive: true });
   const entries: SeedCatalogEntry[] = [];
   const report: { title: string; author: string; openLibrary: boolean; isbn: boolean; synopsis: boolean }[] = [];
@@ -441,6 +504,7 @@ async function main() {
         continue;
       }
       const { ol, wiki } = resolved;
+      const coverId = await englishCoverId(ol?.workKey ?? null, title, seed.author);
       report[index] = {
         title,
         author: seed.author,
@@ -459,8 +523,8 @@ async function main() {
         year: seed.year !== undefined ? seed.year : (ol?.year ?? null),
         pages: ol?.pages ?? null,
         language: "pt",
-        coverUrl: ol?.coverId ? `https://covers.openlibrary.org/b/id/${ol.coverId}-L.jpg` : null,
-        coverSource: ol?.coverId ? "Open Library" : null,
+        coverUrl: coverUrlFor(coverId),
+        coverSource: coverId ? "Open Library" : null,
         sourceUrl: ol ? `https://openlibrary.org${ol.workKey}` : null,
         subjects: ol?.subjects ?? [],
         synopsis: wiki?.synopsis ?? null,

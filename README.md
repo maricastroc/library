@@ -17,7 +17,7 @@ npm run dev
 
 Edit `.env.local` before starting: `ADMIN_PASSWORD` (8+ characters) and `SESSION_SECRET` (24+ characters) protect the counter at `/admin`.
 
-The initial catalog is already in `data/seed/catalog.json`. To fetch it again from Open Library and Wikipedia: `npm run catalog:fetch`. The fetch brings synopses in Portuguese; the ones in the repository were translated into English afterwards.
+The initial catalog is already in `data/seed/catalog.json`. To fetch it again from Open Library and Wikipedia: `npm run catalog:fetch` (`-- --covers` only refreshes the cover images). The fetch brings synopses in Portuguese; the ones in the repository were translated into English afterwards.
 
 ## Commands
 
