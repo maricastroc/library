@@ -28,7 +28,7 @@ import { createShowcase, deleteShowcase, updateShowcase, type ShowcaseItem } fro
 
 export type FormState = { ok: boolean; message: string | null; fields?: Record<string, string> };
 
-const text = (form: FormData, key: string) => String(form.get(key) ?? "").trim();
+const text = (form: FormData, key: string) => String(form.get(key) ?? "").replace(/\r\n?/g, "\n").trim();
 
 function reindexLater(id: number) {
   void indexBook(id).catch(() => undefined);

@@ -1,221 +1,392 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Metadata } from "next";
+import { PageHead, SectionHead, Stamp } from "@/components/admin/Counter";
 import { SearchComparison } from "@/components/admin/SearchComparison";
-import { confidenceLabel } from "@/lib/semantic/taxonomy";
+import { EngineKey, Tally, Track } from "@/components/admin/bench/BenchParts";
+import { BenchQueries } from "@/components/admin/bench/BenchQueries";
+import { catalogChangesSince } from "@/lib/catalog/books";
+import { KINDS, LEVEL, SYSTEMS, duel, filterHash, formatScore, isGraded, kindStanding, kindsPhrase, signed, standing, type BenchReport, type Rival } from "@/lib/search/bench";
 
 export const metadata: Metadata = { title: "Search evaluation" };
 
-type Ranked = { id: number; title: string; author: string };
-type SystemName = "lexical" | "embedding" | "full";
-type Report = {
-  summary: {
-    generatedAt: string;
-    models: { embeddings: string; classifier: string; judge: string | null };
-    overall: Record<SystemName, { p5: number | null; ndcg5: number | null; emptyQueries: number }>;
-    byType: Record<string, Record<SystemName, number | null>>;
-    abstention: { outOfScopeDeclined: number; outOfScopeTotal: number; inScopeAnswered: number; inScopeTotal: number };
-  };
-  queries: {
-    id: string;
-    type: string;
-    query: string;
-    confidence: string;
-    message: string | null;
-    systems: Record<SystemName, Ranked[]>;
-    grades: Record<string, number>;
-    metrics: Record<SystemName, { ndcg5: number | null }>;
-  }[];
-};
+const ALONE: Record<Rival, string> = { lexical: "keywords", embedding: "embeddings alone" };
 
-const SYSTEMS: { key: SystemName; label: string; description: string }[] = [
-  { key: "lexical", label: "Keywords", description: "FTS5/BM25 over title, author, genre, synopsis and note" },
-  { key: "embedding", label: "Embeddings only", description: "closeness between the query and the synopsis" },
-  { key: "full", label: "Shelf", description: "reading of the request, embeddings and reranking by attributes" },
-];
-
-const TYPE_LABELS: Record<string, string> = {
-  emotional: "emotional",
-  abstract: "abstract",
-  author: "author",
-  negative: "negative",
-  ambiguous: "ambiguous",
-  "no-match": "no match",
-  unanswerable: "unanswerable",
-};
-
-const formatScore = (value: number | null) => (value === null ? "—" : value.toFixed(2));
-
-function loadReport(): Report | null {
+function loadReport(): BenchReport | null {
   const file = join(process.cwd(), "data", "eval", "results.json");
   if (!existsSync(file)) return null;
   try {
-    const parsed = JSON.parse(readFileSync(file, "utf8")) as Partial<Report>;
-    return parsed.summary && parsed.queries ? (parsed as Report) : null;
+    const parsed = JSON.parse(readFileSync(file, "utf8")) as Partial<BenchReport>;
+    return parsed.summary && parsed.queries ? (parsed as BenchReport) : null;
   } catch {
     return null;
   }
 }
 
+function Head({ count }: { count?: number }) {
+  return (
+    <PageHead
+      folio="06 · the search bench"
+      title={
+        <>
+          Does the shelf <em>find better</em>?
+        </>
+      }
+      lede={
+        count ? (
+          <p>The same {count} requests put to three engines, and every answer graded.</p>
+        ) : (
+          <p>Try any query on the engines below. The fixed evaluation set has not been run on this computer yet.</p>
+        )
+      }
+      actions={
+        count ? (
+          <a href="#bench-try" className="button button-outline">
+            Try a query ↓
+          </a>
+        ) : null
+      }
+    />
+  );
+}
+
 export default function EvaluationPage() {
   const report = loadReport();
-  const judged = Boolean(report?.summary.models.judge);
-  return (
-    <div className="max-w-6xl">
-      <h1 className="display text-[2.6rem] leading-none">Search evaluation</h1>
-      <p className="mt-3 max-w-[48rem] text-ink-soft">
-        The shelf only earns trust if it finds books an ordinary search can’t. Here you can try any query on both
-        engines and see the results for the fixed evaluation set.
-      </p>
 
-      <section aria-labelledby="live-comparison-heading" className="mt-8 border border-ink/30 bg-paper-light p-5">
-        <h2 id="live-comparison-heading" className="sr-only">
-          Live comparison
-        </h2>
-        <SearchComparison />
-      </section>
-
-      <section aria-labelledby="evaluation-set-heading" className="mt-14">
-        <h2 id="evaluation-set-heading" className="display text-[1.8rem] leading-none">
-          Evaluation set
-        </h2>
-        {report === null ? (
-          <p className="mt-3 text-ink-soft">
-            No results saved yet. Run <code className="font-mono text-[0.85rem]">npm run ai:eval -- --judge</code> in the terminal.
+  if (report === null) {
+    return (
+      <div className="counter-page">
+        <Head />
+        <div className="blank">
+          <p className="blank-line">No evaluation saved yet.</p>
+          <p className="blank-hint">
+            Run <code className="bench-code">npm run ai:eval -- --judge</code> in the terminal. It puts the same questions to the three engines and has a local model grade the answers.
           </p>
-        ) : (
-          <>
-            <p className="eyebrow mt-3 text-ink-soft">
-              {report.queries.length} queries · generated on {report.summary.generatedAt.slice(0, 16).replace("T", " ")} · embeddings{" "}
-              {report.summary.models.embeddings} · classifier {report.summary.models.classifier}
-            </p>
-            {judged ? (
-              <p className="mt-3 max-w-[48rem] border-l-2 border-vermilion pl-3 text-[0.95rem]">
-                The relevance grades (0, 1 or 2) were given by another local model, {report.summary.models.judge}, reading only title,
-                author, genre and synopsis. It’s an automatic judge, not a human evaluation: treat the numbers as a hint and read the lists.
-              </p>
-            ) : (
-              <p className="mt-3 text-ink-soft">This run had no relevance judge; just the lists side by side.</p>
-            )}
+        </div>
+        <TrySection />
+      </div>
+    );
+  }
 
-            <div className="mt-6 overflow-x-auto">
-              <table className="w-full min-w-[36rem] border-collapse text-left">
-                <thead>
-                  <tr className="eyebrow border-b border-ink text-ink-soft">
-                    <th scope="col" className="py-2 pr-4 font-normal">Engine</th>
-                    <th scope="col" className="py-2 pr-4 text-right font-normal">nDCG@5</th>
-                    <th scope="col" className="py-2 pr-4 text-right font-normal">P@5</th>
-                    <th scope="col" className="py-2 text-right font-normal">Queries with no results</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {SYSTEMS.map((system) => (
-                    <tr key={system.key} className="border-b border-ink/15 align-baseline">
-                      <th scope="row" className="py-2.5 pr-4 font-normal">
-                        <span className="font-label font-semibold">{system.label}</span>
-                        <span className="block text-[0.85rem] text-ink-soft">{system.description}</span>
-                      </th>
-                      <td className="display py-2.5 pr-4 text-right text-[1.6rem]">{formatScore(report.summary.overall[system.key].ndcg5)}</td>
-                      <td className="display py-2.5 pr-4 text-right text-[1.6rem]">{formatScore(report.summary.overall[system.key].p5)}</td>
-                      <td className="py-2.5 text-right font-mono text-[0.9rem]">{report.summary.overall[system.key].emptyQueries}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+  const { summary } = report;
+  const judge = summary.models.judge;
+  const graded = report.queries.filter(isGraded);
+  const declined = report.queries.length - graded.length;
+  const versusKeywords = duel(graded, "lexical");
+  const versusEmbeddings = duel(graded, "embedding");
+  const changes = catalogChangesSince(summary.generatedAt);
+  const run = new Date(summary.generatedAt);
+  const runLabel = Number.isNaN(run.getTime())
+    ? summary.generatedAt
+    : `${run.toLocaleString("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "UTC" })} UTC`;
+  const kindCount = new Set(report.queries.map((query) => query.type)).size;
 
-            <div className="mt-8 grid gap-8 md:grid-cols-2">
-              <div>
-                <h3 className="eyebrow border-b border-ink pb-2 text-ink">nDCG@5 by query type</h3>
-                <table className="w-full border-collapse text-left text-[0.95rem]">
-                  <thead>
-                    <tr className="eyebrow text-ink-soft">
-                      <th scope="col" className="py-1.5 pr-3 font-normal">Type</th>
-                      {SYSTEMS.map((system) => (
-                        <th key={system.key} scope="col" className="py-1.5 pl-3 text-right font-normal">
-                          {system.label}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Object.entries(report.summary.byType).map(([type, row]) => (
-                      <tr key={type} className="border-t border-ink/15">
-                        <th scope="row" className="py-1.5 pr-3 font-label font-normal">{TYPE_LABELS[type] ?? type}</th>
-                        {SYSTEMS.map((system) => (
-                          <td key={system.key} className="py-1.5 pl-3 text-right font-mono text-[0.88rem]">
-                            {formatScore(row[system.key])}
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <div>
-                <h3 className="eyebrow border-b border-ink pb-2 text-ink">When there’s no answer</h3>
-                <p className="mt-3 text-[0.98rem]">
-                  Queries outside what the bookshop sells, declined or flagged as weak:{" "}
-                  <strong>
-                    {report.summary.abstention.outOfScopeDeclined} of {report.summary.abstention.outOfScopeTotal}
-                  </strong>
-                  .
-                </p>
-                <p className="mt-2 text-[0.98rem]">
-                  Legitimate queries answered with confidence:{" "}
-                  <strong>
-                    {report.summary.abstention.inScopeAnswered} of {report.summary.abstention.inScopeTotal}
-                  </strong>
-                  .
-                </p>
-              </div>
-            </div>
+  const swing = graded.length > 0 ? 1 / graded.length : 0;
+  const closeGap = Math.abs((summary.overall.full.ndcg5 ?? 0) - (summary.overall.embedding.ndcg5 ?? 0));
 
-            <h3 className="eyebrow mt-12 border-b border-ink pb-2 text-ink">Query by query</h3>
-            <div className="divide-y divide-ink/20">
-              {report.queries.map((item) => {
-                const graded = Object.keys(item.grades).length > 0;
+  const kinds = Object.entries(summary.byType).map(([type, row]) => {
+    const queries = graded.filter((query) => query.type === type);
+    return { type, row, count: queries.length, ...kindStanding(row), tally: duel(queries, "embedding") };
+  });
+  const perKind = kinds.map((kind) => kind.count).filter((count) => count > 0);
+  const smallest = Math.min(...perKind);
+  const largest = Math.max(...perKind);
+  const leading = kinds.filter((kind) => kind.leads).map((kind) => kind.type);
+  const trailing = (["embedding", "lexical"] as Rival[])
+    .map((rival) => ({ rival, types: kinds.filter((kind) => kind.behind === rival).map((kind) => kind.type) }))
+    .filter((group) => group.types.length > 0);
+  const close = kinds.filter((kind) => !kind.leads && !kind.behind).map((kind) => kind.type);
+
+  return (
+    <div className="counter-page counter-page-wide">
+      <Head count={report.queries.length} />
+
+      {changes.added + changes.edited > 0 ? (
+        <p className="slip bench-stale">
+          <strong>Run of {runLabel}.</strong> The catalogue has changed since: {changes.added} {changes.added === 1 ? "book" : "books"} added and {changes.edited} edited, so these
+          numbers describe the shelf as it was then and some titles below have been renamed. To refresh, run <code className="bench-code">npm run ai:eval -- --judge</code>.
+        </p>
+      ) : null}
+
+      {judge ? (
+        <section aria-labelledby="summary-heading" className="bench-summary">
+          <h2 id="summary-heading" className="sr-only">
+            The result
+          </h2>
+          <p className="bench-verdict">
+            The shelf is <em>{standing(versusKeywords)} keywords</em> and <em>{standing(versusEmbeddings)} embeddings alone</em>.
+          </p>
+
+          <table className="bench-engines">
+            <caption className="sr-only">Mean scores of the three engines over {graded.length} graded queries</caption>
+            <thead>
+              <tr>
+                <th scope="col">Engine</th>
+                <th scope="col" className="bench-col-score">
+                  nDCG@5 <span className="bench-col-note">order of the first five</span>
+                </th>
+                <th scope="col" className="bench-col-scale hide-narrow">
+                  <span className="bench-scale" aria-hidden>
+                    <span>0</span>
+                    <span>0.5</span>
+                    <span>1</span>
+                  </span>
+                </th>
+                <th scope="col" className="numeric">
+                  P@5 <span className="bench-col-note">fit among five</span>
+                </th>
+                <th scope="col" className="numeric hide-narrow">
+                  No results
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {SYSTEMS.map((system) => {
+                const row = summary.overall[system.key];
                 return (
-                  <details key={item.id} className="group py-3">
-                    <summary className="flex cursor-pointer flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-                      <span>
-                        <span className="eyebrow mr-3 text-ink-soft">{TYPE_LABELS[item.type] ?? item.type}</span>
-                        <span className="display-italic text-[1.2rem]">“{item.query}”</span>
+                  <tr key={system.key} data-engine={system.key}>
+                    <th scope="row">
+                      <span className="bench-engine">
+                        <EngineKey engine={system.key} />
+                        {system.label}
                       </span>
-                      <span className="eyebrow text-ink-soft">
-                        {confidenceLabel(item.confidence)} confidence
-                        {graded ? ` · nDCG ${formatScore(item.metrics.lexical.ndcg5)} → ${formatScore(item.metrics.full.ndcg5)}` : ""}
-                      </span>
-                    </summary>
-                    {item.message ? <p className="mt-3 border-l-2 border-vermilion pl-3 text-[0.92rem]">{item.message}</p> : null}
-                    <div className="mt-3 grid gap-6 md:grid-cols-3">
-                      {SYSTEMS.map((system) => (
-                        <div key={system.key}>
-                          <p className="eyebrow text-ink-soft">{system.label}</p>
-                          {item.systems[system.key].length === 0 ? (
-                            <p className="mt-1 text-[0.9rem] text-ink-soft">no results</p>
-                          ) : (
-                            <ol className="mt-1 space-y-1 text-[0.92rem]">
-                              {item.systems[system.key].map((entry) => (
-                                <li key={entry.id} className="flex items-baseline justify-between gap-3">
-                                  <span>
-                                    {entry.title} <span className="italic text-ink-soft">— {entry.author}</span>
-                                  </span>
-                                  {graded ? <span className="font-mono text-[0.8rem]">{item.grades[String(entry.id)] ?? 0}</span> : null}
-                                </li>
-                              ))}
-                            </ol>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </details>
+                      <span className="bench-engine-note">{system.gist}</span>
+                    </th>
+                    <td className="bench-score">{formatScore(row.ndcg5)}</td>
+                    <td className="hide-narrow">
+                      <Track values={{ [system.key]: row.ndcg5 }} />
+                    </td>
+                    <td className="numeric bench-p5">{formatScore(row.p5)}</td>
+                    <td className="numeric bench-empty hide-narrow">{row.emptyQueries}</td>
+                  </tr>
                 );
               })}
+            </tbody>
+          </table>
+
+          <div className="bench-duels">
+            {[
+              { rival: "lexical" as Rival, label: "keywords", result: versusKeywords },
+              { rival: "embedding" as Rival, label: "embeddings only", result: versusEmbeddings },
+            ].map(({ rival, label, result }) => (
+              <div key={rival} className="bench-duel">
+                <p className="bench-duel-label">
+                  Shelf against {label}
+                  <span className="bench-duel-count">
+                    <a href={filterHash({ show: "better", against: rival })}>better on {result.better}</a> ·{" "}
+                    <a href={filterHash({ show: "level", against: rival })}>level on {result.level}</a> ·{" "}
+                    <a href={filterHash({ show: "worse", against: rival })} data-tone={result.worse > 0 ? "worse" : undefined}>
+                      worse on {result.worse}
+                    </a>
+                  </span>
+                </p>
+                <Tally marks={result.marks} />
+              </div>
+            ))}
+            <p className="bench-tally-key" aria-hidden>
+              <span data-mark="better" /> better <span data-mark="level" /> level, within {LEVEL.toFixed(2)} <span data-mark="worse" /> worse · one square per graded query
+            </p>
+          </div>
+
+          <p className="bench-caveat">
+            Graded by <span className="bench-model">{judge}</span>, a local model, not a reader, over {graded.length} queries. One query can move a mean by up to {swing.toFixed(2)}
+            {closeGap < swing ? <>, more than the {closeGap.toFixed(2)} between the shelf and embeddings alone: read those two as level</> : null}.
+          </p>
+        </section>
+      ) : (
+        <p className="slip bench-stale">This run had no relevance judge, so there are no grades: only the lists side by side.</p>
+      )}
+
+      <details className="bench-about">
+        <summary>
+          <span className="eyebrow">How these numbers were made</span>
+          <span className="bench-about-gist">the questions, the judge, the two scores and their limits</span>
+        </summary>
+        <dl className="bench-about-list">
+          <div>
+            <dt>The questions</dt>
+            <dd>
+              {report.queries.length} requests in {kindCount} kinds. {graded.length} are graded; the other {declined} are outside what a bookshop can answer, and there only whether
+              the shelf declines them is checked.
+            </dd>
+          </div>
+          <div>
+            <dt>The judge</dt>
+            <dd>
+              {judge ? (
+                <>
+                  The first five books of each engine, pooled, were graded 0, 1 or 2 by <span className="bench-model">{judge}</span>, another local model, which sees only each
+                  book’s title, author, genre, pages, year and synopsis. It is an automatic judge: take the numbers as a hint and read the lists.
+                </>
+              ) : (
+                "This run had no judge."
+              )}
+            </dd>
+          </div>
+          <div>
+            <dt>nDCG@5</dt>
+            <dd>How well an engine orders its first five books, from 0 to 1. 1.00 is the best order of the books any of the three engines found, not of the whole catalogue.</dd>
+          </div>
+          <div>
+            <dt>P@5</dt>
+            <dd>The share of the first five that the judge found fitting (graded 1 or 2). An engine that returns nothing scores 0 on both.</dd>
+          </div>
+          <div>
+            <dt>Better, level, worse</dt>
+            <dd>Compared query by query on nDCG@5. A difference under {LEVEL.toFixed(2)}, before rounding, counts as level, so two rows showing −0.05 can fall on either side.</dd>
+          </div>
+          <div>
+            <dt>How far they go</dt>
+            <dd>
+              With {graded.length} graded queries, one query moves an overall mean by up to {swing.toFixed(2)}; with {smallest === largest ? smallest : `${smallest} to ${largest}`} per
+              kind, a kind’s mean by up to {(1 / smallest).toFixed(2)}. There is no test of significance here.
+            </dd>
+          </div>
+          <div>
+            <dt>The engines</dt>
+            <dd>
+              <ul className="bench-about-engines">
+                {SYSTEMS.map((system) => (
+                  <li key={system.key}>
+                    <EngineKey engine={system.key} /> <strong>{system.label}</strong>: {system.description}.
+                  </li>
+                ))}
+              </ul>
+            </dd>
+          </div>
+          <div>
+            <dt>The run</dt>
+            <dd className="bench-about-run">
+              {runLabel} · embeddings {summary.models.embeddings} · reading {summary.models.classifier}
+              {judge ? ` · judge ${judge}` : ""}
+            </dd>
+          </div>
+        </dl>
+      </details>
+
+      {judge ? (
+        <section aria-labelledby="types-heading" className="counter-section">
+          <SectionHead id="types-heading" title={<>By kind of <em>question</em></>} aside="mean nDCG@5 · shelf against embeddings only" />
+          <p className="bench-kinds-lead">
+            {leading.length > 0 ? <>The shelf leads on {kindsPhrase(leading)}</> : <>The shelf leads on no kind of request</>}
+            {trailing.map((group) => (
+              <span key={group.rival}>
+                {" "}
+                and <em>falls behind {ALONE[group.rival]}</em> on {kindsPhrase(group.types)}
+              </span>
+            ))}
+            .{close.length > 0 ? <> On {kindsPhrase(close)}, it stays within {LEVEL.toFixed(2)} of the better of the other two.</> : null}
+          </p>
+          <div className="bench-legend" aria-hidden>
+            {SYSTEMS.map((system) => (
+              <span key={system.key}>
+                <EngineKey engine={system.key} />
+                {system.label}
+              </span>
+            ))}
+            <span>
+              <span className="bench-legend-span" data-tone="ahead" />
+              <span className="bench-legend-span" data-tone="behind" />
+              gap between shelf and embeddings only
+            </span>
+          </div>
+          <p className="bench-types-head" aria-hidden>
+            <span>Kind</span>
+            <span>0 to 1</span>
+            <span className="bench-types-head-values">
+              <span>Keyw.</span>
+              <span>Emb.</span>
+              <span>Shelf</span>
+            </span>
+            <span>Shelf − emb.</span>
+            <span>Query by query</span>
+          </p>
+          <ul className="bench-types">
+            {kinds.map(({ type, row, count, leads, behind, tally }) => {
+              const gap = (row.full ?? 0) - (row.embedding ?? 0);
+              return (
+                <li key={type} className="bench-type" data-behind={behind ? "" : undefined}>
+                  <div className="bench-type-name">
+                    <p>
+                      {KINDS[type]?.label ?? type}
+                      <span className="bench-type-gist">
+                        {KINDS[type]?.gist ?? ""} · {count} {count === 1 ? "query" : "queries"}
+                      </span>
+                    </p>
+                    {behind ? <Stamp tone="vermilion">behind {ALONE[behind]}</Stamp> : leads ? <Stamp tone="ink">shelf leads</Stamp> : null}
+                  </div>
+                  <Track values={row} against="embedding" label={SYSTEMS.map((system) => `${system.label} ${formatScore(row[system.key])}`).join(", ")} />
+                  <p className="bench-type-values">
+                    {SYSTEMS.map((system) => (
+                      <span key={system.key} data-engine={system.key}>
+                        <EngineKey engine={system.key} />
+                        <span className="sr-only">{system.label} </span>
+                        {formatScore(row[system.key])}
+                      </span>
+                    ))}
+                  </p>
+                  <p className="bench-type-gap" data-sign={gap >= LEVEL ? "up" : gap <= -LEVEL ? "down" : "level"}>
+                    <span className="sr-only">shelf against embeddings only </span>
+                    <span aria-hidden className="bench-type-gap-label">
+                      shelf − emb.{" "}
+                    </span>
+                    {signed(gap)}
+                  </p>
+                  <a className="bench-type-tally" href={filterHash({ against: "embedding", kind: type })}>
+                    <Tally marks={tally.marks} size="small" />
+                    <span>
+                      {tally.better} better · {tally.level} level · {tally.worse} worse
+                    </span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+          <p className="counter-field-hint bench-types-foot">
+            {smallest === largest ? smallest : `${smallest} to ${largest}`} queries per kind: one query moves a kind’s mean by up to {(1 / smallest).toFixed(2)}. Read a gap as a lead
+            to follow up, not as a measurement.
+          </p>
+        </section>
+      ) : null}
+
+      <section aria-labelledby="restraint-heading" className="counter-section">
+        <SectionHead id="restraint-heading" title={<>Knowing when <em>not to answer</em></>} aside="shelf only" />
+        <div className="bench-restraint">
+          {[
+            { label: "Out of scope, declined or flagged as weak", done: summary.abstention.outOfScopeDeclined, total: summary.abstention.outOfScopeTotal },
+            { label: "In scope, answered with confidence", done: summary.abstention.inScopeAnswered, total: summary.abstention.inScopeTotal },
+          ].map((row) => (
+            <div key={row.label} className="bench-restraint-row">
+              <p className="bench-restraint-figure">
+                {row.done}
+                <span> of {row.total}</span>
+              </p>
+              <p className="bench-restraint-label">{row.label}</p>
+              <span className="bench-pips" aria-hidden>
+                {Array.from({ length: row.total }, (_, index) => (
+                  <span key={index} data-on={index < row.done ? "" : undefined} />
+                ))}
+              </span>
             </div>
-          </>
-        )}
+          ))}
+        </div>
       </section>
+
+      <section id="queries" aria-labelledby="queries-heading" className="counter-section bench-explore-section">
+        <SectionHead id="queries-heading" title={<>Query <em>by query</em></>} aside="open one to see the three lists" />
+        <BenchQueries queries={report.queries} judged={Boolean(judge)} />
+      </section>
+
+      <TrySection />
     </div>
+  );
+}
+
+function TrySection() {
+  return (
+    <section id="bench-try" aria-labelledby="try-heading" className="counter-section bench-try">
+      <SectionHead id="try-heading" title={<>Try a query <em>on the bench</em></>} aside="live, on this computer" />
+      <SearchComparison />
+    </section>
   );
 }

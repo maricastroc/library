@@ -10,7 +10,7 @@ export type ShopConfig = {
 
 export const DEFAULT_SHOP: ShopConfig = {
   name: "Subtext",
-  tagline: "Independent bookshop. Living shelf.",
+  tagline: "Independent bookshop. A collection on display.",
   bookseller: "",
   city: "",
   contact: "",

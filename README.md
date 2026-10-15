@@ -1,6 +1,6 @@
 # Subtext
 
-A digital shelf for independent bookshops. The visitor describes what they want to feel ("something melancholic, but comforting") and the shelf rearranges its spines, explains why each book was suggested and opens the chosen book. The AI is open and runs on this computer, through Ollama.
+A collection on display for independent bookshops. The visitor describes what they want to feel ("something melancholic, but comforting") and the collection answers: the closest books leave their niches and stand on a staircase of pedestals, each with the reasons the engine found, and any book can be opened as its dust jacket, laid flat. The AI is open and runs on this computer, through Ollama.
 
 ## Running
 
@@ -17,7 +17,7 @@ npm run dev
 
 Edit `.env.local` before starting: `ADMIN_PASSWORD` (8+ characters) and `SESSION_SECRET` (24+ characters) protect the counter at `/admin`.
 
-The initial catalog is already in `data/seed/catalog.json`. To fetch it again from Open Library and Wikipedia: `npm run catalog:fetch` (`-- --covers` only refreshes the cover images; `-- --new` only fetches titles added to `data/seed/titles.ts`, keeping the entries already there). The fetch brings synopses in Portuguese; the ones in the repository were translated into English afterwards.
+The initial catalog is already in `data/seed/catalog.json`. To fetch it again from Open Library and Wikipedia: `npm run catalog:fetch` (`-- --covers` only refreshes the cover images; `-- --new` only fetches titles added to `data/seed/titles.ts`, keeping the entries already there). Synopses come from Portuguese Wikipedia, and the ones in the repository were translated into English afterwards; titles marked `wikipediaLanguage: "en"` in `data/seed/titles.ts` take theirs from English Wikipedia, as written.
 
 ## Commands
 
@@ -38,13 +38,13 @@ The initial catalog is already in `data/seed/catalog.json`. To fetch it again fr
 | `src/lib/catalog` | books, ISBN, CSV import |
 | `src/lib/semantic` | taxonomy, Ollama client, classification, embeddings, enrichment queue |
 | `src/lib/search` | query interpretation, lexical search, semantic search, explanations |
-| `src/lib/shelf` | visual rules for the spines, sorting and shelf layout |
+| `src/lib/shelf` | visual rules for the bindings, sorting and the composition of the collection |
 | `src/lib/shop`, `src/lib/showcase`, `src/lib/interest`, `src/lib/auth` | bookshop settings, showcases, reservations, counter session |
 | `src/lib/db` | SQLite connection, schema and migrations |
-| `src/components/shelf`, `src/components/book`, `src/components/showcase` | public experience: shelf, open book, showcase |
+| `src/components/shelf`, `src/components/book`, `src/components/showcase` | public experience: the collection on display, the dust jacket, showcases |
 | `src/components/admin`, `src/app/admin` | the bookshop's counter |
 | `scripts` | catalog fetch, seeding, enrichment, evaluation |
 
-Everything is in English: the code (files, routes, functions, internal values, CSS classes), the interface, the model prompts and the catalog data. Books carry the title of their English-language edition when one exists; author names and publishers stay as printed on the Brazilian editions the shop sells.
+Everything is in English: the code (files, routes, functions, internal values, CSS classes), the interface, the model prompts and the catalog data. Books carry the title of their English-language edition when one exists and a translated title otherwise, except titles that are proper names; author names and publishers stay as printed on the Brazilian editions the shop sells.
 
 Architecture decisions and open items: [DECISIONS.md](DECISIONS.md).

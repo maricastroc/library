@@ -39,7 +39,7 @@ function Reading({ interpretation, declined }: { interpretation: Interpretation;
   if (reference?.inCatalog && reference.similar) {
     entries.push(
       <Entry key="ref" label="starting point">
-        {reference.kind === "author" ? `the books by ${reference.label} on the shelf` : reference.label}
+        {reference.kind === "author" ? `the books by ${reference.label} in the collection` : reference.label}
       </Entry>,
     );
   } else if (reference?.inCatalog) {
@@ -122,26 +122,25 @@ function Reading({ interpretation, declined }: { interpretation: Interpretation;
 
 export function SearchBar({
   state,
+  draft,
+  onDraft,
   onSearch,
   onClear,
+  still,
 }: {
   state: SearchState;
+  draft: string;
+  onDraft: (draft: string) => void;
   onSearch: (query: string) => void;
   onClear: () => void;
+  still?: ReactNode;
 }) {
   const inputId = useId();
   const statusId = useId();
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const committed = state.status === "idle" ? "" : state.query;
-  const [draft, setDraft] = useState(committed);
-  const [syncedQuery, setSyncedQuery] = useState(committed);
   const [exampleIndex, setExampleIndex] = useState(0);
   const [slow, setSlow] = useState(false);
-
-  if (committed !== syncedQuery) {
-    setSyncedQuery(committed);
-    setDraft(committed);
-  }
 
   useEffect(() => {
     if (draft.length > 0) return;
@@ -175,9 +174,9 @@ export function SearchBar({
   return (
     <section aria-label="Search by intent" className="hero">
       <div className="min-w-0">
-        <form role="search" onSubmit={submit}>
-          <label htmlFor={inputId} className="block">
-            <span className="eyebrow text-ink-soft">Ask the shelf, in your own words</span>
+        <form role="search" onSubmit={submit} className="hero-form">
+          <label htmlFor={inputId} className="hero-label">
+            <span className="eyebrow text-ink-soft">Ask the bookshop, in your own words</span>
             <span className="hero-lead mt-3 block">I’m looking for</span>
           </label>
           <div className="hero-field">
@@ -193,7 +192,7 @@ export function SearchBar({
                 spellCheck={false}
                 maxLength={240}
                 value={draft}
-                onChange={(event) => setDraft(event.target.value.replace(/\n/g, " "))}
+                onChange={(event) => onDraft(event.target.value.replace(/\n/g, " "))}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" && !event.shiftKey) {
                     event.preventDefault();
@@ -210,7 +209,7 @@ export function SearchBar({
                 <button
                   type="button"
                   onClick={() => {
-                    setDraft("");
+                    onDraft("");
                     onClear();
                     inputRef.current?.focus();
                   }}
@@ -227,10 +226,11 @@ export function SearchBar({
               <path d="M2 6 C 90 2.5, 210 8.5, 360 5 S 640 2.5, 790 6 S 940 7.5, 998 4.5" />
             </svg>
           </div>
+          {still}
         </form>
 
         <div id={statusId} aria-live="polite" className="hero-status">
-          {state.status === "loading" && slow ? <p className="italic text-ink-soft">Reading the shelf…</p> : null}
+          {state.status === "loading" && slow ? <p className="italic text-ink-soft">Reading the collection…</p> : null}
 
           {state.status === "error" ? (
             <p className="text-vermilion">
@@ -273,7 +273,7 @@ export function SearchBar({
                     type="button"
                     className="margin-request"
                     onClick={() => {
-                      setDraft(example);
+                      onDraft(example);
                       onSearch(example);
                     }}
                   >

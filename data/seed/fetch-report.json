@@ -2371,5 +2371,488 @@
     "openLibrary": true,
     "isbn": true,
     "synopsis": true
+  },
+  {
+    "title": "Sense and Sensibility",
+    "author": "Jane Austen",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Orlando",
+    "author": "Virginia Woolf",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Dubliners",
+    "author": "James Joyce",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "The Grapes of Wrath",
+    "author": "John Steinbeck",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Never Let Me Go",
+    "author": "Kazuo Ishiguro",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Beloved",
+    "author": "Toni Morrison",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "The Bluest Eye",
+    "author": "Toni Morrison",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "The Color Purple",
+    "author": "Alice Walker",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Half of a Yellow Sun",
+    "author": "Chimamanda Ngozi Adichie",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Things Fall Apart",
+    "author": "Chinua Achebe",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Blood Meridian",
+    "author": "Cormac McCarthy",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "The Hours",
+    "author": "Michael Cunningham",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Middlesex",
+    "author": "Jeffrey Eugenides",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Midnight's Children",
+    "author": "Salman Rushdie",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "The Year of Magical Thinking",
+    "author": "Joan Didion",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "The Bell Jar",
+    "author": "Sylvia Plath",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Pachinko",
+    "author": "Min Jin Lee",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "A Little Life",
+    "author": "Hanya Yanagihara",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Foundation",
+    "author": "Isaac Asimov",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "I, Robot",
+    "author": "Isaac Asimov",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Kindred",
+    "author": "Octavia E. Butler",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Parable of the Sower",
+    "author": "Octavia E. Butler",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "And Then There Were None",
+    "author": "Agatha Christie",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "The Big Sleep",
+    "author": "Raymond Chandler",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "The Shining",
+    "author": "Stephen King",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Women, Race and Class",
+    "author": "Angela Davis",
+    "openLibrary": false,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Walden",
+    "author": "Henry David Thoreau",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Life of Pi",
+    "author": "Yann Martel",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Gone Girl",
+    "author": "Gillian Flynn",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Where the Crawdads Sing",
+    "author": "Delia Owens",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Middlemarch",
+    "author": "George Eliot",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Little Women",
+    "author": "Louisa May Alcott",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Alice's Adventures in Wonderland",
+    "author": "Lewis Carroll",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Adventures of Huckleberry Finn",
+    "author": "Mark Twain",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Strange Case of Dr Jekyll and Mr Hyde",
+    "author": "Robert Louis Stevenson",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "The Age of Innocence",
+    "author": "Edith Wharton",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Gulliver's Travels",
+    "author": "Jonathan Swift",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Rebecca",
+    "author": "Daphne du Maurier",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Catch-22",
+    "author": "Joseph Heller",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Slaughterhouse-Five",
+    "author": "Kurt Vonnegut",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "On the Road",
+    "author": "Jack Kerouac",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Invisible Man",
+    "author": "Ralph Ellison",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Their Eyes Were Watching God",
+    "author": "Zora Neale Hurston",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Giovanni's Room",
+    "author": "James Baldwin",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Wide Sargasso Sea",
+    "author": "Jean Rhys",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "One Flew Over the Cuckoo's Nest",
+    "author": "Ken Kesey",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "White Teeth",
+    "author": "Zadie Smith",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "The Secret History",
+    "author": "Donna Tartt",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Wolf Hall",
+    "author": "Hilary Mantel",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "The Underground Railroad",
+    "author": "Colson Whitehead",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Station Eleven",
+    "author": "Emily St. John Mandel",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "The Song of Achilles",
+    "author": "Madeline Miller",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Cloud Atlas",
+    "author": "David Mitchell",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "A Streetcar Named Desire",
+    "author": "Tennessee Williams",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Death of a Salesman",
+    "author": "Arthur Miller",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Leaves of Grass",
+    "author": "Walt Whitman",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "The Waste Land",
+    "author": "T. S. Eliot",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Interpreter of Maladies",
+    "author": "Jhumpa Lahiri",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "The Talented Mr. Ripley",
+    "author": "Patricia Highsmith",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "The Silence of the Lambs",
+    "author": "Thomas Harris",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "The Time Machine",
+    "author": "H. G. Wells",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "The Lion, the Witch and the Wardrobe",
+    "author": "C. S. Lewis",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Matilda",
+    "author": "Roald Dahl",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "I Know Why the Caged Bird Sings",
+    "author": "Maya Angelou",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Silent Spring",
+    "author": "Rachel Carson",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "Hiroshima",
+    "author": "John Hersey",
+    "openLibrary": true,
+    "isbn": false,
+    "synopsis": true
+  },
+  {
+    "title": "Watchmen",
+    "author": "Alan Moore",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
+  },
+  {
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "openLibrary": true,
+    "isbn": true,
+    "synopsis": true
   }
 ]

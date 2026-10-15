@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Caveat, Fraunces, IBM_Plex_Mono, Newsreader } from "next/font/google";
+import { ScrollRail } from "@/components/ScrollRail";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -40,11 +41,11 @@ const caveat = Caveat({
 
 export const metadata: Metadata = {
   title: {
-    default: "Subtext — independent bookshop, living shelf",
+    default: "Subtext — an independent bookshop, on display",
     template: "%s — Subtext",
   },
   description:
-    "A digital shelf that answers to what you want to feel. Discover books by atmosphere, pace and intent, curated by an independent bookshop.",
+    "A collection on display that answers to what you want to feel. Discover books by atmosphere, pace and intent, curated by an independent bookshop.",
 };
 
 export const viewport: Viewport = {
@@ -59,7 +60,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${fraunces.variable} ${newsreader.variable} ${bricolage.variable} ${plexMono.variable} ${caveat.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        {children}
+        <ScrollRail />
+      </body>
     </html>
   );
 }

@@ -278,7 +278,7 @@ export async function semanticSearch(
         parsed.unknowable.length > 0
           ? `I cannot tell which books are ${judged}: the catalog knows what each book is about and how it reads, not how it was received. Tell me a feeling, a theme or a pace and I will look for that.`
           : parsed.asksPrice
-            ? "I do not search by price. Arrange the shelf by price to see the least expensive books first, or tell me what you would like to read."
+            ? "I do not search by price. Arrange the collection by price to see the least expensive books first, or tell me what you would like to read."
             : "That is too little for me to go on. Tell me a feeling, a theme, a pace, or an author you liked.",
       results: [],
       engine: { ...engine, tookMs: Date.now() - started },
@@ -440,12 +440,12 @@ export async function semanticSearch(
     message =
       message ??
       (soundsLikeName
-        ? `Nothing on this shelf answers “${parsed.original}”: no title or author goes by that name, and no synopsis comes close to it. The catalog may not have this kind of book.`
-        : "I found nothing on this shelf that answers this request well. The catalog may not have this kind of book.");
+        ? `Nothing in this collection answers “${parsed.original}”: no title or author goes by that name, and no synopsis comes close to it. The catalog may not have this kind of book.`
+        : "I found nothing in this collection that answers this request well. The catalog may not have this kind of book.");
   } else {
     if (confidence === "low") {
       limit = Math.min(limit, 3);
-      message = message ?? "The shelf has no clear answer for this request. These are the closest books, but the match is weak.";
+      message = message ?? "The collection has no clear answer for this request. These are the closest books, but the match is weak.";
     }
     const top = ranked[0]?.score ?? 0;
     picked = ranked.filter((item, position) => position < SEARCH_TUNING.minResults || item.score >= top - SEARCH_TUNING.scoreWindow).slice(0, limit);

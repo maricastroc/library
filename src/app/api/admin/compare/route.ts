@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
         results: semantic.results
           .map((result) => {
             const book = describe(result.id);
-            return book ? { ...book, reasons: result.reasons.map((reason) => reason.label) } : null;
+            return book ? { ...book, reasons: result.reasons.map((reason) => reason.label), matches: result.reasons, quote: result.quote, caveat: result.caveat } : null;
           })
           .filter((item) => item !== null),
       },

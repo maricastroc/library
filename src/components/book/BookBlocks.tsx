@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
 import { formatIsbn } from "@/lib/catalog/isbn";
 import type { BookDetail, ShelfBook } from "@/lib/catalog/types";
 import type { SearchResult } from "@/lib/search/types";
@@ -38,43 +37,6 @@ export function TitleBlock({ book, titleId, compact = false }: { book: ShelfBook
   );
 }
 
-export function Frontispiece({ detail, children }: { detail: BookDetail | null; children: ReactNode }) {
-  const [state, setState] = useState<"waiting" | "loaded" | "failed">("waiting");
-  const [ratio, setRatio] = useState<number | null>(null);
-  const photographed = Boolean(detail?.coverUrl) && state === "loaded";
-  return (
-    <figure className="frontispiece">
-      <div className="frontispiece-plate" style={photographed && ratio ? { aspectRatio: ratio } : undefined}>
-        {children}
-        {detail?.coverUrl && state !== "failed" ? (
-          <img
-            src={`${detail.coverUrl}?default=false`}
-            alt={`Cover of an edition of ${detail.title}`}
-            decoding="async"
-            onLoad={(event) => {
-              const { naturalWidth, naturalHeight } = event.currentTarget;
-              if (naturalWidth <= 8 || naturalHeight <= 8) {
-                setState("failed");
-                return;
-              }
-              setRatio(Math.min(0.85, Math.max(0.55, naturalWidth / naturalHeight)));
-              setState("loaded");
-            }}
-            onError={() => setState("failed")}
-            className="frontispiece-photo"
-            data-loaded={state === "loaded" ? "true" : undefined}
-          />
-        ) : null}
-        <span aria-hidden className="frontispiece-corner" data-at="tl" />
-        <span aria-hidden className="frontispiece-corner" data-at="br" />
-      </div>
-      <figcaption className="eyebrow mt-2 text-[8.5px] leading-tight text-ink-soft">
-        {photographed ? `edition cover · ${detail?.coverSource ?? "external source"}` : "as it stands on the shelf"}
-      </figcaption>
-    </figure>
-  );
-}
-
 function Gauge({ name, value, levels }: { name: string; value: number; levels: readonly { value: number; label: string }[] }) {
   const current = levels.find((level) => level.value === value)?.label ?? "";
   return (
@@ -107,7 +69,7 @@ export function ReadingBlock({ book, detail }: { book: ShelfBook; detail: BookDe
         <h3 className="eyebrow text-ink">How it reads</h3>
         <p className="mt-2 text-[0.98rem] italic leading-snug text-ink-soft">
           {book.semanticStatus === "insufficient"
-            ? "There isn’t enough of a synopsis to describe this book responsibly. It sits on the shelf in kraft paper."
+            ? "There isn’t enough of a synopsis to describe this book responsibly. It stands in the collection in kraft paper."
             : book.semanticStatus === "error"
               ? "The automatic reading of this book failed. The bookshop can redo it at the counter."
               : "The AI hasn’t read this book’s synopsis yet."}

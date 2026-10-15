@@ -1,6 +1,6 @@
 import { Colophon } from "@/components/shelf/Colophon";
 import { ShelfExperience, type ShowcaseLink } from "@/components/shelf/ShelfExperience";
-import { listShelfBooks } from "@/lib/catalog/books";
+import { listShelfBooks, readingSpecimen } from "@/lib/catalog/books";
 import { CHAT_MODEL, EMBED_MODEL } from "@/lib/semantic/ollama";
 import { SORT_OPTIONS, type SortKey } from "@/lib/shelf/arrange";
 import { getShopConfig } from "@/lib/shop/config";
@@ -37,8 +37,9 @@ export default async function Home({ searchParams }: PageProps<"/">) {
       initialQuery={first(params.q).replace(/\s+/g, " ").trim().slice(0, 240)}
       initialSort={initialSort}
       initialSlug={first(params.book) || null}
+      density={first(params.density) === "airy" ? "airy" : "balanced"}
     >
-      <Colophon embedModel={EMBED_MODEL} chatModel={CHAT_MODEL} />
+      <Colophon embedModel={EMBED_MODEL} chatModel={CHAT_MODEL} reading={readingSpecimen()} />
     </ShelfExperience>
   );
 }

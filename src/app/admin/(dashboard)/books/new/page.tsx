@@ -1,19 +1,25 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { BookForm } from "@/components/admin/BookForm";
+import { PageHead } from "@/components/admin/Counter";
+import { getShopConfig } from "@/lib/shop/config";
 
 export const metadata: Metadata = { title: "Add book" };
 
 export default function NewBookPage() {
   return (
-    <div className="max-w-4xl">
-      <Link href="/admin/books" className="eyebrow ink-link">
-        ← Books
-      </Link>
-      <h1 className="display mt-3 text-[2.6rem] leading-none">Add book</h1>
-      <p className="mt-3 text-ink-soft">Once saved, the book shows up on the shelf right away in kraft paper, until the AI reads the synopsis.</p>
-      <div className="mt-8">
-        <BookForm book={null} />
+    <div className="counter-page">
+      <PageHead
+        folio="02 · new catalogue record"
+        back={{ href: "/admin/books", label: "Books" }}
+        title={
+          <>
+            Add a <em>book</em>
+          </>
+        }
+        lede={<p>Once saved, it appears on the shelf right away in kraft paper, until the AI has read its synopsis.</p>}
+      />
+      <div className="record-single">
+        <BookForm signature={getShopConfig().bookseller} />
       </div>
     </div>
   );

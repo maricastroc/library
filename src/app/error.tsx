@@ -15,7 +15,7 @@ export default function ErrorPage({ reset }: { error: Error & { digest?: string 
           Try again
         </button>
         <Link href="/" className="button button-outline">
-          Back to the shelf
+          Back to the collection
         </Link>
       </div>
     </main>

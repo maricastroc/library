@@ -55,6 +55,7 @@ type WikipediaMatch = {
 type CachedEntry = {
   ol: OpenLibraryMatch | null;
   wiki: WikipediaMatch | null;
+  wikiLanguage?: string;
 };
 
 export type SeedCatalogEntry = {
@@ -293,10 +294,20 @@ type WikipediaPage = {
   missing?: string;
   fullurl?: string;
   extract?: string;
-  pageprops?: { disambiguation?: string };
+  pageprops?: { disambiguation?: string; "wikibase-shortdesc"?: string };
 };
 
-async function fetchWikipediaPage(title: string): Promise<WikipediaPage | null> {
+type WikipediaLanguage = "pt" | "en";
+
+function wikipediaLanguage(seed: SeedTitle): WikipediaLanguage {
+  return seed.wikipediaLanguage ?? "pt";
+}
+
+function wikipediaApi(language: WikipediaLanguage): string {
+  return `https://${language}.wikipedia.org/w/api.php`;
+}
+
+async function fetchWikipediaPage(title: string, language: WikipediaLanguage): Promise<WikipediaPage | null> {
   const query = new URLSearchParams({
     action: "query",
     format: "json",
@@ -307,7 +318,7 @@ async function fetchWikipediaPage(title: string): Promise<WikipediaPage | null> 
     titles: title,
   });
   const data = await fetchJson<{ query?: { pages?: Record<string, WikipediaPage> } }>(
-    `https://pt.wikipedia.org/w/api.php?${query.toString()}`,
+    `${wikipediaApi(language)}?${query.toString()}`,
     wikipediaLimiter,
   );
   const page = Object.values(data?.query?.pages ?? {})[0];
@@ -316,26 +327,33 @@ async function fetchWikipediaPage(title: string): Promise<WikipediaPage | null> 
 }
 
 async function searchWikipedia(seed: SeedTitle): Promise<string[]> {
+  const language = wikipediaLanguage(seed);
   const query = new URLSearchParams({
     action: "query",
     format: "json",
     list: "search",
     srlimit: "4",
-    srsearch: `${seed.title} ${seed.author}`,
+    srsearch: `${language === "en" ? (seed.englishTitle ?? seed.title) : seed.title} ${seed.author}`,
   });
   const data = await fetchJson<{ query?: { search?: { title: string }[] } }>(
-    `https://pt.wikipedia.org/w/api.php?${query.toString()}`,
+    `${wikipediaApi(language)}?${query.toString()}`,
     wikipediaLimiter,
   );
   return (data?.query?.search ?? []).map((item) => item.title);
 }
 
-const WORK_WORDS =
-  /(romance|livro|novela|conto|poema|poesia|poético|obra|peça|ensaio|coletânea|antologia|autobiogr|diário|banda desenhada|quadrinhos|graphic novel|epopeia|tragédia|trilogia|saga|narrativa|distopia|ficção|crônica|reportagem|memórias|tratado|fábula)/i;
-const ADAPTATION_LEAD =
-  /(é um filme|é uma telenovela|é uma minissérie|é uma série de televisão|é um longa-metragem|é uma canção|é um álbum|é uma telessérie|é um município|é uma cidade|é uma banda)/i;
-const PLOT_SECTION =
-  /^(enredo|sinopse|resumo|trama|argumento|história|historia|narrativa|conteúdo|temas|temática|tema|estrutura|a obra|sobre a obra|o livro|descrição|personagens e enredo|estrutura e enredo|enredo e estrutura|resumo do enredo|análise)/i;
+const WORK_WORDS: Record<WikipediaLanguage, RegExp> = {
+  pt: /(romance|livro|novela|conto|poema|poesia|poético|obra|peça|ensaio|coletânea|antologia|autobiogr|diário|banda desenhada|quadrinhos|graphic novel|epopeia|tragédia|trilogia|saga|narrativa|distopia|ficção|crônica|reportagem|memórias|tratado|fábula)/i,
+  en: /(novel|novella|book|short stor|collection|poem|poetry|play|essay|memoir|autobiograph|diary|comic|graphic novel|epic|tragedy|trilogy|saga|fiction|non-fiction|nonfiction|reportage|treatise|fable|anthology)/i,
+};
+const ADAPTATION_LEAD: Record<WikipediaLanguage, RegExp> = {
+  pt: /(é um filme|é uma telenovela|é uma minissérie|é uma série de televisão|é um longa-metragem|é uma canção|é um álbum|é uma telessérie|é um município|é uma cidade|é uma banda)/i,
+  en: /\b(is|was) an? (\d{4} )?(\w+ ){0,2}(film|television series|miniseries|song|album|band|city|town|musical|video game)\b/i,
+};
+const PLOT_SECTION: Record<WikipediaLanguage, RegExp> = {
+  pt: /^(enredo|sinopse|resumo|trama|argumento|história|historia|narrativa|conteúdo|temas|temática|tema|estrutura|a obra|sobre a obra|o livro|descrição|personagens e enredo|estrutura e enredo|enredo e estrutura|resumo do enredo|análise)/i,
+  en: /^(plot|synopsis|summary|story|premise|overview|outline|contents?|structure|narrative|themes)/i,
+};
 
 function cutAtSentence(text: string, limit: number): string {
   if (text.length <= limit) return text.trim();
@@ -350,12 +368,18 @@ function cleanParagraphs(text: string): string {
     .replace(/\[[^\]]{0,24}\]/g, "")
     .replace(/={2,}[^=\n]+={2,}/g, "\n")
     .split(/\n+/)
-    .map((paragraph) => paragraph.replace(/\s+/g, " ").trim())
+    .map((paragraph) =>
+      paragraph
+        .replace(/\s+/g, " ")
+        .replace(/\(\s*[;,]\s*/g, "(")
+        .replace(/\s*\(\s*\)/g, "")
+        .trim(),
+    )
     .filter((paragraph) => paragraph.length > 0)
     .join("\n\n");
 }
 
-function composeSynopsis(extract: string): string {
+function composeSynopsis(extract: string, language: WikipediaLanguage): string {
   const parts = extract.split(/\n(?===\s[^=])/);
   const intro = cleanParagraphs(parts[0] ?? "");
   const introParagraphs = intro.split("\n\n").slice(0, 2).join("\n\n");
@@ -364,7 +388,7 @@ function composeSynopsis(extract: string): string {
   for (const part of parts.slice(1)) {
     const header = part.match(/^==\s*([^=]+?)\s*==/);
     if (!header) continue;
-    if (!PLOT_SECTION.test(header[1].trim())) continue;
+    if (!PLOT_SECTION[language].test(header[1].trim())) continue;
     const body = cleanParagraphs(part.replace(/^==\s*[^=]+?\s*==/, ""));
     if (body.length < 140) continue;
     synopsis = `${synopsis}\n\n${cutAtSentence(body, 1100)}`;
@@ -374,7 +398,7 @@ function composeSynopsis(extract: string): string {
 }
 
 function titleKeys(seed: SeedTitle): string[] {
-  return [seed.title, seed.title.split(":")[0], seed.originalTitle]
+  return [seed.title, seed.title.split(":")[0], seed.originalTitle, seed.englishTitle]
     .filter((value): value is string => Boolean(value))
     .map((value) => normalizeText(value))
     .filter((value) => value.length >= 3);
@@ -395,28 +419,38 @@ function validateWikipediaPage(seed: SeedTitle, page: WikipediaPage): boolean {
   if (page.pageprops?.disambiguation !== undefined) return false;
   const extract = page.extract ?? "";
   if (extract.length < 200) return false;
+  const language = wikipediaLanguage(seed);
   const lead = extract.slice(0, 420);
-  if (ADAPTATION_LEAD.test(lead.slice(0, 260))) return false;
-  if (!WORK_WORDS.test(lead)) return false;
+  if (ADAPTATION_LEAD[language].test(lead.slice(0, 260))) return false;
+  if (!WORK_WORDS[language].test(lead)) return false;
   const head = normalizeText(extract.slice(0, 1400));
   if (!head.includes(surnameKey(seed.author))) return false;
+  const credit = page.pageprops?.["wikibase-shortdesc"]?.match(/\bby (.+)$/i)?.[1];
+  if (credit && !normalizeText(credit).includes(surnameKey(seed.author))) return false;
   return isAboutTheWork(seed, page.title, extract);
 }
 
 async function findInWikipedia(seed: SeedTitle): Promise<WikipediaMatch | null> {
   const tried = new Set<string>();
-  const direct = [seed.wikipediaTitle, seed.title, `${seed.title} (livro)`, `${seed.title} (romance)`, seed.originalTitle].filter(Boolean) as string[];
+  const language = wikipediaLanguage(seed);
+  const english = seed.englishTitle ?? seed.title;
+  const surname = seed.author.split(" ").slice(-1)[0];
+  const direct = (
+    language === "en"
+      ? [seed.wikipediaTitle, seed.originalTitle, english, `${english} (novel)`, `${english} (${surname} novel)`, `${english} (book)`, `${english} (play)`, `${english} (poem)`]
+      : [seed.wikipediaTitle, seed.title, `${seed.title} (livro)`, `${seed.title} (romance)`, seed.originalTitle]
+  ).filter(Boolean) as string[];
   const tryTitle = async (title: string): Promise<WikipediaMatch | null> => {
     const key = normalizeText(title);
     if (tried.has(key)) return null;
     tried.add(key);
-    const page = await fetchWikipediaPage(title);
+    const page = await fetchWikipediaPage(title, language);
     if (!page || !validateWikipediaPage(seed, page)) return null;
-    const synopsis = composeSynopsis(page.extract ?? "");
+    const synopsis = composeSynopsis(page.extract ?? "", language);
     if (synopsis.length < 220) return null;
     return {
       title: page.title,
-      url: page.fullurl ?? `https://pt.wikipedia.org/wiki/${encodeURIComponent(page.title.replace(/ /g, "_"))}`,
+      url: page.fullurl ?? `https://${language}.wikipedia.org/wiki/${encodeURIComponent(page.title.replace(/ /g, "_"))}`,
       synopsis,
     };
   };
@@ -444,6 +478,17 @@ async function resolveSeed(seed: SeedTitle, slug: string): Promise<CachedEntry |
   }
   if (existsSync(cacheFile)) {
     const cached = JSON.parse(readFileSync(cacheFile, "utf8")) as CachedEntry & { olRefreshed?: boolean; wikiChecked?: boolean };
+    const language = wikipediaLanguage(seed);
+    if (language !== "pt" && cached.wikiLanguage !== language) {
+      try {
+        const relocated = { ...cached, wiki: await findInWikipedia(seed), wikiChecked: true, wikiLanguage: language };
+        writeFileSync(cacheFile, JSON.stringify(relocated, null, 2));
+        return relocated;
+      } catch (error) {
+        if (error instanceof SourceUnavailableError) return null;
+        throw error;
+      }
+    }
     if (REVALIDATE_WIKIPEDIA && !cached.wikiChecked) {
       const valid = cached.wiki ? isAboutTheWork(seed, cached.wiki.title, cached.wiki.synopsis) : false;
       try {
@@ -469,7 +514,7 @@ async function resolveSeed(seed: SeedTitle, slug: string): Promise<CachedEntry |
   }
   try {
     const [ol, wiki] = await Promise.all([findInOpenLibrary(seed), findInWikipedia(seed)]);
-    const entry = { ol, wiki, olRefreshed: true, wikiChecked: true };
+    const entry = { ol, wiki, olRefreshed: true, wikiChecked: true, wikiLanguage: wikipediaLanguage(seed) };
     writeFileSync(cacheFile, JSON.stringify(entry, null, 2));
     return entry;
   } catch (error) {
@@ -486,11 +531,17 @@ async function main() {
   mkdirSync(CACHE_DIR, { recursive: true });
   const onlyNew = process.argv.includes("--new");
   const kept: SeedCatalogEntry[] = onlyNew && existsSync(OUT_FILE) ? (JSON.parse(readFileSync(OUT_FILE, "utf8")) as SeedCatalogEntry[]) : [];
-  const keptSlugs = new Set(kept.map((entry) => entry.slug));
   const entrySlug = (seed: SeedTitle) => slugify(`${seed.englishTitle ?? seed.title} ${seed.author.split(" ").slice(-1)[0]}`);
-  const entries: SeedCatalogEntry[] = [...kept];
+  const seedBySlug = new Map(seedTitles.map((seed) => [entrySlug(seed), seed]));
+  const misplaced = (entry: SeedCatalogEntry) => {
+    const seed = seedBySlug.get(entry.slug);
+    return Boolean(seed && wikipediaLanguage(seed) !== "pt" && !entry.synopsisUrl?.startsWith(`https://${wikipediaLanguage(seed)}.wikipedia.org/`));
+  };
+  const keptSlugs = new Set(kept.filter((entry) => !misplaced(entry)).map((entry) => entry.slug));
+  const entries: SeedCatalogEntry[] = kept.filter((entry) => keptSlugs.has(entry.slug));
   const report: { title: string; author: string; openLibrary: boolean; isbn: boolean; synopsis: boolean }[] = [];
   const queue = seedTitles.map((seed, index) => ({ seed, index })).filter(({ seed }) => !keptSlugs.has(entrySlug(seed)));
+  const queueSize = queue.length;
   const results = new Array<SeedCatalogEntry | null>(seedTitles.length).fill(null);
   let done = 0;
   const unavailable: string[] = [];
@@ -537,8 +588,8 @@ async function main() {
       };
       done += 1;
       if (done % 20 === 0) {
-        console.log(`${done}/${seedTitles.length - kept.length}`);
-        writeFileSync(OUT_FILE, JSON.stringify([...kept, ...results.filter(Boolean)], null, 2));
+        console.log(`${done}/${queueSize}`);
+        writeFileSync(OUT_FILE, JSON.stringify([...entries, ...results.filter(Boolean)], null, 2));
       }
     }
   };

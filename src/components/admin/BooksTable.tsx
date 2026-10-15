@@ -1,144 +1,384 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { formatPrice, normalizeText } from "@/lib/catalog/text";
 import type { BookDetail } from "@/lib/catalog/types";
-import { atmosphereLabel } from "@/lib/semantic/taxonomy";
+import { ATMOSPHERE_BY_ID, atmosphereLabel, attributeLabel } from "@/lib/semantic/taxonomy";
+import { KRAFT, spineIdentity } from "@/lib/shelf/identity";
+import { Stamp } from "./Counter";
 
-const FILTERS = [
-  { key: "all", label: "All" },
-  { key: "with-note", label: "With note" },
-  { key: "without-note", label: "Without note" },
-  { key: "example-note", label: "Sample note" },
-  { key: "without-synopsis", label: "Without synopsis" },
-  { key: "out-of-stock", label: "Out of stock" },
-  { key: "unread", label: "Without AI reading" },
-  { key: "reviewed", label: "Reviewed by me" },
-] as const;
+type Reading = "all" | "read" | "reviewed" | "unread";
+type Note = "any" | "with" | "sample" | "without";
+type Shelf = "any" | "out-of-stock" | "without-synopsis";
+type Order = "title" | "author" | "price" | "stock" | "changed";
 
-type FilterKey = (typeof FILTERS)[number]["key"];
+const READING: { key: Reading; label: string; test: (book: BookDetail) => boolean }[] = [
+  { key: "all", label: "all", test: () => true },
+  { key: "read", label: "read by the AI", test: (book) => book.semanticStatus === "ready" && book.semanticOrigin !== "bookseller" },
+  { key: "reviewed", label: "reviewed by you", test: (book) => book.semanticOrigin === "bookseller" },
+  { key: "unread", label: "not read yet", test: (book) => book.semanticStatus !== "ready" },
+];
 
-function matches(book: BookDetail, filter: FilterKey): boolean {
-  switch (filter) {
-    case "with-note":
-      return Boolean(book.note);
-    case "without-note":
-      return !book.note;
-    case "example-note":
-      return book.noteOrigin === "example";
-    case "without-synopsis":
-      return !book.synopsis;
-    case "out-of-stock":
-      return book.stock === 0;
-    case "unread":
-      return book.semanticStatus !== "ready";
-    case "reviewed":
-      return book.semanticOrigin === "bookseller";
-    default:
-      return true;
-  }
-}
+const NOTE: { key: Note; label: string; test: (book: BookDetail) => boolean }[] = [
+  { key: "any", label: "any", test: () => true },
+  { key: "with", label: "with a note", test: (book) => Boolean(book.note) },
+  { key: "sample", label: "sample notes", test: (book) => book.noteOrigin === "example" },
+  { key: "without", label: "without", test: (book) => !book.note },
+];
 
-const STATUS_LABEL: Record<string, string> = {
-  pending: "queued",
-  processing: "reading…",
-  insufficient: "insufficient synopsis",
-  error: "reading error",
+const SHELF: { key: Shelf; label: string; test: (book: BookDetail) => boolean }[] = [
+  { key: "any", label: "everything", test: () => true },
+  { key: "out-of-stock", label: "out of stock", test: (book) => book.stock === 0 },
+  { key: "without-synopsis", label: "no synopsis", test: (book) => !book.synopsis },
+];
+
+const ORDERS: { key: Order; label: string }[] = [
+  { key: "title", label: "title" },
+  { key: "author", label: "author" },
+  { key: "price", label: "price" },
+  { key: "stock", label: "stock" },
+  { key: "changed", label: "last changed" },
+];
+
+const LEGACY: Record<string, { reading?: Reading; note?: Note; shelf?: Shelf }> = {
+  "with-note": { note: "with" },
+  "without-note": { note: "without" },
+  "example-note": { note: "sample" },
+  "without-synopsis": { shelf: "without-synopsis" },
+  "out-of-stock": { shelf: "out-of-stock" },
+  unread: { reading: "unread" },
+  reviewed: { reading: "reviewed" },
 };
 
+const STATUS: Record<string, { label: string; tone: "kraft" | "hollow" | "vermilion" }> = {
+  pending: { label: "in the queue", tone: "kraft" },
+  processing: { label: "reading now", tone: "kraft" },
+  insufficient: { label: "too little synopsis", tone: "hollow" },
+  error: { label: "reading failed", tone: "vermilion" },
+};
+
+type Facets = { reading: Reading; note: Note; shelf: Shelf };
+
+function passes(book: BookDetail, facets: Facets, except?: keyof Facets): boolean {
+  return (
+    (except === "reading" || READING.find((item) => item.key === facets.reading)!.test(book)) &&
+    (except === "note" || NOTE.find((item) => item.key === facets.note)!.test(book)) &&
+    (except === "shelf" || SHELF.find((item) => item.key === facets.shelf)!.test(book))
+  );
+}
+
+function surname(author: string): string {
+  const parts = author.trim().split(/\s+/);
+  return normalizeText(`${parts.at(-1) ?? ""} ${parts.slice(0, -1).join(" ")}`);
+}
+
+function Facet<T extends string>({
+  legend,
+  options,
+  value,
+  counts,
+  onChange,
+}: {
+  legend: string;
+  options: { key: T; label: string }[];
+  value: T;
+  counts: Map<T, number>;
+  onChange: (key: T) => void;
+}) {
+  return (
+    <div role="group" aria-label={legend} className="facet" data-active={value !== options[0].key ? "" : undefined}>
+      <span className="eyebrow facet-legend">{legend}</span>
+      {options.map((option, index) => (
+        <button
+          key={option.key}
+          type="button"
+          className="facet-option"
+          data-default={index === 0 ? "" : undefined}
+          aria-pressed={value === option.key}
+          onClick={() => onChange(option.key)}
+        >
+          {option.label}
+          <span className="facet-option-count">{counts.get(option.key) ?? 0}</span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export function BooksTable({ books, initialFilter }: { books: BookDetail[]; initialFilter: string }) {
+  const legacy = LEGACY[initialFilter] ?? {};
   const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState<FilterKey>(FILTERS.some((item) => item.key === initialFilter) ? (initialFilter as FilterKey) : "all");
+  const [reading, setReading] = useState<Reading>(legacy.reading ?? "all");
+  const [note, setNote] = useState<Note>(legacy.note ?? "any");
+  const [shelf, setShelf] = useState<Shelf>(legacy.shelf ?? "any");
+  const [order, setOrder] = useState<Order>("title");
+  const [open, setOpen] = useState<number | null>(null);
+
+  const identities = useMemo(() => new Map(books.map((book) => [book.id, spineIdentity(book)])), [books]);
+
+  const searched = useMemo(() => {
+    const folded = normalizeText(query);
+    if (folded.length === 0) return books;
+    return books.filter((book) => normalizeText(`${book.title} ${book.author} ${book.isbn ?? ""} ${book.genre ?? ""}`).includes(folded));
+  }, [books, query]);
+
+  const facets: Facets = { reading, note, shelf };
+  const counts = {
+    reading: new Map(READING.map((item) => [item.key, searched.filter((book) => passes(book, facets, "reading") && item.test(book)).length])),
+    note: new Map(NOTE.map((item) => [item.key, searched.filter((book) => passes(book, facets, "note") && item.test(book)).length])),
+    shelf: new Map(SHELF.map((item) => [item.key, searched.filter((book) => passes(book, facets, "shelf") && item.test(book)).length])),
+  };
 
   const visible = useMemo(() => {
-    const folded = normalizeText(query);
-    return books.filter(
-      (book) =>
-        matches(book, filter) &&
-        (folded.length === 0 || normalizeText(`${book.title} ${book.author} ${book.isbn ?? ""} ${book.genre ?? ""}`).includes(folded)),
-    );
-  }, [books, query, filter]);
+    const list = searched.filter((book) => passes(book, { reading, note, shelf }));
+    const byTitle = (a: BookDetail, b: BookDetail) => a.title.localeCompare(b.title, "en");
+    const sorters: Record<Order, (a: BookDetail, b: BookDetail) => number> = {
+      title: byTitle,
+      author: (a, b) => surname(a.author).localeCompare(surname(b.author), "en") || byTitle(a, b),
+      price: (a, b) => (a.priceCents ?? Infinity) - (b.priceCents ?? Infinity) || byTitle(a, b),
+      stock: (a, b) => (a.stock ?? Infinity) - (b.stock ?? Infinity) || byTitle(a, b),
+      changed: (a, b) => b.updatedAt.localeCompare(a.updatedAt) || byTitle(a, b),
+    };
+    return [...list].sort(sorters[order]);
+  }, [searched, reading, note, shelf, order]);
+
+  const active = [
+    query.trim() ? { key: "query", label: `“${query.trim()}”`, clear: () => setQuery("") } : null,
+    reading !== "all" ? { key: "reading", label: READING.find((item) => item.key === reading)!.label, clear: () => setReading("all") } : null,
+    note !== "any" ? { key: "note", label: NOTE.find((item) => item.key === note)!.label, clear: () => setNote("any") } : null,
+    shelf !== "any" ? { key: "shelf", label: SHELF.find((item) => item.key === shelf)!.label, clear: () => setShelf("any") } : null,
+  ].filter((item) => item !== null);
 
   return (
-    <div>
-      <div className="flex flex-wrap items-end gap-x-8 gap-y-4">
-        <div className="min-w-[16rem] flex-1">
-          <label htmlFor="books-filter" className="eyebrow text-ink-soft">
-            Search by title, author or ISBN
+    <div className="catalogue">
+      <div className="catalogue-tools">
+        <div className="catalogue-search">
+          <label htmlFor="books-filter" className="eyebrow counter-field-label">
+            Find a book
           </label>
-          <input id="books-filter" className="field" value={query} onChange={(event) => setQuery(event.target.value)} autoComplete="off" />
+          <input
+            id="books-filter"
+            type="search"
+            className="catalogue-search-input"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="title, author, ISBN or genre"
+            autoComplete="off"
+            spellCheck={false}
+          />
         </div>
-        <div role="group" aria-label="Filter" className="flex flex-wrap gap-1">
-          {FILTERS.map((item) => (
-            <button
-              key={item.key}
-              type="button"
-              aria-pressed={filter === item.key}
-              onClick={() => setFilter(item.key)}
-              className={`eyebrow border px-2.5 py-1.5 ${filter === item.key ? "border-ink bg-ink text-paper" : "border-ink/40 text-ink hover:border-ink"}`}
-            >
+        <div className="facets">
+          <Facet legend="Reading" options={READING} value={reading} counts={counts.reading} onChange={setReading} />
+          <Facet legend="Notes" options={NOTE} value={note} counts={counts.note} onChange={setNote} />
+          <Facet legend="Shelf" options={SHELF} value={shelf} counts={counts.shelf} onChange={setShelf} />
+        </div>
+      </div>
+
+      <div className="catalogue-bar">
+        <div className="catalogue-count">
+          <p className="eyebrow" aria-live="polite">
+            <span className="catalogue-tally">{visible.length}</span> of {books.length} {books.length === 1 ? "book" : "books"}
+          </p>
+          {active.length > 0 ? (
+            <ul className="catalogue-active" aria-label="Active filters">
+              {active.map((item) => (
+                <li key={item.key}>
+                  <button type="button" className="catalogue-chip" onClick={item.clear} aria-label={`Remove the filter ${item.label}`}>
+                    {item.label}
+                    <span aria-hidden>×</span>
+                  </button>
+                </li>
+              ))}
+              {active.length > 1 ? (
+                <li>
+                  <button
+                    type="button"
+                    className="catalogue-reset"
+                    onClick={() => {
+                      setQuery("");
+                      setReading("all");
+                      setNote("any");
+                      setShelf("any");
+                    }}
+                  >
+                    clear all
+                  </button>
+                </li>
+              ) : null}
+            </ul>
+          ) : null}
+        </div>
+        <div role="group" aria-label="Order" className="catalogue-order">
+          <span className="eyebrow facet-legend">ordered by</span>
+          {ORDERS.map((item) => (
+            <button key={item.key} type="button" className="facet-option" aria-pressed={order === item.key} onClick={() => setOrder(item.key)}>
               {item.label}
             </button>
           ))}
         </div>
       </div>
-      <p className="eyebrow mt-4 text-ink-soft" aria-live="polite">
-        {visible.length} of {books.length} {books.length === 1 ? "book" : "books"}
-      </p>
-      <div className="mt-2 overflow-x-auto border-t-2 border-ink">
-        <table className="w-full min-w-[46rem] border-collapse text-left text-[0.95rem]">
+
+      <div className="catalogue-table">
+        <table className="ledger">
           <thead>
-            <tr className="eyebrow border-b border-ink text-ink-soft">
-              <th scope="col" className="py-2 pr-4 font-normal">Book</th>
-              <th scope="col" className="py-2 pr-4 font-normal">Genre</th>
-              <th scope="col" className="py-2 pr-4 font-normal">Reading</th>
-              <th scope="col" className="py-2 pr-4 font-normal">Note</th>
-              <th scope="col" className="py-2 pr-4 text-right font-normal">Price</th>
-              <th scope="col" className="py-2 pr-4 text-right font-normal">Stock</th>
-              <th scope="col" className="py-2 font-normal">
-                <span className="sr-only">Actions</span>
+            <tr>
+              <th scope="col">Book</th>
+              <th scope="col" className="catalogue-col-form">
+                Form
+              </th>
+              <th scope="col" className="catalogue-col-reading">
+                Reading
+              </th>
+              <th scope="col" className="catalogue-col-note">
+                Note
+              </th>
+              <th scope="col" className="numeric">
+                Price
+              </th>
+              <th scope="col" className="numeric">
+                Stock
+              </th>
+              <th scope="col">
+                <span className="sr-only">More</span>
               </th>
             </tr>
           </thead>
           <tbody>
-            {visible.map((book) => (
-              <tr key={book.id} className="border-b border-ink/15 align-baseline hover:bg-paper-light">
-                <th scope="row" className="py-2 pr-4 font-normal">
-                  <Link href={`/admin/books/${book.id}`} className="display text-[1.05rem] leading-tight hover:text-vermilion">
-                    {book.title}
-                  </Link>
-                  <span className="block text-[0.88rem] italic text-ink-soft">{book.author}</span>
-                </th>
-                <td className="py-2 pr-4 font-label text-[0.85rem]">{book.genre ?? "—"}</td>
-                <td className="py-2 pr-4 font-label text-[0.85rem]">
-                  {book.semanticStatus === "ready" ? (
-                    <>
-                      {book.atmospheres.slice(0, 2).map(atmosphereLabel).join(", ")}
-                      {book.semanticOrigin === "bookseller" ? <span className="eyebrow ml-1.5 text-[8.5px] text-vermilion">reviewed</span> : null}
-                    </>
-                  ) : (
-                    <span className="text-ink-soft">{STATUS_LABEL[book.semanticStatus] ?? book.semanticStatus}</span>
-                  )}
-                </td>
-                <td className="py-2 pr-4 font-label text-[0.85rem]">
-                  {book.note ? (book.noteOrigin === "example" ? <span className="text-vermilion">sample</span> : "yes") : <span className="text-ink-soft">—</span>}
-                </td>
-                <td className="py-2 pr-4 text-right font-mono text-[0.82rem]">
-                  {formatPrice(book.priceCents) ?? "—"}
-                  {book.priceIsDemo ? <span className="block text-[8.5px] uppercase tracking-wider text-ink-soft">demo</span> : null}
-                </td>
-                <td className="py-2 pr-4 text-right font-mono text-[0.82rem]">{book.stock ?? "—"}</td>
-                <td className="py-2 text-right">
-                  <Link href={`/admin/books/${book.id}`} className="eyebrow ink-link">
-                    edit
-                  </Link>
-                </td>
-              </tr>
-            ))}
+            {visible.map((book) => {
+              const identity = identities.get(book.id);
+              const status = STATUS[book.semanticStatus];
+              const expanded = open === book.id;
+              return (
+                <Fragment key={book.id}>
+                  <tr className="catalogue-row" data-open={expanded ? "true" : undefined}>
+                    <th scope="row">
+                      <span className="catalogue-book">
+                        <span
+                          aria-hidden
+                          className="catalogue-spine"
+                          style={{
+                            background: book.semanticStatus === "ready" ? identity?.color : KRAFT,
+                            height: `${Math.round(((identity?.height ?? 200) / 260) * 2.6 * 10) / 10}rem`,
+                          }}
+                        />
+                        <span className="min-w-0">
+                          <Link href={`/admin/books/${book.id}`} className="catalogue-title">
+                            {book.title}
+                          </Link>
+                          <span className="catalogue-author">{book.author}</span>
+                          {book.semanticStatus === "ready" ? (
+                            <span aria-hidden className="catalogue-dots show-small">
+                              {book.atmospheres.slice(0, 3).map((id) => (
+                                <span key={id} style={{ background: ATMOSPHERE_BY_ID[id].color }} />
+                              ))}
+                            </span>
+                          ) : (
+                            <span className="catalogue-status show-small">
+                              <Stamp tone={status?.tone ?? "kraft"}>{status?.label ?? book.semanticStatus}</Stamp>
+                            </span>
+                          )}
+                        </span>
+                      </span>
+                    </th>
+                    <td className="catalogue-col-form">
+                      <span className="catalogue-form">
+                        {book.genre ?? "—"}
+                        {book.year ? <span className="catalogue-year">{book.year}</span> : null}
+                      </span>
+                    </td>
+                    <td className="catalogue-col-reading">
+                      {book.semanticStatus === "ready" ? (
+                        <span className="catalogue-reading">
+                          <span aria-hidden className="catalogue-dots">
+                            {book.atmospheres.slice(0, 3).map((id) => (
+                              <span key={id} style={{ background: ATMOSPHERE_BY_ID[id].color }} />
+                            ))}
+                          </span>
+                          <span>{book.atmospheres.slice(0, 2).map(atmosphereLabel).join(", ")}</span>
+                          {book.semanticOrigin === "bookseller" ? <Stamp tone="vermilion">reviewed</Stamp> : null}
+                        </span>
+                      ) : (
+                        <Stamp tone={status?.tone ?? "kraft"}>{status?.label ?? book.semanticStatus}</Stamp>
+                      )}
+                    </td>
+                    <td className="catalogue-col-note">
+                      {book.note ? (
+                        <span className="catalogue-note">
+                          <span className="handwriting catalogue-note-text">{book.note}</span>
+                          {book.noteOrigin === "example" ? <Stamp tone="faint">sample</Stamp> : null}
+                        </span>
+                      ) : (
+                        <span className="catalogue-empty">—</span>
+                      )}
+                    </td>
+                    <td className="numeric">
+                      {formatPrice(book.priceCents) ?? "—"}
+                      {book.priceIsDemo ? <span className="catalogue-demo">demo</span> : null}
+                    </td>
+                    <td className="numeric">{book.stock === 0 ? <span className="catalogue-out">out</span> : (book.stock ?? "—")}</td>
+                    <td className="catalogue-more">
+                      <button
+                        type="button"
+                        className="catalogue-peek"
+                        aria-expanded={expanded}
+                        aria-controls={`peek-${book.id}`}
+                        aria-label={`${expanded ? "Hide" : "Show"} the details of ${book.title}`}
+                        onClick={() => setOpen(expanded ? null : book.id)}
+                      >
+                        <span aria-hidden>{expanded ? "−" : "+"}</span>
+                      </button>
+                    </td>
+                  </tr>
+                  {expanded ? (
+                    <tr id={`peek-${book.id}`} className="catalogue-peek-row">
+                      <td colSpan={7}>
+                        <div className="peek">
+                          <div className="peek-block">
+                            <p className="eyebrow peek-label">Synopsis</p>
+                            {book.synopsis ? (
+                              <p className="peek-synopsis">{book.synopsis}</p>
+                            ) : (
+                              <p className="peek-missing">No synopsis yet. Without one, the AI can’t read the book and searches by feeling won’t find it.</p>
+                            )}
+                            {book.synopsisSource ? <p className="eyebrow peek-source">{book.synopsisSource}</p> : null}
+                          </div>
+                          <div className="peek-block">
+                            <p className="eyebrow peek-label">{book.semanticOrigin === "bookseller" ? "Your reading" : "The AI’s reading"}</p>
+                            {book.portrait ? <p className="peek-portrait">{book.portrait}</p> : <p className="peek-missing">Not read yet.</p>}
+                            {book.evidence[0] ? (
+                              <p className="peek-evidence">
+                                <span className="eyebrow">{attributeLabel(book.evidence[0].attribute)}</span> “{book.evidence[0].quote}”
+                              </p>
+                            ) : null}
+                          </div>
+                          <div className="peek-block">
+                            <p className="eyebrow peek-label">Your note</p>
+                            {book.note ? <p className="handwriting peek-note">{book.note}</p> : <p className="peek-missing">No note. Only you write these.</p>}
+                            <p className="peek-links">
+                              <Link href={`/admin/books/${book.id}`} className="button-quiet">
+                                Edit this book →
+                              </Link>
+                              <a href={`/?book=${book.slug}`} className="button-quiet" target="_blank" rel="noreferrer">
+                                See it in the shop ↗
+                              </a>
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : null}
+                </Fragment>
+              );
+            })}
           </tbody>
         </table>
-        {visible.length === 0 ? <p className="py-10 text-center text-ink-soft">No book matches this filter.</p> : null}
+        {visible.length === 0 ? (
+          <div className="blank">
+            <p className="blank-line">No book answers to {query ? `“${query}” with these filters` : "these filters"}.</p>
+            <p className="blank-hint">Loosen a filter or search by another word from the title, the author or the ISBN.</p>
+          </div>
+        ) : null}
       </div>
     </div>
   );

@@ -143,7 +143,7 @@ export function Reservation({ book, query }: { book: ShelfBook; query: string | 
         <p role="status" className="mt-4 border-l-2 border-vermilion pl-3 text-[1.02rem]">
           {status.kind === "reservation"
             ? "Reservation noted. The bookshop will set the copy aside and get in touch to confirm."
-            : "Noted. The bookshop will let you know as soon as this book is back on the shelf."}
+            : "Noted. The bookshop will let you know as soon as this book is back in the shop."}
         </p>
       ) : null}
     </section>
