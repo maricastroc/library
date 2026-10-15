@@ -13,6 +13,7 @@ import { Masthead } from "./Masthead";
 import { RunningHead } from "./RunningHead";
 import { Gallery, type GalleryHandle } from "./Gallery";
 import { StillLife } from "./StillLife";
+import { HeroStill, pickHeroBooks, type HeroStillHandle } from "./HeroStill";
 import type { Density } from "@/lib/shelf/composition";
 import { IndexList } from "./IndexList";
 import { SortControls, type ViewMode } from "./SortControls";
@@ -42,7 +43,7 @@ type ShelfExperienceProps = {
   children?: React.ReactNode;
 };
 
-type OpenBookState = { id: number; origin: Box | null; pushed: boolean };
+type OpenBookState = { id: number; origin: Box | null; pushed: boolean; fromHero?: boolean };
 
 function writeUrl(patch: { q?: string | null; sort?: SortKey | null; book?: string | null }, mode: "push" | "replace") {
   const url = new URL(window.location.href);
@@ -57,6 +58,7 @@ function writeUrl(patch: { q?: string | null; sort?: SortKey | null; book?: stri
 
 export function ShelfExperience({ books, shop, showcases, initialQuery, initialSort, initialSlug, density, children }: ShelfExperienceProps) {
   const shelfRef = useRef<GalleryHandle>(null);
+  const heroStillRef = useRef<HeroStillHandle>(null);
   const openBookRef = useRef<JacketHandle>(null);
   const abortRef = useRef<AbortController | null>(null);
   const heroRef = useRef<HTMLDivElement>(null);
@@ -160,6 +162,7 @@ export function ShelfExperience({ books, shop, showcases, initialQuery, initialS
     return arrangeBooks(answered, answerSort).flatMap((group) => group.books.map((book) => book.id));
   }, [matches, answerSort, byId]);
   const identities = useMemo(() => new Map(books.map((book) => [book.id, spineIdentity(book)])), [books]);
+  const heroPieces = useMemo(() => pickHeroBooks(books, identities), [books, identities]);
   const showcaseBooks = useMemo(
     () =>
       new Map(
@@ -175,12 +178,13 @@ export function ShelfExperience({ books, shop, showcases, initialQuery, initialS
   );
 
   const openBook = useCallback(
-    (id: number) => {
+    (id: number, fromHero = false) => {
       const book = byId.get(id);
       if (!book || openRef.current) return;
-      const rect = shelfRef.current?.bookElement(id)?.getBoundingClientRect();
+      const element = fromHero ? heroStillRef.current?.bookElement(id) : shelfRef.current?.bookElement(id);
+      const rect = element?.getBoundingClientRect();
       writeUrl({ book: book.slug }, "push");
-      setOpen({ id, origin: rect ? { x: rect.left, y: rect.top, w: rect.width, h: rect.height } : null, pushed: true });
+      setOpen({ id, origin: rect ? { x: rect.left, y: rect.top, w: rect.width, h: rect.height } : null, pushed: true, fromHero });
     },
     [byId],
   );
@@ -188,7 +192,8 @@ export function ShelfExperience({ books, shop, showcases, initialQuery, initialS
   const getOrigin = useCallback((): Box | null => {
     const current = openRef.current;
     if (!current) return null;
-    const rect = shelfRef.current?.bookElement(current.id)?.getBoundingClientRect();
+    const element = current.fromHero ? heroStillRef.current?.bookElement(current.id) : shelfRef.current?.bookElement(current.id);
+    const rect = element?.getBoundingClientRect();
     return rect ? { x: rect.left, y: rect.top, w: rect.width, h: rect.height } : null;
   }, []);
 
@@ -201,7 +206,7 @@ export function ShelfExperience({ books, shop, showcases, initialQuery, initialS
       if (current.pushed) window.history.back();
       else writeUrl({ book: null }, "replace");
     }
-    requestAnimationFrame(() => shelfRef.current?.focusBook(current.id));
+    requestAnimationFrame(() => (current.fromHero ? heroStillRef.current?.focusBook(current.id) : shelfRef.current?.focusBook(current.id)));
   }, []);
 
   const changeSort = useCallback((key: AnswerSortKey) => {
@@ -260,7 +265,14 @@ export function ShelfExperience({ books, shop, showcases, initialQuery, initialS
 
       <main className="page-main">
         <div ref={heroRef} className="page-hero pb-12 pt-12 sm:pb-16 sm:pt-20">
-          <SearchBar state={search} draft={draft} onDraft={setDraft} onSearch={(query) => void runSearch(query)} onClear={clearSearch} />
+          <SearchBar
+            state={search}
+            draft={draft}
+            onDraft={setDraft}
+            onSearch={(query) => void runSearch(query)}
+            onClear={clearSearch}
+            still={heroPieces.length > 0 && search.status === "idle" ? <HeroStill ref={heroStillRef} pieces={heroPieces} shopName={shop.name} onOpen={(id) => openBook(id, true)} /> : null}
+          />
         </div>
 
         <div ref={shelfTopRef} className="pb-5">

@@ -126,12 +126,14 @@ export function SearchBar({
   onDraft,
   onSearch,
   onClear,
+  still,
 }: {
   state: SearchState;
   draft: string;
   onDraft: (draft: string) => void;
   onSearch: (query: string) => void;
   onClear: () => void;
+  still?: ReactNode;
 }) {
   const inputId = useId();
   const statusId = useId();
@@ -172,8 +174,8 @@ export function SearchBar({
   return (
     <section aria-label="Search by intent" className="hero">
       <div className="min-w-0">
-        <form role="search" onSubmit={submit}>
-          <label htmlFor={inputId} className="block">
+        <form role="search" onSubmit={submit} className="hero-form">
+          <label htmlFor={inputId} className="hero-label">
             <span className="eyebrow text-ink-soft">Ask the bookshop, in your own words</span>
             <span className="hero-lead mt-3 block">I’m looking for</span>
           </label>
@@ -224,6 +226,7 @@ export function SearchBar({
               <path d="M2 6 C 90 2.5, 210 8.5, 360 5 S 640 2.5, 790 6 S 940 7.5, 998 4.5" />
             </svg>
           </div>
+          {still}
         </form>
 
         <div id={statusId} aria-live="polite" className="hero-status">

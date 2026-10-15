@@ -461,3 +461,24 @@ export function catalogChangesSince(iso: string): { added: number; edited: numbe
     .get(since, since, since) as { added: number | null; edited: number | null };
   return { added: row.added ?? 0, edited: row.edited ?? 0 };
 }
+
+export type ReadingSpecimen = { title: string; slug: string; passages: { atmosphere: AtmosphereId; quote: string }[] };
+
+export function readingSpecimen(): ReadingSpecimen | null {
+  const rows = db()
+    .prepare(
+      `SELECT b.title, b.slug, s.atmospheres, s.evidence FROM books b JOIN book_semantics s ON s.book_id = b.id
+       WHERE s.status = 'ready' AND s.origin = 'ai' AND s.evidence IS NOT NULL ORDER BY b.id`,
+    )
+    .all() as { title: string; slug: string; atmospheres: string; evidence: string }[];
+  for (const row of rows) {
+    const atmospheres = parseJsonArray(row.atmospheres);
+    const evidence = parseEvidence(row.evidence);
+    const passages = evidence
+      .filter((item) => atmospheres.includes(item.attribute) && item.quote.length >= 20 && item.quote.length <= 80 && !/["“”]/.test(item.quote))
+      .filter((item, index, list) => list.findIndex((other) => other.attribute === item.attribute) === index)
+      .map((item) => ({ atmosphere: item.attribute as AtmosphereId, quote: item.quote }));
+    if (passages.length >= 2) return { title: row.title, slug: row.slug, passages: passages.slice(0, 2) };
+  }
+  return null;
+}
