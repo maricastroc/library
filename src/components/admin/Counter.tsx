@@ -7,13 +7,26 @@ export function PageHead({
   title,
   lede,
   actions,
+  quiet = false,
 }: {
   folio: string;
   back?: { href: string; label: string };
   title: ReactNode;
   lede?: ReactNode;
   actions?: ReactNode;
+  quiet?: boolean;
 }) {
+  if (quiet) {
+    return (
+      <header className="counter-head" data-quiet="">
+        <p className="eyebrow counter-head-folio">
+          {back ? <Link href={back.href}>← {back.label}</Link> : null}
+          <span>{folio}</span>
+        </p>
+        <h1 className="sr-only">{title}</h1>
+      </header>
+    );
+  }
   return (
     <header className="counter-head">
       <p className="eyebrow counter-head-folio">
