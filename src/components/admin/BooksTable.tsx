@@ -87,10 +87,17 @@ function Facet<T extends string>({
   onChange: (key: T) => void;
 }) {
   return (
-    <div role="group" aria-label={legend} className="facet">
+    <div role="group" aria-label={legend} className="facet" data-active={value !== options[0].key ? "" : undefined}>
       <span className="eyebrow facet-legend">{legend}</span>
-      {options.map((option) => (
-        <button key={option.key} type="button" className="facet-option" aria-pressed={value === option.key} onClick={() => onChange(option.key)}>
+      {options.map((option, index) => (
+        <button
+          key={option.key}
+          type="button"
+          className="facet-option"
+          data-default={index === 0 ? "" : undefined}
+          aria-pressed={value === option.key}
+          onClick={() => onChange(option.key)}
+        >
           {option.label}
           <span className="facet-option-count">{counts.get(option.key) ?? 0}</span>
         </button>
@@ -136,7 +143,12 @@ export function BooksTable({ books, initialFilter }: { books: BookDetail[]; init
     return [...list].sort(sorters[order]);
   }, [searched, reading, note, shelf, order]);
 
-  const filtered = reading !== "all" || note !== "any" || shelf !== "any" || query.length > 0;
+  const active = [
+    query.trim() ? { key: "query", label: `“${query.trim()}”`, clear: () => setQuery("") } : null,
+    reading !== "all" ? { key: "reading", label: READING.find((item) => item.key === reading)!.label, clear: () => setReading("all") } : null,
+    note !== "any" ? { key: "note", label: NOTE.find((item) => item.key === note)!.label, clear: () => setNote("any") } : null,
+    shelf !== "any" ? { key: "shelf", label: SHELF.find((item) => item.key === shelf)!.label, clear: () => setShelf("any") } : null,
+  ].filter((item) => item !== null);
 
   return (
     <div className="catalogue">
@@ -164,23 +176,39 @@ export function BooksTable({ books, initialFilter }: { books: BookDetail[]; init
       </div>
 
       <div className="catalogue-bar">
-        <p className="eyebrow" aria-live="polite">
-          <span className="catalogue-tally">{visible.length}</span> of {books.length} {books.length === 1 ? "book" : "books"}
-          {filtered ? (
-            <button
-              type="button"
-              className="catalogue-reset"
-              onClick={() => {
-                setQuery("");
-                setReading("all");
-                setNote("any");
-                setShelf("any");
-              }}
-            >
-              clear filters
-            </button>
+        <div className="catalogue-count">
+          <p className="eyebrow" aria-live="polite">
+            <span className="catalogue-tally">{visible.length}</span> of {books.length} {books.length === 1 ? "book" : "books"}
+          </p>
+          {active.length > 0 ? (
+            <ul className="catalogue-active" aria-label="Active filters">
+              {active.map((item) => (
+                <li key={item.key}>
+                  <button type="button" className="catalogue-chip" onClick={item.clear} aria-label={`Remove the filter ${item.label}`}>
+                    {item.label}
+                    <span aria-hidden>×</span>
+                  </button>
+                </li>
+              ))}
+              {active.length > 1 ? (
+                <li>
+                  <button
+                    type="button"
+                    className="catalogue-reset"
+                    onClick={() => {
+                      setQuery("");
+                      setReading("all");
+                      setNote("any");
+                      setShelf("any");
+                    }}
+                  >
+                    clear all
+                  </button>
+                </li>
+              ) : null}
+            </ul>
           ) : null}
-        </p>
+        </div>
         <div role="group" aria-label="Order" className="catalogue-order">
           <span className="eyebrow facet-legend">ordered by</span>
           {ORDERS.map((item) => (
@@ -196,13 +224,13 @@ export function BooksTable({ books, initialFilter }: { books: BookDetail[]; init
           <thead>
             <tr>
               <th scope="col">Book</th>
-              <th scope="col" className="hide-narrow">
+              <th scope="col" className="catalogue-col-form">
                 Form
               </th>
-              <th scope="col" className="hide-small">
+              <th scope="col" className="catalogue-col-reading">
                 Reading
               </th>
-              <th scope="col" className="hide-narrow">
+              <th scope="col" className="catalogue-col-note">
                 Note
               </th>
               <th scope="col" className="numeric">
@@ -246,20 +274,20 @@ export function BooksTable({ books, initialFilter }: { books: BookDetail[]; init
                               ))}
                             </span>
                           ) : (
-                            <span className="show-small">
+                            <span className="catalogue-status show-small">
                               <Stamp tone={status?.tone ?? "kraft"}>{status?.label ?? book.semanticStatus}</Stamp>
                             </span>
                           )}
                         </span>
                       </span>
                     </th>
-                    <td className="hide-narrow">
+                    <td className="catalogue-col-form">
                       <span className="catalogue-form">
                         {book.genre ?? "—"}
-                        {book.year ? <span> · {book.year}</span> : null}
+                        {book.year ? <span className="catalogue-year">{book.year}</span> : null}
                       </span>
                     </td>
-                    <td className="hide-small">
+                    <td className="catalogue-col-reading">
                       {book.semanticStatus === "ready" ? (
                         <span className="catalogue-reading">
                           <span aria-hidden className="catalogue-dots">
@@ -274,11 +302,11 @@ export function BooksTable({ books, initialFilter }: { books: BookDetail[]; init
                         <Stamp tone={status?.tone ?? "kraft"}>{status?.label ?? book.semanticStatus}</Stamp>
                       )}
                     </td>
-                    <td className="hide-narrow">
+                    <td className="catalogue-col-note">
                       {book.note ? (
                         <span className="catalogue-note">
-                          {book.noteOrigin === "example" ? <Stamp tone="faint">sample</Stamp> : null}
                           <span className="handwriting catalogue-note-text">{book.note}</span>
+                          {book.noteOrigin === "example" ? <Stamp tone="faint">sample</Stamp> : null}
                         </span>
                       ) : (
                         <span className="catalogue-empty">—</span>

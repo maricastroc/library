@@ -85,16 +85,16 @@ export function BibliographicFields({ book, errors }: { book: BookDetail | null;
           ))}
         </select>
       </Field>
-      <Field label="Publisher" name="publisher" className="sheet-half">
+      <Field label="Publisher" name="publisher" className="sheet-wide">
         <input id="publisher" name="publisher" form={RECORD_FORM} className="field" defaultValue={book?.publisher ?? ""} maxLength={120} />
       </Field>
-      <Field label="ISBN" name="isbn" error={errors.isbn} hint="10 or 13 digits. Leave it empty if you’re not sure." className="sheet-half">
-        <input id="isbn" name="isbn" form={RECORD_FORM} className="field font-mono text-[0.95rem]" defaultValue={formatIsbn(book?.isbn ?? null) ?? ""} inputMode="numeric" {...invalid(errors, "isbn")} />
-      </Field>
-      <Field label="Year" name="year" error={errors.year} className="sheet-quarter">
+      <Field label="Year" name="year" error={errors.year} className="sheet-narrow">
         <input id="year" name="year" form={RECORD_FORM} className="field font-mono text-[0.95rem]" defaultValue={book?.year ?? ""} inputMode="numeric" {...invalid(errors, "year")} />
       </Field>
-      <Field label="Pages" name="pages" error={errors.pages} className="sheet-quarter">
+      <Field label="ISBN" name="isbn" error={errors.isbn} hint="10 or 13 digits. Leave it empty if you’re not sure." className="sheet-wide">
+        <input id="isbn" name="isbn" form={RECORD_FORM} className="field font-mono text-[0.95rem]" defaultValue={formatIsbn(book?.isbn ?? null) ?? ""} inputMode="numeric" {...invalid(errors, "isbn")} />
+      </Field>
+      <Field label="Pages" name="pages" error={errors.pages} className="sheet-narrow">
         <input id="pages" name="pages" form={RECORD_FORM} className="field font-mono text-[0.95rem]" defaultValue={book?.pages ?? ""} inputMode="numeric" {...invalid(errors, "pages")} />
       </Field>
     </div>
