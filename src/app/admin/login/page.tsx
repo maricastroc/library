@@ -17,21 +17,26 @@ export default async function LoginPage({ searchParams }: PageProps<"/admin/logi
   const configured = adminConfigured();
   const shop = getShopConfig();
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center px-6 py-16">
-      <Link href="/" className="self-start text-[1.8rem]" aria-label={`${shop.name}, back to the shelf`}>
-        <Wordmark name={shop.name} />
-      </Link>
-      <h1 className="display mt-10 text-[2.4rem] leading-none">Bookshop counter</h1>
-      <p className="mt-3 text-ink-soft">For whoever looks after the catalog: importing books, writing notes, putting together showcases.</p>
-      <div className="mt-8">
+    <main className="door">
+      <div className="door-leaf">
+        <Link href="/" className="door-wordmark" aria-label={`${shop.name}, back to the shelf`}>
+          <Wordmark name={shop.name} />
+        </Link>
+        <p className="eyebrow door-folio">the counter · for the bookshop’s staff</p>
+        <h1 className="counter-title">
+          Behind the <em>counter</em>
+        </h1>
+        <p className="counter-lede">Where the catalogue is kept: importing books, writing notes, arranging showcases and answering readers.</p>
         {configured ? null : (
-          <p role="alert" className="mb-5 border-l-2 border-vermilion pl-3 text-[0.95rem]">
-            The counter doesn’t have a password yet. Set <code className="font-mono text-[0.85rem]">ADMIN_PASSWORD</code> and{" "}
-            <code className="font-mono text-[0.85rem]">SESSION_SECRET</code> in the <code className="font-mono text-[0.85rem]">.env.local</code> file and
-            restart the server.
+          <p role="alert" className="slip door-unset" data-tone="error">
+            The counter doesn’t have a password yet. Set <code className="bench-code">ADMIN_PASSWORD</code> and <code className="bench-code">SESSION_SECRET</code> in{" "}
+            <code className="bench-code">.env.local</code> and restart the server.
           </p>
         )}
         <LoginForm destination={destination} configured={configured} />
+        <Link href="/" className="eyebrow door-back">
+          ← Back to the shelf
+        </Link>
       </div>
     </main>
   );

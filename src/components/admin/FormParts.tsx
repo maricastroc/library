@@ -16,12 +16,9 @@ export function SubmitButton({ children, pendingLabel = "Saving…", className =
 }
 
 export function FormFeedback({ state }: { state: FormState }) {
-  if (!state.message) return <p aria-live="polite" className="min-h-6" />;
+  if (!state.message) return <p aria-live="polite" className="slip" />;
   return (
-    <p
-      role={state.ok ? "status" : "alert"}
-      className={`min-h-6 border-l-2 pl-3 text-[0.95rem] ${state.ok ? "border-ink text-ink" : "border-vermilion text-vermilion"}`}
-    >
+    <p key={state.message} role={state.ok ? "status" : "alert"} className="slip slip-enter" data-tone={state.ok ? undefined : "error"}>
       {state.message}
     </p>
   );
@@ -32,23 +29,25 @@ export function Field({
   name,
   error,
   hint,
+  className,
   children,
 }: {
   label: string;
   name: string;
   error?: string;
   hint?: string;
+  className?: string;
   children: ReactNode;
 }) {
   return (
-    <div>
-      <label htmlFor={name} className="eyebrow text-ink-soft">
+    <div className={className}>
+      <label htmlFor={name} className="eyebrow counter-field-label">
         {label}
       </label>
       {children}
-      {hint && !error ? <p className="mt-1 text-[0.82rem] text-ink-soft">{hint}</p> : null}
+      {hint && !error ? <p className="counter-field-hint">{hint}</p> : null}
       {error ? (
-        <p id={`${name}-error`} className="mt-1 text-[0.85rem] text-vermilion">
+        <p id={`${name}-error`} className="counter-field-error">
           {error}
         </p>
       ) : null}

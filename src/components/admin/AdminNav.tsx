@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useRef } from "react";
 
 const ITEMS = [
   { href: "/admin", label: "Dashboard" },
@@ -15,21 +16,29 @@ const ITEMS = [
 
 export function AdminNav({ pending }: { pending: number }) {
   const pathname = usePathname();
+  const nav = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const scroller = nav.current;
+    const active = scroller?.querySelector<HTMLElement>('[aria-current="page"]');
+    if (!scroller || !active || scroller.scrollWidth <= scroller.clientWidth) return;
+    scroller.scrollLeft = active.offsetLeft - (scroller.clientWidth - active.offsetWidth) / 2;
+  }, [pathname]);
+
   return (
-    <nav aria-label="Counter" className="mt-5 border-y border-ink">
-      <ul className="-mx-1 flex flex-wrap gap-x-1">
-        {ITEMS.map((item) => {
+    <nav ref={nav} aria-label="Counter" className="counter-nav">
+      <ol>
+        {ITEMS.map((item, index) => {
           const current = item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href);
           return (
             <li key={item.href}>
-              <Link
-                href={item.href}
-                aria-current={current ? "page" : undefined}
-                className={`inline-flex items-center gap-1.5 px-3 py-2.5 font-label text-[0.92rem] font-semibold ${current ? "bg-ink text-paper" : "text-ink hover:bg-ink/10"}`}
-              >
-                {item.label}
+              <Link href={item.href} aria-current={current ? "page" : undefined} className="counter-nav-link">
+                <span aria-hidden className="counter-nav-number">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span className="counter-nav-label">{item.label}</span>
                 {item.href === "/admin/reservations" && pending > 0 ? (
-                  <span className={`eyebrow px-1.5 py-0.5 text-[9px] ${current ? "bg-paper text-ink" : "bg-vermilion text-paper"}`}>
+                  <span className="counter-nav-badge" aria-label={`${pending} awaiting a reply`}>
                     {pending}
                   </span>
                 ) : null}
@@ -37,7 +46,7 @@ export function AdminNav({ pending }: { pending: number }) {
             </li>
           );
         })}
-      </ul>
+      </ol>
     </nav>
   );
 }

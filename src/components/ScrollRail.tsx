@@ -43,6 +43,7 @@ export function ScrollRail({ target }: { target?: RefObject<HTMLElement | null> 
     };
     const source: HTMLElement | Window = target ? element : window;
     source.addEventListener("scroll", paint, { passive: true });
+    if (target) element.addEventListener("input", paint);
     window.addEventListener("resize", paint);
     const observer = new ResizeObserver(paint);
     const watch = () => {
@@ -56,6 +57,7 @@ export function ScrollRail({ target }: { target?: RefObject<HTMLElement | null> 
     watch();
     return () => {
       source.removeEventListener("scroll", paint);
+      if (target) element.removeEventListener("input", paint);
       window.removeEventListener("resize", paint);
       observer.disconnect();
       mutations.disconnect();

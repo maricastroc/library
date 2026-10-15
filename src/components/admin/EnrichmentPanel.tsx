@@ -52,72 +52,68 @@ export function EnrichmentPanel({ initial }: { initial: Payload }) {
   const done = semantics.ready + semantics.insufficient;
   const ollama = data.ollama;
   const ollamaProblem = ollama && (!ollama.available || !ollama.embedReady || !ollama.chatReady);
+  const share = total === 0 ? 0 : Math.round((semantics.ready / total) * 100);
 
   return (
-    <section aria-labelledby="reading-heading" className="border border-ink/30 bg-paper-light p-5">
-      <div className="flex flex-wrap items-baseline justify-between gap-3">
-        <h2 id="reading-heading" className="display text-[1.5rem] leading-none">
-          AI reading of the catalog
-        </h2>
-        <p className="eyebrow text-ink-soft">
-          {ollama ? `${ollama.chatModel} · ${ollama.embedModel}` : "local models"}
-        </p>
+    <section aria-labelledby="reader-heading" className="margin-block reader" data-active={data.state.running ? "true" : undefined}>
+      <h2 id="reader-heading" className="eyebrow margin-title">
+        The reader
+      </h2>
+      <p className="reader-figure">
+        <span className="reader-share">{share}</span>
+        <span className="reader-share-unit">% of the catalogue read</span>
+      </p>
+      <div className="reader-bar" role="progressbar" aria-valuemin={0} aria-valuemax={total} aria-valuenow={done} aria-label="Books already read by the AI">
+        <span style={{ width: `${total === 0 ? 0 : (semantics.ready / total) * 100}%` }} />
+        <span data-kind="insufficient" style={{ width: `${total === 0 ? 0 : (semantics.insufficient / total) * 100}%` }} />
       </div>
-      <div
-        className="mt-4 h-2 w-full bg-ink/15"
-        role="progressbar"
-        aria-valuemin={0}
-        aria-valuemax={total}
-        aria-valuenow={done}
-        aria-label="Books already read by the AI"
-      >
-        <div className="h-full bg-ink transition-[width] duration-500" style={{ width: `${total === 0 ? 0 : (done / total) * 100}%` }} />
-      </div>
-      <dl className="eyebrow mt-3 flex flex-wrap gap-x-6 gap-y-1 text-ink">
-        <div className="flex gap-1.5">
-          <dt className="text-ink-soft">read</dt>
+      <dl className="reader-facts">
+        <div>
+          <dt>read</dt>
           <dd>{semantics.ready}</dd>
         </div>
-        <div className="flex gap-1.5">
-          <dt className="text-ink-soft">queued</dt>
+        <div>
+          <dt>in the queue</dt>
           <dd>{pending}</dd>
         </div>
-        <div className="flex gap-1.5">
-          <dt className="text-ink-soft">insufficient synopsis</dt>
+        <div>
+          <dt>too little synopsis</dt>
           <dd>{semantics.insufficient}</dd>
         </div>
-        <div className="flex gap-1.5">
-          <dt className="text-ink-soft">with errors</dt>
-          <dd>{semantics.error}</dd>
+        <div>
+          <dt>failed</dt>
+          <dd data-alert={semantics.error > 0 ? "true" : undefined}>{semantics.error}</dd>
         </div>
       </dl>
-      <div className="mt-3 min-h-6 text-[0.95rem]" aria-live="polite">
+      <div className="reader-status" aria-live="polite">
         {data.state.running ? (
-          <p className="italic text-ink-soft">
-            Reading now: {data.state.current.slice(0, 3).join(", ") || "preparing embeddings"}…
+          <p className="reader-now">
+            <span aria-hidden className="reader-pulse" />
+            Reading {data.state.current.slice(0, 2).join(" and ") || "the queue"}…
           </p>
         ) : pending > 0 ? (
-          <p className="text-ink-soft">Some books are waiting to be read. The shelf already shows them in kraft paper.</p>
+          <p>{pending === 1 ? "One book is" : `${pending} books are`} waiting. The shelf shows them in kraft paper until they are read.</p>
         ) : (
-          <p className="text-ink-soft">All caught up.</p>
+          <p>Nothing in the queue.</p>
         )}
         {ollamaProblem ? (
-          <p role="alert" className="mt-1 text-vermilion">
+          <p role="alert" className="reader-alert">
             {!ollama.available
-              ? "Ollama isn’t responding on this computer. Without it, the collection can only be searched by keyword."
-              : `Model missing from Ollama: ${[!ollama.embedReady ? ollama.embedModel : null, !ollama.chatReady ? ollama.chatModel : null].filter(Boolean).join(" and ")}.`}
+              ? "Ollama isn’t answering on this computer. Until it does, the shop can only be searched by keyword."
+              : `Missing from Ollama: ${[!ollama.embedReady ? ollama.embedModel : null, !ollama.chatReady ? ollama.chatModel : null].filter(Boolean).join(" and ")}.`}
           </p>
         ) : null}
-        {data.state.lastError && !data.state.running ? (
-          <p className="mt-1 text-vermilion">Last error: {data.state.lastError}</p>
-        ) : null}
-        {error ? <p className="mt-1 text-vermilion">{error}</p> : null}
+        {data.state.lastError && !data.state.running ? <p className="reader-alert">Last error: {data.state.lastError}</p> : null}
+        {error ? <p className="reader-alert">{error}</p> : null}
       </div>
       {!data.state.running && pending > 0 ? (
-        <button type="button" className="button mt-3" onClick={() => void start()}>
-          Read the {pending} pending {pending === 1 ? "book" : "books"}
+        <button type="button" className="button" onClick={() => void start()}>
+          Read the {pending === 1 ? "waiting book" : `${pending} waiting books`}
         </button>
       ) : null}
+      <p className="reader-models">
+        {ollama ? `${ollama.chatModel} reads · ${ollama.embedModel} searches` : "local models"} · on this computer
+      </p>
     </section>
   );
 }

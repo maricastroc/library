@@ -23,7 +23,7 @@ export function SearchComparison() {
   const submit = async (event: FormEvent) => {
     event.preventDefault();
     if (query.trim().length < 2) return;
-    setState({ status: "loading", result: null, message: null });
+    setState({ status: "loading", result: state.result, message: null });
     try {
       const response = await fetch(`/api/admin/compare?n=8&q=${encodeURIComponent(query.trim())}`);
       const data = (await response.json()) as Result & { error?: string };
@@ -40,82 +40,110 @@ export function SearchComparison() {
   const result = state.result;
   const lexicalIds = new Set(result?.lexical.map((item) => item.id));
   const semanticIds = new Set(result?.semantic?.results.map((item) => item.id));
+  const reading = result?.semantic
+    ? [...result.semantic.interpretation.atmospheres, ...result.semantic.interpretation.inferredAtmospheres].map(atmosphereLabel)
+    : [];
+  const avoids = result?.semantic ? result.semantic.interpretation.avoidAtmospheres.map(atmosphereLabel) : [];
 
   return (
-    <div>
-      <form onSubmit={submit} className="flex flex-wrap items-end gap-4">
-        <div className="min-w-[16rem] flex-1">
-          <label htmlFor="compare-query" className="eyebrow text-ink-soft">
-            Try a query on both engines
-          </label>
-          <input id="compare-query" className="field display-italic text-[1.4rem]" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="a book to read on a sleepless night" autoComplete="off" />
+    <div className="bench-live">
+      <form onSubmit={submit} className="bench-ask">
+        <label htmlFor="compare-query" className="eyebrow counter-field-label">
+          A reader’s request, in their words
+        </label>
+        <div className="bench-ask-row">
+          <input
+            id="compare-query"
+            className="field bench-ask-input"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="a book to read on a sleepless night"
+            autoComplete="off"
+          />
+          <button type="submit" className="button" disabled={state.status === "loading" || query.trim().length < 2}>
+            {state.status === "loading" ? "Comparing…" : "Compare"}
+          </button>
         </div>
-        <button type="submit" className="button" disabled={state.status === "loading"}>
-          {state.status === "loading" ? "Comparing…" : "Compare"}
-        </button>
       </form>
-      <div aria-live="polite">
+      <div aria-live="polite" aria-busy={state.status === "loading"}>
         {state.message ? (
-          <p role="alert" className="mt-3 text-vermilion">
+          <p role="alert" className="slip slip-enter" data-tone="error">
             {state.message}
           </p>
         ) : null}
         {result ? (
-          <div className="mt-6 grid gap-8 md:grid-cols-2">
-            <section aria-label="Keyword search">
-              <h3 className="eyebrow border-b border-ink pb-2 text-ink">Keyword search · FTS5/BM25</h3>
+          <div className="bench-columns" data-loading={state.status === "loading" ? "" : undefined}>
+            <section aria-labelledby="live-keywords" className="bench-column">
+              <h3 id="live-keywords" className="eyebrow bench-column-title">
+                <span aria-hidden className="bench-dot bench-dot-key" data-engine="lexical" />
+                Keywords <span className="bench-column-note">FTS5 / BM25</span>
+              </h3>
               {result.lexical.length === 0 ? (
-                <p className="py-4 text-ink-soft">No book contains those words.</p>
+                <p className="bench-list-none">No book contains those words.</p>
               ) : (
-                <ol className="divide-y divide-ink/15">
+                <ol className="bench-hits">
                   {result.lexical.map((item, index) => (
-                    <li key={item.id} className="flex gap-3 py-2">
-                      <span className="eyebrow w-5 pt-1 text-ink-soft">{index + 1}</span>
-                      <span>
-                        <span className="font-label font-semibold">{item.title}</span>
-                        <span className="block text-[0.88rem] italic text-ink-soft">{item.author}</span>
-                        {semanticIds.has(item.id) ? null : <span className="eyebrow text-[8.5px] text-ink-soft">only shows up here</span>}
+                    <li key={item.id} className="bench-hit">
+                      <span className="bench-hit-rank">{index + 1}</span>
+                      <span className="min-w-0">
+                        <span className="bench-list-book">{item.title}</span>
+                        <span className="bench-list-author">{item.author}</span>
+                        {semanticIds.has(item.id) ? null : <span className="bench-hit-only">only here</span>}
                       </span>
                     </li>
                   ))}
                 </ol>
               )}
             </section>
-            <section aria-label="Semantic search">
-              <h3 className="eyebrow border-b border-ink pb-2 text-ink">
-                Semantic search{result.semantic ? ` · ${confidenceLabel(result.semantic.confidence)} confidence · ${result.semantic.tookMs} ms` : ""}
+            <section aria-labelledby="live-shelf" className="bench-column">
+              <h3 id="live-shelf" className="eyebrow bench-column-title">
+                <span aria-hidden className="bench-dot bench-dot-key" data-engine="full" />
+                Shelf
+                {result.semantic ? (
+                  <span className="bench-column-note">
+                    {confidenceLabel(result.semantic.confidence)} confidence · {result.semantic.tookMs} ms
+                  </span>
+                ) : null}
               </h3>
               {result.semantic === null ? (
-                <p className="py-4 text-vermilion">{result.error ?? "AI unavailable."}</p>
+                <p className="slip" data-tone="error">
+                  {result.error ?? "The local AI is not answering."}
+                </p>
               ) : (
                 <>
-                  {result.semantic.interpretation.atmospheres.length + result.semantic.interpretation.inferredAtmospheres.length + result.semantic.interpretation.avoidAtmospheres.length > 0 ? (
-                    <p className="pt-2 text-[0.88rem] text-ink-soft">
-                      Reading of the request:{" "}
-                      {[...result.semantic.interpretation.atmospheres, ...result.semantic.interpretation.inferredAtmospheres].map(atmosphereLabel).join(", ") || "—"}
-                      {result.semantic.interpretation.avoidAtmospheres.length > 0
-                        ? `; avoids ${result.semantic.interpretation.avoidAtmospheres.map(atmosphereLabel).join(", ")}`
-                        : ""}
+                  {reading.length + avoids.length > 0 ? (
+                    <p className="bench-reading">
+                      Read as <em>{reading.join(", ") || "—"}</em>
+                      {avoids.length > 0 ? (
+                        <>
+                          {" "}
+                          · avoiding <em>{avoids.join(", ")}</em>
+                        </>
+                      ) : null}
                     </p>
                   ) : null}
-                  {result.semantic.message ? <p className="mt-2 border-l-2 border-vermilion pl-3 text-[0.92rem]">{result.semantic.message}</p> : null}
-                  <ol className="divide-y divide-ink/15">
-                    {result.semantic.results.map((item, index) => (
-                      <li key={item.id} className="flex gap-3 py-2">
-                        <span className="eyebrow w-5 pt-1 text-ink-soft">{index + 1}</span>
-                        <span>
-                          <span className="font-label font-semibold">{item.title}</span>
-                          <span className="block text-[0.88rem] italic text-ink-soft">{item.author}</span>
-                          <span className="block text-[0.82rem] text-ink-soft">{item.reasons?.slice(0, 2).join(" · ")}</span>
-                          {lexicalIds.has(item.id) ? null : <span className="eyebrow text-[8.5px] text-vermilion">keyword search doesn’t find it</span>}
-                        </span>
-                      </li>
-                    ))}
-                  </ol>
+                  {result.semantic.message ? <p className="slip">{result.semantic.message}</p> : null}
+                  {result.semantic.results.length === 0 ? null : (
+                    <ol className="bench-hits">
+                      {result.semantic.results.map((item, index) => (
+                        <li key={item.id} className="bench-hit">
+                          <span className="bench-hit-rank">{index + 1}</span>
+                          <span className="min-w-0">
+                            <span className="bench-list-book">{item.title}</span>
+                            <span className="bench-list-author">{item.author}</span>
+                            {item.reasons && item.reasons.length > 0 ? <span className="bench-hit-reason">{item.reasons.slice(0, 2).join(" · ")}</span> : null}
+                            {lexicalIds.has(item.id) ? null : <span className="bench-hit-only" data-tone="shelf">keywords miss it</span>}
+                          </span>
+                        </li>
+                      ))}
+                    </ol>
+                  )}
                 </>
               )}
             </section>
           </div>
+        ) : state.status === "loading" ? (
+          <p className="bench-waiting">Asking both engines…</p>
         ) : null}
       </div>
     </div>

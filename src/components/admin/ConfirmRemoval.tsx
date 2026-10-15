@@ -16,21 +16,21 @@ export function ConfirmRemoval({
   const [confirming, setConfirming] = useState(false);
   if (!confirming) {
     return (
-      <button type="button" className="eyebrow ink-link mt-3 text-vermilion" onClick={() => setConfirming(true)}>
+      <button type="button" className="button-quiet" data-tone="danger" onClick={() => setConfirming(true)}>
         {label}
       </button>
     );
   }
   return (
-    <form action={action} className="mt-3 border-l-2 border-vermilion pl-3">
+    <form action={action} className="confirm slip-enter">
       <input type="hidden" name="id" value={id} />
-      <p className="text-[0.98rem]">{question}</p>
-      <div className="mt-3 flex items-center gap-4">
+      <p className="text-[0.98rem] leading-snug">{question}</p>
+      <div className="flex flex-wrap items-center gap-4">
         <button type="submit" className="button">
           Yes, remove
         </button>
-        <button type="button" className="eyebrow ink-link" onClick={() => setConfirming(false)}>
-          Cancel
+        <button type="button" className="button-quiet" onClick={() => setConfirming(false)} autoFocus>
+          Keep it
         </button>
       </div>
     </form>

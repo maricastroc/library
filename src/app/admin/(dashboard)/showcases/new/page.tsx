@@ -1,20 +1,24 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { PageHead } from "@/components/admin/Counter";
 import { ShowcaseEditor } from "@/components/admin/ShowcaseEditor";
 import { listPickerBooks } from "@/lib/showcase/picker";
+import { getShopConfig } from "@/lib/shop/config";
 
 export const metadata: Metadata = { title: "New showcase" };
 
 export default function NewShowcasePage() {
   return (
-    <div className="max-w-5xl">
-      <Link href="/admin/showcases" className="eyebrow ink-link">
-        ← Showcases
-      </Link>
-      <h1 className="display mt-3 text-[2.6rem] leading-none">Put together a showcase</h1>
-      <div className="mt-8">
-        <ShowcaseEditor showcase={null} books={listPickerBooks()} />
-      </div>
+    <div className="counter-page counter-page-wide">
+      <PageHead
+        folio="04 · a new showcase"
+        back={{ href: "/admin/showcases", label: "Showcases" }}
+        title={
+          <>
+            Put together a <em>showcase</em>
+          </>
+        }
+      />
+      <ShowcaseEditor showcase={null} books={listPickerBooks()} shopName={getShopConfig().name} />
     </div>
   );
 }

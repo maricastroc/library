@@ -1,7 +1,10 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import type { CSSProperties } from "react";
 import type { Metadata } from "next";
+import { PageHead, SectionHead, Stamp } from "@/components/admin/Counter";
 import { SearchComparison } from "@/components/admin/SearchComparison";
+import { catalogChangesSince } from "@/lib/catalog/books";
 import { confidenceLabel } from "@/lib/semantic/taxonomy";
 
 export const metadata: Metadata = { title: "Search evaluation" };
@@ -20,6 +23,8 @@ type Report = {
     id: string;
     type: string;
     query: string;
+    expects?: "abstain" | "limitation" | null;
+    abstentionCorrect?: boolean;
     confidence: string;
     message: string | null;
     systems: Record<SystemName, Ranked[]>;
@@ -27,24 +32,28 @@ type Report = {
     metrics: Record<SystemName, { ndcg5: number | null }>;
   }[];
 };
+type Query = Report["queries"][number];
 
 const SYSTEMS: { key: SystemName; label: string; description: string }[] = [
   { key: "lexical", label: "Keywords", description: "FTS5/BM25 over title, author, genre, synopsis and note" },
   { key: "embedding", label: "Embeddings only", description: "closeness between the query and the synopsis" },
-  { key: "full", label: "Shelf", description: "reading of the request, embeddings and reranking by attributes" },
+  { key: "full", label: "Shelf", description: "reads the request, then embeddings and reranking by attributes" },
 ];
 
-const TYPE_LABELS: Record<string, string> = {
-  emotional: "emotional",
-  abstract: "abstract",
-  author: "author",
-  negative: "negative",
-  ambiguous: "ambiguous",
-  "no-match": "no match",
-  unanswerable: "unanswerable",
+const TYPES: Record<string, { label: string; gist: string }> = {
+  emotional: { label: "Emotional", gist: "a mood or a feeling to find" },
+  abstract: { label: "Abstract", gist: "an image or a sensation, not a subject" },
+  author: { label: "Author", gist: "a writer or a book as the reference" },
+  negative: { label: "With a “but”", gist: "something wanted and something to avoid" },
+  ambiguous: { label: "Loose", gist: "one or two open words" },
+  "no-match": { label: "Not a bookshop request", gist: "outside what the shop sells" },
+  unanswerable: { label: "A judgement", gist: "asks for an opinion the catalogue cannot hold" },
 };
 
+const LEVEL = 0.05;
 const formatScore = (value: number | null) => (value === null ? "—" : value.toFixed(2));
+const signed = (value: number) => `${value > 0 ? "+" : value < 0 ? "−" : "±"}${Math.abs(value).toFixed(2)}`;
+const score = (query: Query, system: SystemName) => query.metrics[system].ndcg5 ?? 0;
 
 function loadReport(): Report | null {
   const file = join(process.cwd(), "data", "eval", "results.json");
@@ -57,165 +66,385 @@ function loadReport(): Report | null {
   }
 }
 
+function duel(queries: Query[], against: SystemName) {
+  const marks = queries.map((query) => {
+    const difference = score(query, "full") - score(query, against);
+    return difference >= LEVEL ? "better" : difference <= -LEVEL ? "worse" : "level";
+  });
+  return {
+    marks,
+    better: marks.filter((mark) => mark === "better").length,
+    level: marks.filter((mark) => mark === "level").length,
+    worse: marks.filter((mark) => mark === "worse").length,
+  };
+}
+
+function standing(result: { better: number; worse: number }): string {
+  if (result.better - result.worse > 2 && result.better >= result.worse * 2) return "clearly ahead of";
+  if (result.better - result.worse > 2) return "ahead of";
+  if (result.worse - result.better > 2) return "behind";
+  return "level with";
+}
+
+function Track({ values, label }: { values: Partial<Record<SystemName, number | null>>; label?: string }) {
+  return (
+    <span className="bench-track" aria-hidden title={label}>
+      {SYSTEMS.map((system) => {
+        const value = values[system.key];
+        if (value === undefined || value === null) return null;
+        return <span key={system.key} className="bench-dot" data-engine={system.key} style={{ "--at": value } as CSSProperties} />;
+      })}
+    </span>
+  );
+}
+
+function Grade({ value }: { value: number }) {
+  return (
+    <span className="bench-grade" data-grade={value} aria-label={`graded ${value} of 2`}>
+      <span />
+      <span />
+    </span>
+  );
+}
+
 export default function EvaluationPage() {
   const report = loadReport();
-  const judged = Boolean(report?.summary.models.judge);
+
+  if (report === null) {
+    return (
+      <div className="counter-page">
+        <PageHead
+          folio="06 · the search bench"
+          title={
+            <>
+              Does the shelf <em>find better</em>?
+            </>
+          }
+          lede={<p>Try any query on the engines below. The fixed evaluation set has not been run on this computer yet.</p>}
+        />
+        <div className="blank">
+          <p className="blank-line">No evaluation saved yet.</p>
+          <p className="blank-hint">
+            Run <code className="bench-code">npm run ai:eval -- --judge</code> in the terminal. It puts the same questions to the three engines and has a local model grade the answers.
+          </p>
+        </div>
+        <TrySection />
+      </div>
+    );
+  }
+
+  const { summary } = report;
+  const judge = summary.models.judge;
+  const graded = report.queries.filter((query) => query.expects !== "abstain");
+  const declined = report.queries.filter((query) => query.expects === "abstain");
+  const versusKeywords = duel(graded, "lexical");
+  const versusEmbeddings = duel(graded, "embedding");
+  const changes = catalogChangesSince(summary.generatedAt);
+  const run = new Date(summary.generatedAt);
+  const runLabel = Number.isNaN(run.getTime())
+    ? summary.generatedAt
+    : `${run.toLocaleString("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "UTC" })} UTC`;
+  const typeOrder = [...new Set(report.queries.map((query) => query.type))];
+  const perType = Object.keys(summary.byType).map((type) => graded.filter((query) => query.type === type).length).filter((count) => count > 0);
+  const smallest = Math.min(...perType);
+  const largest = Math.max(...perType);
+
   return (
-    <div className="max-w-6xl">
-      <h1 className="display text-[2.6rem] leading-none">Search evaluation</h1>
-      <p className="mt-3 max-w-[48rem] text-ink-soft">
-        The shelf only earns trust if it finds books an ordinary search can’t. Here you can try any query on both
-        engines and see the results for the fixed evaluation set.
-      </p>
+    <div className="counter-page counter-page-wide">
+      <PageHead
+        folio="06 · the search bench"
+        title={
+          <>
+            Does the shelf <em>find better</em>?
+          </>
+        }
+        lede={
+          <p>
+            The same {report.queries.length} questions put to three engines, the answers graded one by one. It shows where reading the synopsis helps a reader, and where it gets in
+            the way.
+          </p>
+        }
+        actions={
+          <a href="#bench-try" className="button button-outline">
+            Try a query ↓
+          </a>
+        }
+      />
 
-      <section aria-labelledby="live-comparison-heading" className="mt-8 border border-ink/30 bg-paper-light p-5">
-        <h2 id="live-comparison-heading" className="sr-only">
-          Live comparison
+      <aside className="bench-method" aria-labelledby="method-heading">
+        <h2 id="method-heading" className="eyebrow bench-method-title">
+          How to read these numbers
         </h2>
-        <SearchComparison />
-      </section>
-
-      <section aria-labelledby="evaluation-set-heading" className="mt-14">
-        <h2 id="evaluation-set-heading" className="display text-[1.8rem] leading-none">
-          Evaluation set
-        </h2>
-        {report === null ? (
-          <p className="mt-3 text-ink-soft">
-            No results saved yet. Run <code className="font-mono text-[0.85rem]">npm run ai:eval -- --judge</code> in the terminal.
+        {judge ? (
+          <p>
+            {graded.length} queries were graded 0, 1 or 2 by <span className="bench-model">{judge}</span>, another local model reading only title, author, genre and synopsis.
+            It is an automatic judge, not a reader: take the numbers as a hint and read the lists. Each engine is scored on its first five books; 1.00 means the best order of
+            the books any of the three engines found, not of the whole catalogue. An engine that returns nothing scores 0.
           </p>
         ) : (
-          <>
-            <p className="eyebrow mt-3 text-ink-soft">
-              {report.queries.length} queries · generated on {report.summary.generatedAt.slice(0, 16).replace("T", " ")} · embeddings{" "}
-              {report.summary.models.embeddings} · classifier {report.summary.models.classifier}
-            </p>
-            {judged ? (
-              <p className="mt-3 max-w-[48rem] border-l-2 border-vermilion pl-3 text-[0.95rem]">
-                The relevance grades (0, 1 or 2) were given by another local model, {report.summary.models.judge}, reading only title,
-                author, genre and synopsis. It’s an automatic judge, not a human evaluation: treat the numbers as a hint and read the lists.
-              </p>
-            ) : (
-              <p className="mt-3 text-ink-soft">This run had no relevance judge; just the lists side by side.</p>
-            )}
+          <p>This run had no relevance judge, so there are no grades: only the lists side by side.</p>
+        )}
+        <p className="eyebrow bench-method-run">
+          run of {runLabel} · embeddings {summary.models.embeddings} · reading {summary.models.classifier}
+          {judge ? ` · judge ${judge}` : ""}
+        </p>
+        {changes.added + changes.edited > 0 ? (
+          <p className="slip bench-stale">
+            The catalogue has changed since this run: {changes.added} {changes.added === 1 ? "book" : "books"} added and {changes.edited} edited. These numbers describe the
+            shelf as it was then, and some titles below have since been renamed. To refresh, run <code className="bench-code">npm run ai:eval -- --judge</code>.
+          </p>
+        ) : null}
+      </aside>
 
-            <div className="mt-6 overflow-x-auto">
-              <table className="w-full min-w-[36rem] border-collapse text-left">
-                <thead>
-                  <tr className="eyebrow border-b border-ink text-ink-soft">
-                    <th scope="col" className="py-2 pr-4 font-normal">Engine</th>
-                    <th scope="col" className="py-2 pr-4 text-right font-normal">nDCG@5</th>
-                    <th scope="col" className="py-2 pr-4 text-right font-normal">P@5</th>
-                    <th scope="col" className="py-2 text-right font-normal">Queries with no results</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {SYSTEMS.map((system) => (
-                    <tr key={system.key} className="border-b border-ink/15 align-baseline">
-                      <th scope="row" className="py-2.5 pr-4 font-normal">
-                        <span className="font-label font-semibold">{system.label}</span>
-                        <span className="block text-[0.85rem] text-ink-soft">{system.description}</span>
-                      </th>
-                      <td className="display py-2.5 pr-4 text-right text-[1.6rem]">{formatScore(report.summary.overall[system.key].ndcg5)}</td>
-                      <td className="display py-2.5 pr-4 text-right text-[1.6rem]">{formatScore(report.summary.overall[system.key].p5)}</td>
-                      <td className="py-2.5 text-right font-mono text-[0.9rem]">{report.summary.overall[system.key].emptyQueries}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <div className="mt-8 grid gap-8 md:grid-cols-2">
-              <div>
-                <h3 className="eyebrow border-b border-ink pb-2 text-ink">nDCG@5 by query type</h3>
-                <table className="w-full border-collapse text-left text-[0.95rem]">
-                  <thead>
-                    <tr className="eyebrow text-ink-soft">
-                      <th scope="col" className="py-1.5 pr-3 font-normal">Type</th>
-                      {SYSTEMS.map((system) => (
-                        <th key={system.key} scope="col" className="py-1.5 pl-3 text-right font-normal">
+      {judge ? (
+        <>
+          <section aria-labelledby="engines-heading" className="counter-section">
+            <SectionHead id="engines-heading" title={<>Three engines, <em>the same questions</em></>} aside={`${graded.length} graded queries`} />
+            <table className="bench-engines">
+              <thead>
+                <tr>
+                  <th scope="col">Engine</th>
+                  <th scope="col" className="bench-col-score">
+                    nDCG@5 <span className="bench-col-note">order of the first five</span>
+                  </th>
+                  <th scope="col" className="bench-col-scale hide-narrow">
+                    <span className="bench-scale" aria-hidden>
+                      <span>0</span>
+                      <span>0.5</span>
+                      <span>1</span>
+                    </span>
+                  </th>
+                  <th scope="col" className="numeric">
+                    P@5 <span className="bench-col-note">fit among five</span>
+                  </th>
+                  <th scope="col" className="numeric hide-narrow">
+                    No results
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {SYSTEMS.map((system) => {
+                  const row = summary.overall[system.key];
+                  return (
+                    <tr key={system.key} data-engine={system.key}>
+                      <th scope="row">
+                        <span className="bench-engine">
+                          <span aria-hidden className="bench-dot bench-dot-key" data-engine={system.key} />
                           {system.label}
-                        </th>
-                      ))}
+                        </span>
+                        <span className="bench-engine-note">{system.description}</span>
+                      </th>
+                      <td className="bench-score">{formatScore(row.ndcg5)}</td>
+                      <td className="hide-narrow">
+                        <Track values={{ [system.key]: row.ndcg5 }} />
+                      </td>
+                      <td className="numeric bench-p5">{formatScore(row.p5)}</td>
+                      <td className="numeric hide-narrow">{row.emptyQueries}</td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {Object.entries(report.summary.byType).map(([type, row]) => (
-                      <tr key={type} className="border-t border-ink/15">
-                        <th scope="row" className="py-1.5 pr-3 font-label font-normal">{TYPE_LABELS[type] ?? type}</th>
-                        {SYSTEMS.map((system) => (
-                          <td key={system.key} className="py-1.5 pl-3 text-right font-mono text-[0.88rem]">
-                            {formatScore(row[system.key])}
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <div>
-                <h3 className="eyebrow border-b border-ink pb-2 text-ink">When there’s no answer</h3>
-                <p className="mt-3 text-[0.98rem]">
-                  Queries outside what the bookshop sells, declined or flagged as weak:{" "}
-                  <strong>
-                    {report.summary.abstention.outOfScopeDeclined} of {report.summary.abstention.outOfScopeTotal}
-                  </strong>
-                  .
-                </p>
-                <p className="mt-2 text-[0.98rem]">
-                  Legitimate queries answered with confidence:{" "}
-                  <strong>
-                    {report.summary.abstention.inScopeAnswered} of {report.summary.abstention.inScopeTotal}
-                  </strong>
-                  .
-                </p>
-              </div>
-            </div>
+                  );
+                })}
+              </tbody>
+            </table>
 
-            <h3 className="eyebrow mt-12 border-b border-ink pb-2 text-ink">Query by query</h3>
-            <div className="divide-y divide-ink/20">
-              {report.queries.map((item) => {
-                const graded = Object.keys(item.grades).length > 0;
+            <div className="bench-duels">
+              <p className="bench-verdict">
+                Query by query, the shelf is <em>{standing(versusKeywords)} keywords</em> and <em>{standing(versusEmbeddings)} embeddings alone</em>.
+              </p>
+              {[
+                { label: "against keywords", result: versusKeywords },
+                { label: "against embeddings only", result: versusEmbeddings },
+              ].map(({ label, result }) => (
+                <div key={label} className="bench-duel">
+                  <p className="bench-duel-label">
+                    Shelf {label}
+                    <span className="bench-duel-count">
+                      better on {result.better} · level on {result.level} · worse on {result.worse}
+                    </span>
+                  </p>
+                  <span className="bench-tally" aria-hidden>
+                    {[...result.marks].sort((a, b) => ["better", "level", "worse"].indexOf(a) - ["better", "level", "worse"].indexOf(b)).map((mark, index) => (
+                      <span key={index} data-mark={mark} />
+                    ))}
+                  </span>
+                </div>
+              ))}
+              <p className="counter-field-hint">Each square is one graded query, by nDCG@5. Differences under {LEVEL.toFixed(2)} count as level.</p>
+            </div>
+          </section>
+
+          <section aria-labelledby="types-heading" className="counter-section">
+            <SectionHead id="types-heading" title={<>By kind of <em>question</em></>} aside="mean nDCG@5" />
+            <div className="bench-legend" aria-hidden>
+              {SYSTEMS.map((system) => (
+                <span key={system.key}>
+                  <span className="bench-dot bench-dot-key" data-engine={system.key} />
+                  {system.label}
+                </span>
+              ))}
+            </div>
+            <ul className="bench-types">
+              {Object.entries(summary.byType).map(([type, row]) => {
+                const count = graded.filter((query) => query.type === type).length;
+                const shelf = row.full ?? 0;
+                const rivals = SYSTEMS.filter((system) => system.key !== "full").map((system) => ({ ...system, value: row[system.key] ?? 0 }));
+                const ahead = rivals.find((rival) => rival.value - shelf >= LEVEL && rival.value === Math.max(...rivals.map((other) => other.value)));
+                const leads = rivals.every((rival) => shelf - rival.value >= LEVEL);
                 return (
-                  <details key={item.id} className="group py-3">
-                    <summary className="flex cursor-pointer flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-                      <span>
-                        <span className="eyebrow mr-3 text-ink-soft">{TYPE_LABELS[item.type] ?? item.type}</span>
-                        <span className="display-italic text-[1.2rem]">“{item.query}”</span>
+                  <li key={type} className="bench-type" data-behind={ahead ? "" : undefined}>
+                    <p className="bench-type-name">
+                      {TYPES[type]?.label ?? type}
+                      <span className="bench-type-gist">
+                        {TYPES[type]?.gist ?? ""} · {count} {count === 1 ? "query" : "queries"}
                       </span>
-                      <span className="eyebrow text-ink-soft">
-                        {confidenceLabel(item.confidence)} confidence
-                        {graded ? ` · nDCG ${formatScore(item.metrics.lexical.ndcg5)} → ${formatScore(item.metrics.full.ndcg5)}` : ""}
-                      </span>
-                    </summary>
-                    {item.message ? <p className="mt-3 border-l-2 border-vermilion pl-3 text-[0.92rem]">{item.message}</p> : null}
-                    <div className="mt-3 grid gap-6 md:grid-cols-3">
+                    </p>
+                    <Track values={row} label={SYSTEMS.map((system) => `${system.label} ${formatScore(row[system.key])}`).join(", ")} />
+                    <p className="bench-type-values">
                       {SYSTEMS.map((system) => (
-                        <div key={system.key}>
-                          <p className="eyebrow text-ink-soft">{system.label}</p>
-                          {item.systems[system.key].length === 0 ? (
-                            <p className="mt-1 text-[0.9rem] text-ink-soft">no results</p>
-                          ) : (
-                            <ol className="mt-1 space-y-1 text-[0.92rem]">
-                              {item.systems[system.key].map((entry) => (
-                                <li key={entry.id} className="flex items-baseline justify-between gap-3">
-                                  <span>
-                                    {entry.title} <span className="italic text-ink-soft">— {entry.author}</span>
-                                  </span>
-                                  {graded ? <span className="font-mono text-[0.8rem]">{item.grades[String(entry.id)] ?? 0}</span> : null}
-                                </li>
-                              ))}
-                            </ol>
-                          )}
-                        </div>
+                        <span key={system.key} data-engine={system.key}>
+                          <span className="sr-only">{system.label} </span>
+                          {formatScore(row[system.key])}
+                        </span>
                       ))}
-                    </div>
-                  </details>
+                    </p>
+                    <p className="bench-type-remark">
+                      {ahead ? (
+                        <Stamp tone="vermilion">shelf behind {ahead.label.toLowerCase()}</Stamp>
+                      ) : leads ? (
+                        <Stamp tone="ink">shelf leads</Stamp>
+                      ) : (
+                        <Stamp tone="faint">no clear lead</Stamp>
+                      )}
+                    </p>
+                  </li>
                 );
               })}
+            </ul>
+            <p className="counter-field-hint bench-types-foot">
+              With {smallest === largest ? smallest : `${smallest}–${largest}`} queries per kind, a single query moves a mean by up to {(1 / smallest).toFixed(2)}. Read a gap as a
+              lead to follow up, not as a measurement.
+            </p>
+          </section>
+        </>
+      ) : null}
+
+      <section aria-labelledby="restraint-heading" className="counter-section">
+        <SectionHead id="restraint-heading" title={<>Knowing when <em>not to answer</em></>} aside="shelf only" />
+        <div className="bench-restraint">
+          {[
+            { label: "Out of scope, declined or flagged as weak", done: summary.abstention.outOfScopeDeclined, total: summary.abstention.outOfScopeTotal },
+            { label: "In scope, answered with confidence", done: summary.abstention.inScopeAnswered, total: summary.abstention.inScopeTotal },
+          ].map((row) => (
+            <div key={row.label} className="bench-restraint-row">
+              <p className="bench-restraint-figure">
+                {row.done}
+                <span> of {row.total}</span>
+              </p>
+              <p className="bench-restraint-label">{row.label}</p>
+              <span className="bench-pips" aria-hidden>
+                {Array.from({ length: row.total }, (_, index) => (
+                  <span key={index} data-on={index < row.done ? "" : undefined} />
+                ))}
+              </span>
             </div>
-          </>
-        )}
+          ))}
+        </div>
       </section>
+
+      <section aria-labelledby="queries-heading" className="counter-section">
+        <SectionHead id="queries-heading" title={<>Query <em>by query</em></>} aside="open one to see the three lists" />
+        {judge ? (
+          <p className="bench-queries-head hide-narrow" aria-hidden>
+            <span>The reader’s request</span>
+            <span>Shelf’s confidence</span>
+            <span>nDCG@5, 0 to 1</span>
+            <span>Shelf − keywords</span>
+          </p>
+        ) : null}
+        {typeOrder.map((type) => {
+          const items = report.queries.filter((query) => query.type === type);
+          return (
+            <div key={type} className="bench-group">
+              <h3 className="eyebrow bench-group-title">
+                {TYPES[type]?.label ?? type}
+                <span>{TYPES[type]?.gist}</span>
+              </h3>
+              <ul className="bench-queries">
+                {items.map((query) => {
+                  const isGraded = Object.keys(query.grades).length > 0;
+                  const gain = score(query, "full") - score(query, "lexical");
+                  return (
+                    <li key={query.id}>
+                      <details className="bench-query">
+                        <summary>
+                          <span className="bench-query-text">{query.query}</span>
+                          <span className="bench-query-confidence">{query.confidence === "none" ? "declined" : `${confidenceLabel(query.confidence)} confidence`}</span>
+                          {isGraded ? (
+                            <>
+                              <Track values={{ lexical: score(query, "lexical"), embedding: score(query, "embedding"), full: score(query, "full") }} />
+                              <span className="bench-query-gain" data-sign={gain >= LEVEL ? "up" : gain <= -LEVEL ? "down" : "level"}>
+                                <span className="sr-only">shelf against keywords </span>
+                                {signed(gain)}
+                              </span>
+                            </>
+                          ) : (
+                            <span className="bench-query-ungraded">{query.expects === "abstain" ? (query.abstentionCorrect ? "the right call" : "should have declined") : "not graded"}</span>
+                          )}
+                        </summary>
+                        <div className="bench-query-body">
+                          {query.message ? <p className="slip bench-query-message">{query.message}</p> : null}
+                          {query.expects === "limitation" ? (
+                            <p className="counter-field-hint">
+                              Here the shelf is expected to say what it cannot do{query.abstentionCorrect ? ", and it did" : ", and it did not"}. Returning nothing still scores 0 for the shelf.
+                            </p>
+                          ) : null}
+                          <div className="bench-lists">
+                            {SYSTEMS.map((system) => (
+                              <div key={system.key}>
+                                <p className="eyebrow bench-list-title">
+                                  <span aria-hidden className="bench-dot bench-dot-key" data-engine={system.key} />
+                                  {system.label}
+                                  {isGraded ? <span className="bench-list-score">{formatScore(query.metrics[system.key].ndcg5)}</span> : null}
+                                </p>
+                                {query.systems[system.key].length === 0 ? (
+                                  <p className="bench-list-none">no results</p>
+                                ) : (
+                                  <ol className="bench-list">
+                                    {query.systems[system.key].map((entry) => (
+                                      <li key={entry.id}>
+                                        <span className="min-w-0">
+                                          <span className="bench-list-book">{entry.title}</span>
+                                          <span className="bench-list-author">{entry.author}</span>
+                                        </span>
+                                        {isGraded ? <Grade value={query.grades[String(entry.id)] ?? 0} /> : null}
+                                      </li>
+                                    ))}
+                                  </ol>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </details>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          );
+        })}
+        {declined.length > 0 && judge ? <p className="counter-field-hint">Out-of-scope queries are not graded: what matters there is whether the shelf declines.</p> : null}
+      </section>
+
+      <TrySection />
     </div>
+  );
+}
+
+function TrySection() {
+  return (
+    <section id="bench-try" aria-labelledby="try-heading" className="counter-section bench-try">
+      <SectionHead id="try-heading" title={<>Try a query <em>on the bench</em></>} aside="live, on this computer" />
+      <SearchComparison />
+    </section>
   );
 }

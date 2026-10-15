@@ -449,3 +449,15 @@ export function catalogStats(): CatalogStats {
     semantics,
   };
 }
+
+export function catalogChangesSince(iso: string): { added: number; edited: number } {
+  const since = iso.slice(0, 19).replace("T", " ");
+  const row = db()
+    .prepare(
+      `SELECT SUM(CASE WHEN created_at > ? THEN 1 ELSE 0 END) AS added,
+              SUM(CASE WHEN created_at <= ? AND updated_at > ? THEN 1 ELSE 0 END) AS edited
+       FROM books`,
+    )
+    .get(since, since, since) as { added: number | null; edited: number | null };
+  return { added: row.added ?? 0, edited: row.edited ?? 0 };
+}
