@@ -53,15 +53,18 @@ export function BenchQueries({ queries, judged }: { queries: BenchQuery[]; judge
   const rival = RIVALS.find((item) => item.key === against)!;
 
   useEffect(() => {
-    const reveal = () => {
-      if (window.location.hash.startsWith("#queries/")) document.getElementById("queries")?.scrollIntoView({ block: "start" });
+    const reveal = (behavior: ScrollBehavior) => {
+      if (window.location.hash.startsWith("#queries/")) document.getElementById("queries")?.scrollIntoView({ block: "start", behavior });
     };
     const onHash = (event: HashChangeEvent) => {
-      if (event.isTrusted) reveal();
+      if (event.isTrusted) reveal("smooth");
     };
-    reveal();
+    const initial = window.setTimeout(() => reveal("instant"), 200);
     window.addEventListener("hashchange", onHash);
-    return () => window.removeEventListener("hashchange", onHash);
+    return () => {
+      window.clearTimeout(initial);
+      window.removeEventListener("hashchange", onHash);
+    };
   }, []);
 
   const change = (next: Partial<BenchFilter>) => {
