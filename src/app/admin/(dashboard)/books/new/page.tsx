@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "Add book" };
 
 export default function NewBookPage() {
   return (
-    <div className="counter-page">
+    <div className="counter-page counter-page-wide">
       <PageHead
         folio="02 · new catalogue record"
         back={{ href: "/admin/books", label: "Books" }}

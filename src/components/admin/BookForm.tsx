@@ -15,7 +15,7 @@ export function BookForm({ signature }: { signature: string }) {
     <form
       id={RECORD_FORM}
       action={action}
-      className="record"
+      className="record book-new"
       noValidate
       onInput={(event) => {
         setDirty(true);

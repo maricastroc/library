@@ -10,6 +10,7 @@ const ITEMS = [
   { href: "/admin/import", label: "Import" },
   { href: "/admin/showcases", label: "Showcases" },
   { href: "/admin/reservations", label: "Reservations" },
+  { href: "/admin/demand", label: "Demand" },
   { href: "/admin/evaluation", label: "Search evaluation" },
   { href: "/admin/shop", label: "Bookshop" },
 ];

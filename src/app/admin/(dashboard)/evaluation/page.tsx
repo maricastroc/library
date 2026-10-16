@@ -26,7 +26,7 @@ function loadReport(): BenchReport | null {
 function Head({ count }: { count?: number }) {
   return (
     <PageHead
-      folio="06 · the search bench"
+      folio="07 · the search bench"
       title={
         <>
           Does the shelf <em>find better</em>?

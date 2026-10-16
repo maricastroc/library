@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { logSearch } from "@/lib/demand";
 import { allowRequest, clientKey } from "@/lib/http/rate-limit";
 import { semanticSearch } from "@/lib/search/engine";
 import { lexicalFallback } from "@/lib/search/fallback";
@@ -17,9 +18,13 @@ export async function GET(request: NextRequest) {
   try {
     const requested = Number(request.nextUrl.searchParams.get("limit"));
     const limit = Number.isInteger(requested) && requested >= 1 && requested <= 10 ? requested : undefined;
-    return NextResponse.json(await semanticSearch(query, { limit }));
+    const response = await semanticSearch(query, { limit });
+    return NextResponse.json({ ...response, logId: logSearch(response) });
   } catch (error) {
-    if (error instanceof OllamaError) return NextResponse.json(lexicalFallback(query, error));
+    if (error instanceof OllamaError) {
+      const response = lexicalFallback(query, error);
+      return NextResponse.json({ ...response, logId: logSearch(response) });
+    }
     console.error("[search]", error);
     return NextResponse.json({ error: "The bookshop couldn’t answer just now." }, { status: 500 });
   }

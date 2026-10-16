@@ -10,6 +10,7 @@ import { parsePrice } from "@/lib/catalog/import-csv";
 import { normalizeIsbn } from "@/lib/catalog/isbn";
 import type { BookInput } from "@/lib/catalog/types";
 import { db } from "@/lib/db";
+import { clearDemand } from "@/lib/demand";
 import { allowRequest } from "@/lib/http/rate-limit";
 import { setInterestStatus, type InterestStatus } from "@/lib/interest";
 import { cleanThemes } from "@/lib/semantic/enrich";
@@ -293,6 +294,18 @@ export async function removeShowcase(form: FormData): Promise<void> {
   revalidatePath("/admin", "layout");
   revalidatePath("/");
   redirect("/admin/showcases");
+}
+
+export async function clearSearchLog(): Promise<void> {
+  await assertAdmin();
+  clearDemand("all");
+  revalidatePath("/admin", "layout");
+}
+
+export async function clearSampleSearches(): Promise<void> {
+  await assertAdmin();
+  clearDemand("samples");
+  revalidatePath("/admin", "layout");
 }
 
 export async function saveShop(_previous: FormState, form: FormData): Promise<FormState> {

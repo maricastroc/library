@@ -18,7 +18,7 @@ export default function ShopPage() {
   return (
     <div className="counter-page counter-page-wide">
       <PageHead
-        folio="07 · the house"
+        folio="08 · the house"
         title={
           <>
             The bookshop’s <em>imprint</em>

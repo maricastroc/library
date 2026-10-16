@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { ReadingSpecimen } from "@/lib/catalog/books";
 import type { ShelfBook } from "@/lib/catalog/types";
+import { RETENTION_DAYS } from "@/lib/demand/report";
 import { ATMOSPHERE_BY_ID, type AtmosphereId } from "@/lib/semantic/taxonomy";
 import { ATMOSPHERE_SPECTRUM } from "@/lib/shelf/arrange";
 import { KRAFT, spineIdentity, type Binding, type SpineIdentity } from "@/lib/shelf/identity";
@@ -387,6 +388,7 @@ export function Colophon({ embedModel, chatModel, reading }: { embedModel: strin
           <p className="howto-models">
             <span>{chatModel}</span> reads the synopses · <span>{embedModel}</span> compares meanings · both run through Ollama, on this computer
           </p>
+          <p className="howto-models">The words of each search stay on this computer for {RETENTION_DAYS} days, without who made them, so the bookshop knows what readers look for.</p>
         </div>
       </section>
 

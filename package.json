@@ -12,7 +12,8 @@
     "catalog:fetch": "tsx scripts/catalog-fetch.ts",
     "db:seed": "tsx scripts/seed.ts",
     "ai:enrich": "tsx scripts/enrich.ts",
-    "ai:eval": "tsx scripts/eval.ts"
+    "ai:eval": "tsx scripts/eval.ts",
+    "demand:sample": "tsx scripts/demand-sample.ts"
   },
   "dependencies": {
     "better-sqlite3": "^13.0.3",

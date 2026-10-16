@@ -212,7 +212,7 @@ async function main() {
   const lines: string[] = [
     "# Search evaluation — keywords × semantics",
     "",
-    `Generated at ${summary.generatedAt}. Embeddings: \`${EMBED_MODEL}\`. Classifier: \`${CHAT_MODEL}\`. ${useJudge ? `Relevance grades assigned automatically by \`${JUDGE_MODEL}\` (0, 1 or 2), reading only title, author, genre and synopsis. This is not a human evaluation.` : "No relevance grades (run with --judge)."}`,
+    `Generated at ${summary.generatedAt}. Embeddings: \`${EMBED_MODEL}\`. Classifier: \`${CHAT_MODEL}\`. ${useJudge ? `Relevance grades assigned automatically by \`${JUDGE_MODEL}\` (0, 1 or 2), reading only each book's title, author, genre, pages, year and synopsis. This is not a human evaluation.` : "No relevance grades (run with --judge)."}`,
     "",
     "- **keywords** (`lexical`): FTS5/BM25 over title, author, genre, synopsis and note, with prefixes.",
     "- **embeddings only** (`embedding`): closeness between the query and the synopsis.",

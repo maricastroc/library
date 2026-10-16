@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getBookBySlug } from "@/lib/catalog/books";
+import { noteReserved } from "@/lib/demand";
 import { allowRequest, clientKey } from "@/lib/http/rate-limit";
 import { createInterest } from "@/lib/interest";
 
@@ -20,6 +21,7 @@ const schema = z.object({
     ),
   message: z.string().trim().max(500).optional(),
   query: z.string().trim().max(240).optional(),
+  searchId: z.number().int().positive().optional(),
   website: z.string().max(0).optional(),
 });
 
@@ -47,5 +49,6 @@ export async function POST(request: Request) {
     message: parsed.data.message || null,
     searchQuery: parsed.data.query || null,
   });
+  if (parsed.data.searchId) noteReserved(parsed.data.searchId, book.id);
   return NextResponse.json({ ok: true, kind });
 }
