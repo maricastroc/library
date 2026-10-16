@@ -128,6 +128,23 @@ CREATE TABLE IF NOT EXISTS interests (
 );
 CREATE INDEX IF NOT EXISTS interests_status_idx ON interests(status, created_at);
 
+CREATE TABLE IF NOT EXISTS search_log (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  query TEXT NOT NULL,
+  folded TEXT NOT NULL,
+  confidence TEXT NOT NULL,
+  fallback INTEGER NOT NULL DEFAULT 0,
+  results INTEGER NOT NULL DEFAULT 0,
+  shown_ids TEXT NOT NULL DEFAULT '[]',
+  atmospheres TEXT NOT NULL DEFAULT '[]',
+  inferred TEXT NOT NULL DEFAULT '[]',
+  opened_ids TEXT NOT NULL DEFAULT '[]',
+  reserved_ids TEXT NOT NULL DEFAULT '[]',
+  sample INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS search_log_created_idx ON search_log(created_at);
+
 CREATE TABLE IF NOT EXISTS shop_settings (
   key TEXT PRIMARY KEY,
   value TEXT NOT NULL

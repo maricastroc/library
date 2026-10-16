@@ -53,6 +53,7 @@ export type SearchConfidence = "high" | "medium" | "low" | "none";
 
 export type SearchResponse = {
   query: string;
+  logId?: number | null;
   fallback?: "lexical";
   interpretation: Interpretation;
   confidence: SearchConfidence;

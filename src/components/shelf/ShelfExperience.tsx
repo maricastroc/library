@@ -406,6 +406,7 @@ export function ShelfExperience({ books, shop, showcases, initialQuery, initialS
           bookseller={shop.bookseller}
           result={results.get(open.id) ?? null}
           query={activeQuery}
+          searchId={results.has(open.id) ? (response?.logId ?? null) : null}
           initialOrigin={open.origin}
           getOrigin={getOrigin}
           onClosed={handleClosed}

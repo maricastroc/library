@@ -22,6 +22,7 @@ type JacketProps = {
   bookseller: string;
   result: SearchResult | null;
   query: string | null;
+  searchId?: number | null;
   initialOrigin: Box | null;
   getOrigin: () => Box | null;
   onClosed: (fromHistory: boolean) => void;
@@ -109,7 +110,7 @@ function CoverFace({ book, identity, shopName, detail }: { book: ShelfBook; iden
   );
 }
 
-export function Jacket({ ref, book, identity, shopName, bookseller, result, query, initialOrigin, getOrigin, onClosed }: JacketProps) {
+export function Jacket({ ref, book, identity, shopName, bookseller, result, query, searchId = null, initialOrigin, getOrigin, onClosed }: JacketProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const slotRef = useRef<HTMLDivElement>(null);
   const flightRef = useRef<HTMLDivElement>(null);
@@ -194,14 +195,14 @@ export function Jacket({ ref, book, identity, shopName, bookseller, result, quer
 
   useEffect(() => {
     const controller = new AbortController();
-    fetch(`/api/books/${book.slug}`, { signal: controller.signal })
+    fetch(`/api/books/${book.slug}${searchId ? `?from=${searchId}` : ""}`, { signal: controller.signal })
       .then((response) => (response.ok ? (response.json() as Promise<BookDetail>) : Promise.reject(new Error(String(response.status)))))
       .then((detail) => setDetailState({ status: "ready", detail }))
       .catch(() => {
         if (!controller.signal.aborted) setDetailState({ status: "error", message: "Couldn’t load this book’s details. Fold the jacket and try again." });
       });
     return () => controller.abort();
-  }, [book.slug]);
+  }, [book.slug, searchId]);
 
   const detail = detailState.status === "ready" ? detailState.detail : null;
   const spine = Math.max(36, Math.round(identity.width * 1.55));
@@ -260,7 +261,7 @@ export function Jacket({ ref, book, identity, shopName, bookseller, result, quer
             <Flap>
               <p className="eyebrow text-ink-soft">on this edition</p>
               <RecordBlock book={book} detail={detail} />
-              <Reservation book={book} query={result ? query : null} />
+              <Reservation book={book} query={result ? query : null} searchId={result ? searchId : null} />
             </Flap>
           </section>
         </div>

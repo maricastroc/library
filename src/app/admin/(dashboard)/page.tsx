@@ -4,6 +4,8 @@ import { PageHead, SectionHead, Stamp, age } from "@/components/admin/Counter";
 import { EnrichmentPanel } from "@/components/admin/EnrichmentPanel";
 import { catalogStats, listBookDetails } from "@/lib/catalog/books";
 import { listImportRuns } from "@/lib/catalog/import-csv";
+import { readDemand } from "@/lib/demand";
+import { isMissed } from "@/lib/demand/report";
 import { listInterests } from "@/lib/interest";
 import { ollamaStatus } from "@/lib/semantic/ollama";
 import { enrichmentState } from "@/lib/semantic/pipeline";
@@ -27,6 +29,7 @@ export default async function DashboardPage() {
   const drafts = showcases.filter((showcase) => !showcase.published).length;
   const published = showcases.length - drafts;
   const failed = stats.semantics.error;
+  const unanswered = readDemand(7).filter(isMissed).length;
   const today = new Intl.DateTimeFormat("en-GB", { weekday: "long", day: "numeric", month: "long" }).format(new Date());
 
   const attention = [
@@ -35,6 +38,7 @@ export default async function DashboardPage() {
     { count: failed, text: failed === 1 ? "reading by the AI failed" : "readings by the AI failed", href: "/admin/books?filter=unread", action: "Look at them", urgent: true },
     { count: samples, text: samples === 1 ? "note is still a sample written for the demo" : "notes are still samples written for the demo", href: "/admin/books?filter=example-note", action: "Rewrite in your words", urgent: false },
     { count: demoPrices, text: demoPrices === 1 ? "price is a demo value" : "prices are demo values", href: "/admin/import", action: "Import real prices", urgent: false },
+    { count: unanswered, text: unanswered === 1 ? "search this week found little or nothing on the shelf" : "searches this week found little or nothing on the shelf", href: "/admin/demand", action: "See what they asked", urgent: false },
     { count: stats.outOfStock, text: stats.outOfStock === 1 ? "title is out of stock" : "titles are out of stock", href: "/admin/books?filter=out-of-stock", action: "See which", urgent: false },
     { count: drafts, text: drafts === 1 ? "showcase is still a draft" : "showcases are still drafts", href: "/admin/showcases", action: "Review", urgent: false },
   ].filter((item) => item.count > 0);

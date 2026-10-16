@@ -9,7 +9,7 @@ type Status =
   | { step: "form"; error: string | null; field: string | null; sending: boolean }
   | { step: "sent"; kind: "reservation" | "notice" };
 
-export function Reservation({ book, query }: { book: ShelfBook; query: string | null }) {
+export function Reservation({ book, query, searchId = null }: { book: ShelfBook; query: string | null; searchId?: number | null }) {
   const [status, setStatus] = useState<Status>({ step: "closed" });
   const nameId = useId();
   const contactId = useId();
@@ -33,6 +33,7 @@ export function Reservation({ book, query }: { book: ShelfBook; query: string | 
           message: form.get("message") || undefined,
           website: form.get("website") || undefined,
           query: query ?? undefined,
+          searchId: searchId ?? undefined,
         }),
       });
       const data = (await response.json()) as { ok?: boolean; kind?: "reservation" | "notice"; error?: string; field?: string };
